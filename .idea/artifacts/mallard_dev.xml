@@ -1,8 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="mallard:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/mallard_war_exploded</output-path>
-    <root id="root">
-      <element id="javaee-facet-resources" facet="mallard/web/Web" />
+  <artifact type="war" name="mallard:dev">
+    <output-path>$PROJECT_DIR$/out/artifacts/mallard_dev</output-path>
+    <root id="archive" name="mallard_dev.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="mallard" />
@@ -10,7 +9,9 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="project-lib" />
         </element>
+        <element id="dir-copy" path="$PROJECT_DIR$/conf/dev" />
       </element>
+      <element id="javaee-facet-resources" facet="mallard/web/Web" />
     </root>
   </artifact>
 </component>
