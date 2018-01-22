@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.10.0.xsd">
+    <jdbc>
+    <driver>com.mysql.jdbc.Driver</driver>
+    <url>jdbc:mysql://db.sporadic.nz:3306/mallard_dev</url> <!-- Modify this to point to your database -->
+    <user>mallard</user>                            <!-- Modify this to use your username -->
+    <password>uPCRFwI87II45NXK</password>                     <!-- Modify this to use your password -->
+  </jdbc>
+
+  <generator>
+    <name>org.jooq.util.JavaGenerator</name>
+    <database>
+      <name>org.jooq.util.mysql.MySQLDatabase</name>
+      <inputSchema>mallard_dev</inputSchema>            <!-- Modify this to use your username -->
+      <includes>.*</includes>
+      <excludes></excludes>
+    </database>
+
+    <target>
+      <packageName>ORM_jooq</packageName>
+      <directory>src</directory>
+    </target>
+  </generator>
+</configuration>
