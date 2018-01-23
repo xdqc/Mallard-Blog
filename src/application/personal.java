@@ -1,6 +1,7 @@
 package application;
 
 
+import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class personal extends HttpServlet {
@@ -25,24 +27,27 @@ public class personal extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String articleId = req.getParameter("articleId");
+        String userId = req.getParameter("userId");
 
-        UserRecord user = DbConnector.getAuthorByArticleId(articleId);
+        UserRecord user = (articleId == null || articleId.isEmpty())
+                ? DbConnector.getUserByUserId(userId)
+                : DbConnector.getAuthorByArticleId(articleId);
 
-        String fname = user.getFName();
-        String lname = user.getLName();
-        String email = user.getEmail();
         Date dob = user.getDob();
-        String country = user.getCountry();
-        String description = user.getDescription();
         long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
         long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
 
-        req.setAttribute("fname", fname);
-        req.setAttribute("lname", lname);
-        req.setAttribute("email", email);
+        req.setAttribute("fname", user.getFName());
+        req.setAttribute("lname", user.getLName());
+        req.setAttribute("email", user.getEmail());
+        req.setAttribute("country", user.getCountry());
+        req.setAttribute("description", user.getDescription());
         req.setAttribute("age", age);
-        req.setAttribute("country", country);
-        req.setAttribute("description", description);
+
+
+        userId = String.valueOf(user.getId());
+        List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
+        req.setAttribute("articles", articles);
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
@@ -51,4 +56,6 @@ public class personal extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
+
+
 }

@@ -3,6 +3,7 @@ package db_connector;
 
 import ORM.tables.Article;
 import ORM.tables.User;
+import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -72,4 +74,50 @@ public class DbConnector {
     }
 
 
+    public static UserRecord getUserByUserId(String userId) {
+        UserRecord user = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            List<UserRecord> result = create.select()
+                    .from(User.USER)
+                    .where(User.USER.ID.equalIgnoreCase(userId))
+                    .fetch()
+                    .into(UserRecord.class);
+
+            user = result.size() > 0 ? result.get(0) : null;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public static List<ArticleRecord> getArticlesByUserId(String userId) {
+        List<ArticleRecord> articles = new ArrayList<>();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            articles = create.select()
+                    .from(Article.ARTICLE)
+                    .join(User.USER).onKey()
+                    .where(User.USER.ID.equalIgnoreCase(userId))
+                    .fetch()
+                    .into(ArticleRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
 }
