@@ -35,9 +35,8 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-            final ORM.tables.User TABLE = User.USER;
-            Result<Record2<Integer, String>> result = create.select(TABLE.GENDER, TABLE.F_NAME)
-                    .from(TABLE)
+            Result<Record2<Integer, String>> result = create.select(User.USER.GENDER, User.USER.F_NAME)
+                    .from(User.USER)
                     .fetch();
 
             for (Record2<Integer, String> record : result) {

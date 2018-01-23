@@ -1,3 +1,22 @@
+# Meta Data #
+## user.gender
+0-- Female
+1-- Male
+2-- Other
+## user.system_role
+0-- Administrator
+1-- Public
+## attachment.attach_type
+A-- Article id
+C-- Comment id
+U-- User id
+## attachment.mine
+Picture-- .jpg .jpn .bpm
+Audio-- .wmv .mp3 .wav
+Media-- .mov .mp4
+ 
+
+
 # README #
 
 This is a personal blogging system.  
