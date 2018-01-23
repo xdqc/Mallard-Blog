@@ -35,20 +35,27 @@
             <div class="card">
                 <img class="card-img-top img-responsive" src="http://i.pravatar.cc/300" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">${fname} ${lname}</h5>
+                    <h5 class="card-title">${fname} ${lname}
+                        <c:if test="${gender==0}">
+                            <span class="fa fa-venus"></span>
+                        </c:if>
+                        <c:if test="${gender==1}">
+                            <span class="fa fa-mars"></span>
+                        </c:if>
+                    </h5>
                     <p class="card-text">${description}</p>
                 </div>
-                <dl class="list-group list-group-flush">
+                <dl class="list-group">
                     <div class="list-group-item">
-                        <dt>Email:</dt>
+                        <dt><span class="fa fa-envelope"></span> Email: </dt>
                         <dd>${email}</dd>
                     </div>
                     <div class="list-group-item">
-                        <dt>From:</dt>
+                        <dt><span class="fa fa-map-marker"></span> From: </dt>
                         <dd>${country}</dd>
                     </div>
                     <div class="list-group-item">
-                        <dt>Age:</dt>
+                        <dt><span class="fa fa-heart"></span> Age: </dt>
                         <dd>${age}</dd>
                     </div>
                 </dl>
@@ -64,11 +71,12 @@
             <c:forEach var="blog" items="${articles}">
                 <c:if test="${blog.getShowHideStatus()>0}">
                     <article class="card animated fadeInLeft">
-                        <img class="card-img-top img-responsive" src="http://lorempixel.com/800/500" alt="random picture"/>
+                        <img class="card-img-top img-responsive" src="http://lorempixel.com/800/500"
+                             alt="random picture"/>
                         <div class="card-body">
                             <h4 class="card-title">${blog.getContent().substring(0,20)}</h4>
 
-                            <h6 class="text-muted">Likes: ${blog.getLikeNum()}</h6>
+                            <h6 class="text-muted"> ${blog.getLikeNum()} <span class="fa fa-thumbs-up"></span></h6>
 
                             <p class="card-text">${blog.getContent()}</p>
 

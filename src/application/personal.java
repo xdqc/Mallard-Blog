@@ -47,6 +47,7 @@ public class personal extends HttpServlet {
         req.setAttribute("fname", user.getFName());
         req.setAttribute("lname", user.getLName());
         req.setAttribute("email", user.getEmail());
+        req.setAttribute("gender", user.getGender());
         req.setAttribute("country", user.getCountry());
         req.setAttribute("description", user.getDescription());
         req.setAttribute("age", age);
