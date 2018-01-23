@@ -60,19 +60,21 @@
         <%--list of blogs--%>
         <div class="col-sm-12 col-md-9 col-lg-9">
             <c:forEach var="blog" items="${articles}">
-                <article class="card animated fadeInLeft">
-                    <img class="card-img-top img-responsive" src="http://lorempixel.com/800/500" alt="random picture"/>
-                    <div class="card-body">
-                        <h4 class="card-title">${blog.getContent().substring(0,20)}</h4>
+                <c:if test="${blog.getShowHideStatus()>0}">
+                    <article class="card animated fadeInLeft">
+                        <img class="card-img-top img-responsive" src="http://lorempixel.com/800/500" alt="random picture"/>
+                        <div class="card-body">
+                            <h4 class="card-title">${blog.getContent().substring(0,20)}</h4>
 
-                        <h6 class="text-muted">Likes: ${blog.getLikeNum()}</h6>
+                            <h6 class="text-muted">Likes: ${blog.getLikeNum()}</h6>
 
-                        <p class="card-text">${blog.getContent()}</p>
+                            <p class="card-text">${blog.getContent()}</p>
 
-                        <a href="#" class="btn btn-primary">Read more</a>
-                    </div>
-                </article>
-                <br>
+                            <a href="#" class="btn btn-primary">Read more</a>
+                        </div>
+                    </article>
+                    <br>
+                </c:if>
             </c:forEach>
         </div>
     </div>
