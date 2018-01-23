@@ -33,6 +33,13 @@ public class personal extends HttpServlet {
                 ? DbConnector.getUserByUserId(userId)
                 : DbConnector.getAuthorByArticleId(articleId);
 
+        if (user==null){
+            String errorMsg = "Too bad! We cannot find that user.";
+            req.setAttribute("errorMsg", errorMsg);
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
+            return;
+        }
+
         Date dob = user.getDob();
         long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
         long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
