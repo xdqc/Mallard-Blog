@@ -3,4 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+
+    <servlet>
+        <servlet-name>personal-blog</servlet-name>
+        <servlet-class>application.personal</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>personal-blog</servlet-name>
+        <url-pattern>/personal-blog</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>home_page.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

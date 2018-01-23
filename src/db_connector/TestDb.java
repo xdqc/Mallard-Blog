@@ -7,7 +7,7 @@ public class TestDb {
     }
 
     private void run() {
-        DbConnector dbConnector = new DbConnector();
+        new DbConnector("conf/dev/mysql.properties");
         DbConnector.fetchAllUserFromDb();
     }
 }
