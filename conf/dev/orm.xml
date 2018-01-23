@@ -17,7 +17,7 @@
     </database>
 
     <target>
-      <packageName>ORM_jooq</packageName>
+      <packageName>ORM</packageName>
       <directory>src</directory>
     </target>
   </generator>

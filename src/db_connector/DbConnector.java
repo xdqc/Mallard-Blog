@@ -1,7 +1,7 @@
 package db_connector;
 
-import ORM_jooq.Tables;
-import ORM_jooq.tables.UserInfo;
+
+import ORM.tables.User;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.Result;
@@ -35,8 +35,8 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-            final UserInfo TABLE = Tables.USER_INFO;
-            Result<Record2<Integer, String>> result = create.select(TABLE.ID, TABLE.USERNAME)
+            final ORM.tables.User TABLE = User.USER;
+            Result<Record2<Integer, String>> result = create.select(TABLE.GENDER, TABLE.F_NAME)
                     .from(TABLE)
                     .fetch();
 
