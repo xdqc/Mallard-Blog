@@ -12,5 +12,9 @@
 </head>
 <body>
 
+<div>
+    <a href="personal-blog?articleId=1">This is a mock link goes to author of articleId=1 's personal blog page </a>
+</div>
+
 </body>
 </html>
