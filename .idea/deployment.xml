@@ -5,7 +5,7 @@
       <paths name="Deployment">
         <serverdata>
           <mappings>
-            <mapping deploy="/opt/tomcat/webapps" local="$PROJECT_DIR$/out/artifacts/mallard_project" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
