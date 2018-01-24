@@ -20,16 +20,16 @@
                 <li><a href="personal-blog?userId=${param.userId}">Personal Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-            <c:if test="${not empty param.userId}">
+            <c:if test="${not empty sessionScope.get('loggedInUser')}">
                 <li><a href="#"><span  class="glyphicon glyphicon-user" aria-hidden="true"></span>${current_username}</a></li>
                 <li><a href="#"><span  class="glyphicon glyphicon-bell" aria-hidden="true"></span>Notification</a></li>
             </c:if>
                 <li>
                     <div class="btn-group" role="group" aria-label="...">
-                        <c:if test="${empty param.userId}">
+                        <c:if test="${empty sessionScope.get('loggedInUser')}">
                         <a href="login" class="btn btn-default" role="button">Login</a>
                         </c:if>
-                        <c:if test="${not empty param.userId}">
+                        <c:if test="${not empty sessionScope.get('loggedInUser')}">
                             <a href="login?logout=1" class="btn btn-default" role="button">Logout</a>
                         </c:if>
                     </div>
