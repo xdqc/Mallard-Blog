@@ -35,13 +35,15 @@ public class Blog {
     }
 
     private void addCommentsToTree(Tree<CommentRecord> tree, List<CommentRecord> list) {
-        for (CommentRecord comment : list) {
+        for (int i = 0; i < list.size(); i++) {
+            CommentRecord comment = list.get(i);
             // Check if there is a comment in the tree can be the parent of the commentList elem
             Tree<CommentRecord> parent = tree.findParentComment(tree, comment);
             if (parent != null) {
                 // Add comment to its parent's children
                 parent.addChild(new Tree<>(comment));
                 list.remove(comment);
+                i--;
             }
         }
     }

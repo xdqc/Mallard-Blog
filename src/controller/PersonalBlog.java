@@ -94,22 +94,22 @@ public class PersonalBlog extends HttpServlet {
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
-    /**
-     * Add comments recursively to the comment tree
-     * @param comment The parent
-     * @param childrenComments The children
-     */
-    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
-        for (CommentRecord pComment : childrenComments) {
-            Tree<CommentRecord> parent = new Tree<>(pComment);
-            comment.addChild(parent);
-
-            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
-            if (children.size()>0){
-                getChildComments(parent, children);
-            }
-        }
-    }
+//    /**
+//     * Add comments recursively to the comment tree
+//     * @param comment The parent
+//     * @param childrenComments The children
+//     */
+//    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
+//        for (CommentRecord pComment : childrenComments) {
+//            Tree<CommentRecord> parent = new Tree<>(pComment);
+//            comment.addChild(parent);
+//
+//            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
+//            if (children.size()>0){
+//                getChildComments(parent, children);
+//            }
+//        }
+//    }
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

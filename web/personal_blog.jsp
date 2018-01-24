@@ -26,7 +26,19 @@
 
         <%--list of blogs--%>
         <div class="col-sm-12 col-md-9 col-lg-9">
-            <%@ include file="personal_blog_articles.jsp" %>
+            <c:if test="${articles.size()==0}">
+                <div class="jumbotron">
+                    <h3>This user has no articles</h3>
+                    <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
+                </div>
+            </c:if>
+            <c:if test="${articles.size()!=0}">
+                <c:forEach var="blog" items="${blogs}">
+                    <c:if test="${blog.getArticle().getShowHideStatus()>0}">
+                        <%@ include file="personal_blog_articles.jsp" %>
+                    </c:if>
+                </c:forEach>
+            </c:if>
         </div>
     </div>
 
