@@ -27,7 +27,7 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="...">
                         <c:if test="${empty param.userId}">
-                        <button type="button" class="btn btn-default">Login</button>
+                        <a href="login.jsp" class="btn btn-default" role="button">Login</a>
                         </c:if>
                         <c:if test="${not empty param.userId}">
                             <a href="/home-page" class="btn btn-default" role="button">Logout</a>
