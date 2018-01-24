@@ -22,7 +22,7 @@
 </head>
 <body>
 <div class="container">
-<form id="login-form" method="post">
+<form id="login-form" method="post" action="">
     <fieldset>
         <legend>Login</legend>
         <ul>
@@ -35,14 +35,14 @@
             <li>
                 <label for="input2">Password</label>
                 <br>
-                <input id="input2" class="jfk-textinput" name="input2" type="text">
+                <input id="input2" class="jfk-textinput" name="input2" type="password">
             </li>
             <br>
         <li>
             <div class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX"></div>
         </li>
         <li>
-            <button>Login</button>
+            <button type="submit">Login</button>
             <button>Sign In</button>
         </li>
         </ul>

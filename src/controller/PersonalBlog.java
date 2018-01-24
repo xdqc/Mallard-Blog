@@ -1,7 +1,6 @@
-package application;
+package controller;
 
 
-import ORM.tables.Article;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
@@ -17,7 +16,7 @@ import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class personal extends HttpServlet {
+public class PersonalBlog extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
@@ -37,8 +36,7 @@ public class personal extends HttpServlet {
 
         if (user==null){
             String errorMsg = "Too bad! We cannot find that user.";
-            req.setAttribute("errorMsg", errorMsg);
-            req.getRequestDispatcher("/error.jsp").forward(req, resp);
+            req.getRequestDispatcher("error?userId=&errorMsg="+errorMsg).forward(req, resp);
             return;
         }
 
@@ -53,6 +51,7 @@ public class personal extends HttpServlet {
         req.setAttribute("country", user.getCountry());
         req.setAttribute("description", user.getDescription());
         req.setAttribute("age", age);
+        req.setAttribute("current_username", user.getUserName());
 
 
         userId = String.valueOf(user.getId());
@@ -60,19 +59,22 @@ public class personal extends HttpServlet {
         Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
 
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
-        // Load comments for each article
-        for (ArticleRecord article : articles) {
-            Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
-            List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-            getChildComments(rootComment, parentComments);
-            blogs.put(article, rootComment);
+        if (articles.size() > 0){
+            // Load comments for each article
+            for (ArticleRecord article : articles) {
+                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
+                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+                getChildComments(rootComment, parentComments);
+                blogs.put(article, rootComment);
+            }
+
+
+            req.setAttribute("blogs", blogs);
+            req.setAttribute("rootComment", blogs.get(articles.get(0)));
+            blogs.get(articles.get(0)).getChildren();
         }
 
-
         req.setAttribute("articles", articles);
-        req.setAttribute("blogs", blogs);
-        req.setAttribute("rootComment", blogs.get(articles.get(0)));
-        blogs.get(articles.get(0)).getChildren();
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }

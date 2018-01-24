@@ -1,4 +1,4 @@
-package application;
+package controller;
 
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;

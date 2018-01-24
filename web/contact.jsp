@@ -2,12 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-<%@include file="head.jsp"%>
+<%@include file="WEB-INF/_head.jsp"%>
     <title>Contact Us</title>
 </head>
 <body>
-<%@include file="home_page_logo.jsp"%>
-<%@include file="home_page_menu.jsp"%>
+<%@include file="WEB-INF/_home_page_logo.jsp"%>
+<%@include file="WEB-INF/_home_page_menu.jsp"%>
 <div class="jumbotron jumbotron-sm">
     <div class="container">
         <div class="row">

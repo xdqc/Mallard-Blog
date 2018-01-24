@@ -15,9 +15,9 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a class="navbar-brand" href="/home-page?userId=1"><span  class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a>
+                    <a class="navbar-brand" href="home-page"><span  class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a>
                 </li>
-                <li><a href="/personal-blog?userId=${param.userId}">Personal Blog</a></li>
+                <li><a href="personal-blog?userId=${param.userId}">Personal Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <c:if test="${not empty param.userId}">
@@ -27,14 +27,14 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="...">
                         <c:if test="${empty param.userId}">
-                        <a href="login.jsp" class="btn btn-default" role="button">Login</a>
+                        <a href="login" class="btn btn-default" role="button">Login</a>
                         </c:if>
                         <c:if test="${not empty param.userId}">
-                            <a href="/home-page" class="btn btn-default" role="button">Logout</a>
+                            <a href="login?logout=1" class="btn btn-default" role="button">Logout</a>
                         </c:if>
                     </div>
                 </li>
-                <li><a href="#"><span  class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Contact us</a></li>
+                <li><a href="contact"><span  class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Contact us</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <div class="form-group">
