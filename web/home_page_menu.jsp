@@ -15,22 +15,26 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a class="navbar-brand" href="home_page.jsp"><span  class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a>
+                    <a class="navbar-brand" href="/home-page?userId=1"><span  class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a>
                 </li>
-                <li><a href="#">Personal Blog</a></li>
+                <li><a href="/personal-blog?userId=${param.userId}">Personal Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
+            <c:if test="${not empty param.userId}">
+                <li><a href="#"><span  class="glyphicon glyphicon-user" aria-hidden="true"></span>${current_username}</a></li>
+                <li><a href="#"><span  class="glyphicon glyphicon-bell" aria-hidden="true"></span>Notification</a></li>
+            </c:if>
+                <li>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <c:if test="${empty param.userId}">
+                        <button type="button" class="btn btn-default">Login</button>
+                        </c:if>
+                        <c:if test="${not empty param.userId}">
+                            <a href="/home-page" class="btn btn-default" role="button">Logout</a>
+                        </c:if>
+                    </div>
                 </li>
+                <li><a href="#"><span  class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Contact us</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <div class="form-group">
