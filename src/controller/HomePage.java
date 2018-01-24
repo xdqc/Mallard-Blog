@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
@@ -26,10 +27,15 @@ public class HomePage extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String userId = req.getParameter("userId");
-        UserRecord user = (userId == null || userId.equals(""))
-                ? null
-                :DbConnector.getUserByUserId(userId);
+        // If current session does not exist, then it will NOT create a new session.
+        HttpSession session = req.getSession(false);
+
+        UserRecord user;
+        if (session == null || session.getAttribute("loggedInUser") == null) {
+            user = null;
+        } else {
+            user = (UserRecord) session.getAttribute("loggedInUser");
+        }
 
         //get all articles sort by like number
         List<ArticleRecord> articles = DbConnector.getHotArticlesSort();
@@ -45,8 +51,8 @@ public class HomePage extends HttpServlet {
         long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
         long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
 
-        req.setAttribute("post_number", DbConnector.getPostNumber(userId));
-        req.setAttribute("follower_number", DbConnector.getFollowerNumber(userId));
+        req.setAttribute("post_number", DbConnector.getPostNumber(String.valueOf(user.getId())));
+        req.setAttribute("follower_number", DbConnector.getFollowerNumber(String.valueOf(user.getId())));
         req.setAttribute("current_username", user.getUserName());
         req.setAttribute("fname", user.getFName());
         req.setAttribute("lname", user.getLName());

@@ -5,16 +5,23 @@ import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import org.json.simple.JSONObject;
+import utililties.Blog;
 import utililties.Tree;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PersonalBlog extends HttpServlet {
 
@@ -29,6 +36,16 @@ public class PersonalBlog extends HttpServlet {
 
         String articleId = req.getParameter("articleId");
         String userId = req.getParameter("userId");
+
+        // If current session does not exist, then it will NOT create a new session.
+        HttpSession session = req.getSession(false);
+
+        UserRecord loggedUser;
+        if (session == null || session.getAttribute("loggedInUser") == null) {
+            loggedUser = null;
+        } else {
+            loggedUser = (UserRecord) session.getAttribute("loggedInUser");
+        }
 
         UserRecord user = (articleId == null || articleId.isEmpty())
                 ? DbConnector.getUserByUserId(userId)
@@ -56,22 +73,33 @@ public class PersonalBlog extends HttpServlet {
 
         userId = String.valueOf(user.getId());
 
-        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
-
+//        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
+        List<Blog> blogList = new LinkedList<>();
+
         if (articles.size() > 0){
             // Load comments for each article
             for (ArticleRecord article : articles) {
-                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
-                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-                getChildComments(rootComment, parentComments);
-                blogs.put(article, rootComment);
+//                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
+//                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+//                getChildComments(rootComment, parentComments);
+//                blogs.put(article, rootComment);
+                blogList.add(new Blog(article));
             }
 
 
-            req.setAttribute("blogs", blogs);
-            req.setAttribute("rootComment", blogs.get(articles.get(0)));
-            blogs.get(articles.get(0)).getChildren();
+            req.setAttribute("blogs", blogList);
+//            req.setAttribute("rootComment", blogList.get(articles.get(0)));
+
+            String blogId = req.getParameter("blog");
+            if (blogId != null) {
+                ajaxBlogHandler(req, resp, blogList);
+                return;
+            }
+
+
+
+
         }
 
         req.setAttribute("articles", articles);
@@ -79,26 +107,36 @@ public class PersonalBlog extends HttpServlet {
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
-    /**
-     * Add comments recursively to the comment tree
-     * @param comment The parent
-     * @param childrenComments The children
-     */
-    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
-        for (CommentRecord pComment : childrenComments) {
-            Tree<CommentRecord> parent = new Tree<>(pComment);
-            comment.addChild(parent);
+    private void ajaxBlogHandler(HttpServletRequest req, HttpServletResponse resp, List<Blog> blogList) throws IOException {
+            Map<UserRecord, Tree<CommentRecord>> blogMap = blogList.stream()
+                    .collect(Collectors.toMap(Blog::getAuthor, Blog::getCommentTree));
 
-            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
-            if (children.size()>0){
-                getChildComments(parent, children);
-            }
-        }
+            JSONObject json = new JSONObject(blogMap);
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(json.toJSONString());
     }
+
+//    /**
+//     * Add comments recursively to the comment tree
+//     * @param comment The parent
+//     * @param childrenComments The children
+//     */
+//    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
+//        for (CommentRecord pComment : childrenComments) {
+//            Tree<CommentRecord> parent = new Tree<>(pComment);
+//            comment.addChild(parent);
+//
+//            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
+//            if (children.size()>0){
+//                getChildComments(parent, children);
+//            }
+//        }
+//    }
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        //doGet(req, resp);
     }
 
 
