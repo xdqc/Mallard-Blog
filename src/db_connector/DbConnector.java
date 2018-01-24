@@ -2,8 +2,10 @@ package db_connector;
 
 
 import ORM.tables.Article;
+import ORM.tables.Comment;
 import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
+import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -116,5 +118,45 @@ public class DbConnector {
             e.printStackTrace();
         }
         return articles;
+    }
+
+    public static List<CommentRecord> getCommentsByArticleId(String articleId) {
+        List<CommentRecord> comments = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            comments = create.select()
+                    .from(Comment.COMMENT)
+                    .join(Article.ARTICLE)
+                    .on(Comment.COMMENT.PARENT_ARTICLE.eq(Article.ARTICLE.ID))
+                    .where(Article.ARTICLE.ID.equalIgnoreCase(articleId))
+                    .fetch()
+                    .into(CommentRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
+    public static List<CommentRecord> getCommentsByParentCommentId(String commentId) {
+        List<CommentRecord> comments = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            comments = create.select()
+                    .from(Comment.COMMENT)
+                    .innerJoin(Comment.COMMENT)
+                    .on(Comment.COMMENT.PARENT_COMMENT.eq(Comment.COMMENT.ID))
+                    .where(Comment.COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
+                    .fetch()
+                    .into(CommentRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
     }
 }

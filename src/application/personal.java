@@ -1,9 +1,12 @@
 package application;
 
 
+import ORM.tables.Article;
 import ORM.tables.records.ArticleRecord;
+import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import utililties.Tree;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class personal extends HttpServlet {
@@ -54,10 +56,41 @@ public class personal extends HttpServlet {
 
 
         userId = String.valueOf(user.getId());
+
+        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
+
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
+        // Load comments for each article
+        for (ArticleRecord article : articles) {
+            Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
+            List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+            getChildComments(rootComment, parentComments);
+            blogs.put(article, rootComment);
+        }
+
+
         req.setAttribute("articles", articles);
+        req.setAttribute("blogs", blogs);
+
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
+    }
+
+    /**
+     * Add comments recursively to the comment tree
+     * @param comment The parent
+     * @param childrenComments The children
+     */
+    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
+        for (CommentRecord pComment : childrenComments) {
+            Tree<CommentRecord> parent = new Tree<>(pComment);
+            comment.addChild(parent);
+
+            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
+            if (children.size()>0){
+                getChildComments(parent, children);
+            }
+        }
     }
 
 
