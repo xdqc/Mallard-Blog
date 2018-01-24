@@ -71,7 +71,8 @@
 
                             <a href="#" class="btn btn-primary">Read more</a>
 
-                            <a href="personal-blog" class="btn btn-info">Comments ${blogs}</a>
+                            <a href="personal-blog" class="btn btn-info">Comments ${blogs.get(article)}</a>
+                            <c:set var="comments" value="${blogs.get(article)}" />
                             <%@include file="comments.jsp"%>
                         </div>
                     </article>

@@ -1,8 +1,6 @@
 package utililties;
 
 
-import ORM.tables.records.CommentRecord;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,9 +10,13 @@ public class Tree<T> {
     private Tree<T> root;
 
     public Tree(T rootData) {
-        root = new Tree<>(rootData);
+        root = this;
         root.data = rootData;
         root.children = new LinkedList<>();
+    }
+
+    public T getData(){
+        return this.data;
     }
 
     public Tree<T> getRoot() {
@@ -23,6 +25,10 @@ public class Tree<T> {
 
     public void addChild(Tree<T> child) {
         this.root.children.add(child);
+    }
+
+    public List<Tree> getChildren(){
+        return this.children;
     }
 
 }

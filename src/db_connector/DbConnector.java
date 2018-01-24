@@ -2,6 +2,7 @@ package db_connector;
 
 
 import ORM.tables.Article;
+import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
 import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
@@ -148,8 +149,6 @@ public class DbConnector {
 
             comments = create.select()
                     .from(Comment.COMMENT)
-                    .innerJoin(Comment.COMMENT)
-                    .on(Comment.COMMENT.PARENT_COMMENT.eq(Comment.COMMENT.ID))
                     .where(Comment.COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
                     .fetch()
                     .into(CommentRecord.class);
@@ -158,6 +157,8 @@ public class DbConnector {
             e.printStackTrace();
         }
         return comments;
+    }
+
     //get articles sort by hot degree(like_num)
     public static List<ArticleRecord> getHotArticlesSort() {
         List<ArticleRecord> articles = new ArrayList<>();

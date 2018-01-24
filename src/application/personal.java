@@ -71,7 +71,8 @@ public class personal extends HttpServlet {
 
         req.setAttribute("articles", articles);
         req.setAttribute("blogs", blogs);
-
+        req.setAttribute("rootComment", blogs.get(articles.get(0)));
+        blogs.get(articles.get(0)).getChildren();
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
