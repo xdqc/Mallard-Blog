@@ -2,6 +2,7 @@ package db_connector;
 
 
 import ORM.tables.Article;
+import ORM.tables.FollowRelation;
 import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;
@@ -116,5 +117,67 @@ public class DbConnector {
             e.printStackTrace();
         }
         return articles;
+    }
+
+    //get articles sort by hot degree(like_num)
+    public static List<ArticleRecord> getHotArticlesSort() {
+        List<ArticleRecord> articles = new ArrayList<>();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            articles = create.select()
+                    .from(Article.ARTICLE)
+                    .orderBy(Article.ARTICLE.LIKE_NUM.desc())
+                    .fetch()
+                    .into(ArticleRecord.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
+
+    //get follower number by userId
+    public static int getFollowerNumber(String userId) {
+        int result = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            result = create.selectCount()
+                    .from(FollowRelation.FOLLOW_RELATION)
+                    .where(FollowRelation.FOLLOW_RELATION.FOLLOWEE.eq(Integer.parseInt(userId)))
+                    .fetchOne(0, int.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //get post number by userId
+    public static int getPostNumber(String userId) {
+        int result = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            result = create.selectCount()
+                    .from(Article.ARTICLE)
+                    .where(Article.ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .fetchOne(0, int.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
