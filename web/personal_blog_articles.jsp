@@ -10,21 +10,40 @@
 
         <a href="#" class="btn btn-primary">Read more</a>
 
-        <span id="showCommentBtn" class="btn btn-info"> Comments </span>
-        <hr>
-        <div id="comment-area"></div>
-        <hr>
-        <c:set var="comments" value="${blog.getCommentTree()}"/>
-        <%@include file="comments.jsp" %>
+        <c:if test="${blog.getNumComments() > 0}">
+            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info"> Show Comments (${blog.getNumComments()})</button>
+        </c:if>
+        <c:if test="${blog.getNumComments() == 0}">
+            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info" disabled="disabled"> Show Comments (0)</button>
+        </c:if>
+        <div id="comment-area-${blog.getArticle().getId()}" class="">
+
+        </div>
+
+        <%--this is the normal approach to show data, we will replace it with AJAX--%>
+        <%--<c:set var="comments" value="${blog.getCommentTree()}"/>--%>
+        <%--<%@include file="comments.jsp" %>--%>
+
     </div>
 </article>
 <br>
 
 <script>
-    $("#showCommentBtn").on("click", function () {
-        $.post("personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
-            $("#comment-area").text(JSON.stringify(resp));
-        })
+    $("#showCommentBtn-${blog.getArticle().getId()}").on("click", function () {
+        let commentArea = $("#comment-area-${blog.getArticle().getId()}");
+        // Toggle comment-area display by click this button
+        $(this).toggleClass('active');
+
+        if ($(this).hasClass('active')){
+            $.post("personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
+                // TODO make comments display nicely
+                commentArea.text(JSON.stringify(resp));
+            });
+            commentArea.show();
+        } else {
+            commentArea.hide();
+        }
+
     })
 
 </script>

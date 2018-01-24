@@ -13,11 +13,13 @@ public class Blog {
     private UserRecord author;
     private ArticleRecord article;
     private Tree<CommentRecord> commentTree;
+    private int numComments;
 
     public Blog(ArticleRecord article) {
         this.article = article;
         this.author = DbConnector.getAuthorByArticleId(String.valueOf(article.getId()));
         List<CommentRecord> commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+        this.numComments = commentList.size();
 
         commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
 
@@ -61,4 +63,7 @@ public class Blog {
         return commentTree;
     }
 
+    public int getNumComments() {
+        return numComments;
+    }
 }
