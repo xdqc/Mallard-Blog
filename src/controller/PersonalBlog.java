@@ -5,6 +5,7 @@ import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import org.json.simple.JSONObject;
 import utililties.Blog;
 import utililties.Tree;
 
@@ -15,8 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PersonalBlog extends HttpServlet {
 
@@ -86,12 +91,30 @@ public class PersonalBlog extends HttpServlet {
             req.setAttribute("blogs", blogList);
 //            req.setAttribute("rootComment", blogList.get(articles.get(0)));
 
+            String blogId = req.getParameter("blog");
+            if (blogId != null) {
+                ajaxBlogHandler(req, resp, blogList);
+                return;
+            }
+
+
+
 
         }
 
         req.setAttribute("articles", articles);
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
+    }
+
+    private void ajaxBlogHandler(HttpServletRequest req, HttpServletResponse resp, List<Blog> blogList) throws IOException {
+            Map<UserRecord, Tree<CommentRecord>> blogMap = blogList.stream()
+                    .collect(Collectors.toMap(Blog::getAuthor, Blog::getCommentTree));
+
+            JSONObject json = new JSONObject(blogMap);
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(json.toJSONString());
     }
 
 //    /**
@@ -113,7 +136,7 @@ public class PersonalBlog extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        //doGet(req, resp);
     }
 
 

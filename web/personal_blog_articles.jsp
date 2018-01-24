@@ -10,9 +10,21 @@
 
         <a href="#" class="btn btn-primary">Read more</a>
 
-        <a href="personal-blog" class="btn btn-info">Comments ${blog.getCommentTree()}</a>
+        <span id="showCommentBtn" class="btn btn-info"> Comments </span>
+        <hr>
+        <div id="comment-area"></div>
+        <hr>
         <c:set var="comments" value="${blog.getCommentTree()}"/>
         <%@include file="comments.jsp" %>
     </div>
 </article>
 <br>
+
+<script>
+    $("#showCommentBtn").on("click", function () {
+        $.get("/personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
+            $("#comment-area").text(resp);
+        })
+    })
+
+</script>
