@@ -15,7 +15,7 @@
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div>
     <%@ include file="home_page_articles.jsp" %>
-    <c:if test="${not empty param.userId}">
+    <c:if test="${not empty sessionScope.get('loggedInUser')}">
     <%@ include file="home_page_profile.jsp" %>
     </c:if>
 </div>
