@@ -15,6 +15,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>home_page.jsp</welcome-file>
+        <welcome-file>mock_home_page.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

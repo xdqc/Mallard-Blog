@@ -18,12 +18,22 @@ import java.util.List;
 import java.util.Properties;
 
 public class DbConnector {
+
+    static {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public DbConnector(String path) {
         try (FileInputStream fIn = new FileInputStream(path)) {
             dbProps.load(fIn);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private static Properties dbProps = new Properties();
@@ -50,11 +60,7 @@ public class DbConnector {
 
     public static UserRecord getAuthorByArticleId(String articleId) {
         UserRecord user = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -76,11 +82,6 @@ public class DbConnector {
 
     public static UserRecord getUserByUserId(String userId) {
         UserRecord user = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -100,11 +101,7 @@ public class DbConnector {
 
     public static List<ArticleRecord> getArticlesByUserId(String userId) {
         List<ArticleRecord> articles = new ArrayList<>();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
