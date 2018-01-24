@@ -5,12 +5,14 @@ import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import utililties.Blog;
 import utililties.Tree;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
@@ -29,6 +31,16 @@ public class PersonalBlog extends HttpServlet {
 
         String articleId = req.getParameter("articleId");
         String userId = req.getParameter("userId");
+
+        // If current session does not exist, then it will NOT create a new session.
+        HttpSession session = req.getSession(false);
+
+        UserRecord loggedUser;
+        if (session == null || session.getAttribute("loggedInUser") == null) {
+            loggedUser = null;
+        } else {
+            loggedUser = (UserRecord) session.getAttribute("loggedInUser");
+        }
 
         UserRecord user = (articleId == null || articleId.isEmpty())
                 ? DbConnector.getUserByUserId(userId)
@@ -56,22 +68,25 @@ public class PersonalBlog extends HttpServlet {
 
         userId = String.valueOf(user.getId());
 
-        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
-
+//        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
+        List<Blog> blogList = new LinkedList<>();
+
         if (articles.size() > 0){
             // Load comments for each article
             for (ArticleRecord article : articles) {
-                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
-                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-                getChildComments(rootComment, parentComments);
-                blogs.put(article, rootComment);
+//                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
+//                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+//                getChildComments(rootComment, parentComments);
+//                blogs.put(article, rootComment);
+                blogList.add(new Blog(article));
             }
 
 
-            req.setAttribute("blogs", blogs);
-            req.setAttribute("rootComment", blogs.get(articles.get(0)));
-            blogs.get(articles.get(0)).getChildren();
+            req.setAttribute("blogs", blogList);
+//            req.setAttribute("rootComment", blogList.get(articles.get(0)));
+
+
         }
 
         req.setAttribute("articles", articles);

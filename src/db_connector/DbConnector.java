@@ -129,6 +129,7 @@ public class DbConnector {
                     .join(Article.ARTICLE)
                     .on(Comment.COMMENT.PARENT_ARTICLE.eq(Article.ARTICLE.ID))
                     .where(Article.ARTICLE.ID.equalIgnoreCase(articleId))
+                    .orderBy(Comment.COMMENT.CREATE_TIME.desc())
                     .fetch()
                     .into(CommentRecord.class);
 

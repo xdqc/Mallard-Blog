@@ -31,8 +31,11 @@ public class HomePage extends HttpServlet {
         HttpSession session = req.getSession(false);
 
         UserRecord user;
-        if (session == null || session.getAttribute("loggedInUser") == null) user = null;
-        else user = (UserRecord) session.getAttribute("loggedInUser");
+        if (session == null || session.getAttribute("loggedInUser") == null) {
+            user = null;
+        } else {
+            user = (UserRecord) session.getAttribute("loggedInUser");
+        }
 
         //get all articles sort by like number
         List<ArticleRecord> articles = DbConnector.getHotArticlesSort();

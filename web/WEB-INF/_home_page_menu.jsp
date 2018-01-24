@@ -17,7 +17,7 @@
                 <li class="active">
                     <a class="navbar-brand" href="home-page"><span  class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a>
                 </li>
-                <li><a href="personal-blog?userId=${param.userId}">Personal Blog</a></li>
+                <li><a href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">Personal Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <c:if test="${not empty sessionScope.get('loggedInUser')}">
