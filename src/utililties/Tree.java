@@ -36,7 +36,8 @@ public class Tree<T> {
     }
 
     public void traverse(Tree<T> node, List<T> result){       // pre order traversal
-        result.add(node.data);
+        if (node.data!=null)
+            result.add(node.data);
         for(Tree<T> each : node.children) {
             traverse(each, result);
         }

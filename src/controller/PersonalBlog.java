@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -51,9 +48,9 @@ public class PersonalBlog extends HttpServlet {
                 ? DbConnector.getUserByUserId(userId)
                 : DbConnector.getAuthorByArticleId(articleId);
 
-        if (user==null){
+        if (user == null) {
             String errorMsg = "Too bad! We cannot find that user.";
-            req.getRequestDispatcher("error?userId=&errorMsg="+errorMsg).forward(req, resp);
+            req.getRequestDispatcher("error?userId=&errorMsg=" + errorMsg).forward(req, resp);
             return;
         }
 
@@ -77,7 +74,7 @@ public class PersonalBlog extends HttpServlet {
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
         List<Blog> blogList = new LinkedList<>();
 
-        if (articles.size() > 0){
+        if (articles.size() > 0) {
             // Load comments for each article
             for (ArticleRecord article : articles) {
 //                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
@@ -91,15 +88,6 @@ public class PersonalBlog extends HttpServlet {
             req.setAttribute("blogs", blogList);
 //            req.setAttribute("rootComment", blogList.get(articles.get(0)));
 
-            String blogId = req.getParameter("blog");
-            if (blogId != null) {
-                ajaxBlogHandler(req, resp, blogList);
-                return;
-            }
-
-
-
-
         }
 
         req.setAttribute("articles", articles);
@@ -107,36 +95,34 @@ public class PersonalBlog extends HttpServlet {
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
-    private void ajaxBlogHandler(HttpServletRequest req, HttpServletResponse resp, List<Blog> blogList) throws IOException {
-            Map<UserRecord, Tree<CommentRecord>> blogMap = blogList.stream()
-                    .collect(Collectors.toMap(Blog::getAuthor, Blog::getCommentTree));
+    private void ajaxBlogHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
+        List<CommentRecord> comments = new LinkedList<>();
 
-            JSONObject json = new JSONObject(blogMap);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(json.toJSONString());
+        blog.getCommentTree().traverse(blog.getCommentTree(), comments);
+
+        Map<Integer, String> commentMap = new TreeMap<>();
+        for (CommentRecord comment : comments) {
+            if (comment.getCommenter() != null){
+                commentMap.put(comment.getId(), comment.getContent());
+            }
+        }
+
+        JSONObject json = new JSONObject(commentMap);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        json.writeJSONString(resp.getWriter());
     }
-
-//    /**
-//     * Add comments recursively to the comment tree
-//     * @param comment The parent
-//     * @param childrenComments The children
-//     */
-//    private void getChildComments(Tree<CommentRecord> comment, List<CommentRecord> childrenComments) {
-//        for (CommentRecord pComment : childrenComments) {
-//            Tree<CommentRecord> parent = new Tree<>(pComment);
-//            comment.addChild(parent);
-//
-//            List<CommentRecord> children = DbConnector.getCommentsByParentCommentId(String.valueOf(pComment.getId()));
-//            if (children.size()>0){
-//                getChildComments(parent, children);
-//            }
-//        }
-//    }
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //doGet(req, resp);
+
+        String blogId = req.getParameter("blog");
+        if (blogId != null) {
+            Blog blog = new Blog(DbConnector.getArticleById(blogId));
+            ajaxBlogHandler(req, resp, blog);
+            return;
+        }
     }
 
 

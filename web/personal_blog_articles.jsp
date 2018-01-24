@@ -22,8 +22,8 @@
 
 <script>
     $("#showCommentBtn").on("click", function () {
-        $.get("/personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
-            $("#comment-area").text(resp);
+        $.post("personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
+            $("#comment-area").text(JSON.stringify(resp));
         })
     })
 

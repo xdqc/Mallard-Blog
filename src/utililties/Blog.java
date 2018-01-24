@@ -48,28 +48,17 @@ public class Blog {
         }
     }
 
+
     public UserRecord getAuthor() {
         return author;
-    }
-
-    public void setAuthor(UserRecord author) {
-        this.author = author;
     }
 
     public ArticleRecord getArticle() {
         return article;
     }
 
-    public void setArticle(ArticleRecord article) {
-        this.article = article;
-    }
-
     public Tree<CommentRecord> getCommentTree() {
         return commentTree;
-    }
-
-    public void setCommentTree(Tree<CommentRecord> commentTree) {
-        this.commentTree = commentTree;
     }
 
 }
