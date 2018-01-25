@@ -82,6 +82,22 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return numComments;
     }
 
+    public void addValue(List<CommentRecord> c) {
+        if (!c.isEmpty()){
+            this.commentList.add(c.get(0));
+        }
+        addListToTree();
+    }
+
+    public void setKey(Tuple<UserRecord, ArticleRecord> t) {
+        this.author = t.Val1;
+        this.article = t.Val2;
+    }
+
+    public List<CommentRecord> getCommentList() {
+        return commentList;
+    }
+
 
     /**
      * Returns the key corresponding to this entry.
@@ -136,15 +152,4 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return value;
     }
 
-    public void addValue(List<CommentRecord> c) {
-        if (!c.isEmpty()){
-            this.commentList.add(c.get(0));
-        }
-        addListToTree();
-    }
-
-    public void setKey(Tuple<UserRecord, ArticleRecord> t) {
-        this.author = t.Val1;
-        this.article = t.Val2;
-    }
 }

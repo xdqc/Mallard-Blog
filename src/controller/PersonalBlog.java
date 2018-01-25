@@ -58,20 +58,14 @@ public class PersonalBlog extends Controller {
 
         userId = String.valueOf(user.getId());
 
-        List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
-        List<Blog> blogList = new LinkedList<>();
+//        List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
+//        List<Blog> blogList = new LinkedList<>();
+        List<Blog> blogs = DbConnector.getBlogsByUserId(userId);
 
-        if (articles.size() > 0) {
+        if (blogs.size() > 0) {
             // Load comments for each article
-            for (ArticleRecord article : articles) {
-
-                blogList.add(new Blog(article));
-            }
-
-            req.setAttribute("blogs", blogList);
+            req.setAttribute("blogs", blogs);
         }
-
-        req.setAttribute("articles", articles);
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }

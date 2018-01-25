@@ -11,16 +11,14 @@ import org.jooq.*;
 import org.jooq.impl.DSL;
 import utililties.Blog;
 import utililties.Tuple;
+import utililties.Tuple3;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static ORM.tables.Article.ARTICLE;
 import static ORM.tables.Comment.*;
@@ -294,6 +292,7 @@ public class DbConnector {
                     .from((USER).join(ARTICLE).onKey())
                     .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .orderBy(COMMENT.CREATE_TIME.asc())
                     .fetchGroups(
                             r -> new Tuple<>(r.into(USER).into(UserRecord.class), r.into(ARTICLE).into(ArticleRecord.class)),
                             r -> r.into(COMMENT).into(CommentRecord.class)
@@ -305,11 +304,60 @@ public class DbConnector {
             });
 
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return blog;
+    }
+
+    public static List<Blog> getBlogsByUserId(String userId) {
+        List<Blog> blogs = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            List<Tuple3<UserRecord, ArticleRecord, CommentRecord>> result = create
+                    .select(USER.fields())
+                    .select(ARTICLE.fields())
+                    .select(COMMENT.fields())
+                    .from((USER).join(ARTICLE).onKey())
+                    .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .orderBy(COMMENT.CREATE_TIME.asc())
+                    .fetch(
+                            r->new Tuple3<>(
+                                    r.into(USER).into(UserRecord.class),
+                                    r.into(ARTICLE).into(ArticleRecord.class),
+                                    r.into(COMMENT).into(CommentRecord.class)
+                            )
+                    );
+
+            result.forEach(
+                    t-> {
+                        Blog blog = new Blog();
+                        blog.setKey(new Tuple<>(t.Val1, t.Val2));
+                        blog.getCommentList().add(t.Val3);
+
+                        // find if result already contains the article
+                        Blog thatBlog = blogs.stream()
+                                .filter(b -> b.getKey().equals(blog.getKey()))
+                                .findFirst().orElse(null);
+
+                        // if there the blog with same Author/Article has been added to result,
+                        if (thatBlog != null){
+                            // then, old article,  add comment to that blog
+                            thatBlog.getCommentList().add(t.Val3);
+                        } else {
+                            // else, new article, just add blog into result
+                            blogs.add(blog);
+                        }
+                    }
+            );
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
     }
 }
