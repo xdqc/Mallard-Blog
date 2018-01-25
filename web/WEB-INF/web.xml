@@ -28,6 +28,15 @@
         <servlet-name>contact</servlet-name>
         <servlet-class>controller.Contact</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>sign-up</servlet-name>
+        <servlet-class>controller.SignUp</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>sign-up</servlet-name>
+        <url-pattern>/sign-up</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>home-page</servlet-name>
