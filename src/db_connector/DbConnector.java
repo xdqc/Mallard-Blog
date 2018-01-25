@@ -8,8 +8,10 @@ import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
+import jdk.management.resource.internal.inst.UnixAsynchronousSocketChannelImplRMHooks;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import utililties.Blog;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +21,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import static ORM.tables.Article.ARTICLE;
+import static ORM.tables.Comment.*;
+import static ORM.tables.User.*;
 
 public class DbConnector {
 
@@ -46,8 +52,8 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-            Result<Record2<Integer, String>> result = create.select(User.USER.GENDER, User.USER.F_NAME)
-                    .from(User.USER)
+            Result<Record2<Integer, String>> result = create.select(USER.GENDER, USER.F_NAME)
+                    .from(USER)
                     .fetch();
 
             for (Record2<Integer, String> record : result) {
@@ -68,9 +74,9 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             user = create.select()
-                    .from(User.USER)
-                    .join(Article.ARTICLE).onKey()
-                    .where(Article.ARTICLE.ID.equalIgnoreCase(articleId))
+                    .from(USER)
+                    .join(ARTICLE).onKey()
+                    .where(ARTICLE.ID.equalIgnoreCase(articleId))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -87,8 +93,8 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             user = create.select()
-                    .from(User.USER)
-                    .where(User.USER.ID.equalIgnoreCase(userId))
+                    .from(USER)
+                    .where(USER.ID.equalIgnoreCase(userId))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -105,10 +111,10 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             articles = create.select()
-                    .from(Article.ARTICLE)
-                    .join(User.USER).onKey()
-                    .where(User.USER.ID.equalIgnoreCase(userId))
-                    .orderBy(Article.ARTICLE.CREATE_TIME.desc())
+                    .from(ARTICLE)
+                    .join(USER).onKey()
+                    .where(USER.ID.equalIgnoreCase(userId))
+                    .orderBy(ARTICLE.CREATE_TIME.desc())
                     .fetch()
                     .into(ArticleRecord.class);
 
@@ -125,11 +131,11 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             comments = create.select()
-                    .from(Comment.COMMENT)
-                    .join(Article.ARTICLE)
-                    .on(Comment.COMMENT.PARENT_ARTICLE.eq(Article.ARTICLE.ID))
-                    .where(Article.ARTICLE.ID.equalIgnoreCase(articleId))
-                    .orderBy(Comment.COMMENT.CREATE_TIME.desc())
+                    .from(COMMENT)
+                    .join(ARTICLE)
+                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(ARTICLE.ID.equalIgnoreCase(articleId))
+                    .orderBy(COMMENT.CREATE_TIME.desc())
                     .fetch()
                     .into(CommentRecord.class);
 
@@ -146,8 +152,8 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             comments = create.select()
-                    .from(Comment.COMMENT)
-                    .where(Comment.COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
+                    .from(COMMENT)
+                    .where(COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
                     .fetch()
                     .into(CommentRecord.class);
 
@@ -164,8 +170,8 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             articles = create.select()
-                    .from(Article.ARTICLE)
-                    .orderBy(Article.ARTICLE.LIKE_NUM.desc())
+                    .from(ARTICLE)
+                    .orderBy(ARTICLE.LIKE_NUM.desc())
                     .fetch()
                     .into(ArticleRecord.class);
         } catch (SQLException e) {
@@ -195,8 +201,8 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
             result = create.selectCount()
-                    .from(Article.ARTICLE)
-                    .where(Article.ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .from(ARTICLE)
+                    .where(ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
                     .fetchOne(0, int.class);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -204,14 +210,19 @@ public class DbConnector {
         return result;
     }
 
+    /**
+     * Get a UserRecord obj by searching username, NULLABLE
+     * @param username
+     * @return
+     */
     public static UserRecord getUserByUsername(String username) {
         List<UserRecord> user = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             user = create.select()
-                    .from(User.USER)
-                    .where(User.USER.USER_NAME.equalIgnoreCase(username))
+                    .from(USER)
+                    .where(USER.USER_NAME.equalIgnoreCase(username))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -221,14 +232,19 @@ public class DbConnector {
         return user.isEmpty()?null:user.get(0);
     }
 
-    public static ArticleRecord getArticleById(String blogId) {
+    /**
+     * Get Article by its id
+     * @param articleId
+     * @return
+     */
+    public static ArticleRecord getArticleById(String articleId) {
         List<ArticleRecord> articles = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             articles = create.select()
-                    .from(Article.ARTICLE)
-                    .where(Article.ARTICLE.ID.equalIgnoreCase(blogId))
+                    .from(ARTICLE)
+                    .where(ARTICLE.ID.equalIgnoreCase(articleId))
                     .fetch()
                     .into(ArticleRecord.class);
 
@@ -236,5 +252,54 @@ public class DbConnector {
             e.printStackTrace();
         }
         return articles.isEmpty()?null:articles.get(0);
+    }
+
+    /**
+     * Get how many comments under an article by its id.
+     * @param articleId
+     * @return
+     */
+    public static int getCommentNumberByArticle(String articleId) {
+        int result = 0;
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            result = create.selectCount()
+                    .from(COMMENT)
+                    .where(COMMENT.PARENT_ARTICLE.eq(Integer.parseInt(articleId)))
+                    .fetchOne(0, int.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Get Article with Author and all Comments by articleId
+     * @param articleId
+     * @return
+     */
+    public static Blog getBlogByArticleId(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            Result<Record> result = create
+                    .select()
+                    .from(USER)
+                    .join(ARTICLE)
+                    .on(ARTICLE.AUTHOR.eq(USER.ID))
+                    .join(COMMENT)
+                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(ARTICLE.ID.eq(Integer.valueOf(articleId)))
+                    .fetch();
+
+            for (Record record : result) {
+                System.out.println(record.formatJSON());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new Blog(new ArticleRecord());
     }
 }

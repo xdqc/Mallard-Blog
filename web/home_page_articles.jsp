@@ -1,6 +1,6 @@
 <div class="col-sm-12 col-md-9 col-lg-9">
-    <c:forEach var="blog" items="${blogs}">
-        <c:if test="${blog.getArticle().getShowHideStatus()>0}">
+    <%--<c:forEach var="blog" items="${blogs}">--%>
+        <%--<c:if test="${blog.getArticle().getShowHideStatus()>0}">--%>
             <%--<article class="panel animated fadeInLeft">--%>
                 <%--<img class="panel-img-top img-responsive" src="http://lorempixel.com/800/500"--%>
                      <%--alt="random picture"/>--%>
@@ -14,8 +14,8 @@
                     <%--<a href="#" class="btn btn-primary">Read more</a>--%>
                 <%--</div>--%>
             <%--</article>--%>
-            <%@include file="personal_blog_articles.jsp"%>
-            <br>
-        </c:if>
-    </c:forEach>
+        <%--</c:if>--%>
+    <%--</c:forEach>--%>
+    <%@include file="personal_blog_articles.jsp"%>
+    <br>
 </div>

@@ -58,24 +58,17 @@ public class PersonalBlog extends Controller {
 
         userId = String.valueOf(user.getId());
 
-//        Map<ArticleRecord, Tree<CommentRecord>> blogs = new TreeMap<>();
         List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
         List<Blog> blogList = new LinkedList<>();
 
         if (articles.size() > 0) {
             // Load comments for each article
             for (ArticleRecord article : articles) {
-//                Tree<CommentRecord> rootComment = new Tree<>(new CommentRecord());
-//                List<CommentRecord> parentComments = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-//                getChildComments(rootComment, parentComments);
-//                blogs.put(article, rootComment);
+
                 blogList.add(new Blog(article));
             }
 
-
             req.setAttribute("blogs", blogList);
-//            req.setAttribute("rootComment", blogList.get(articles.get(0)));
-
         }
 
         req.setAttribute("articles", articles);

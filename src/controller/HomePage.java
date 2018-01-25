@@ -27,6 +27,7 @@ public class HomePage extends Controller {
         //get all articles sort by like number
         List<ArticleRecord> articles = DbConnector.getHotArticlesSort();
         req.setAttribute("articles", articles);
+
         //pack article and it's author and comments in to one object called "blog"
         List<Blog> blogList = new LinkedList<>();
         for (ArticleRecord article : articles) {

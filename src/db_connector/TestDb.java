@@ -8,6 +8,6 @@ public class TestDb {
 
     private void run() {
         new DbConnector("conf/dev/mysql.properties");
-        DbConnector.fetchAllUserFromDb();
+        DbConnector.getBlogByArticleId("1");
     }
 }
