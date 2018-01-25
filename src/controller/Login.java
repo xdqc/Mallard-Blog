@@ -10,38 +10,43 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Login extends Controller {
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        String dbPath = getServletContext().getRealPath("/WEB-INF/mysql.properties");
-        new DbConnector(dbPath);
-    }
 
-    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        req.getRequestDispatcher("error?errorMsg=You think you are smart?").forward(req, resp);
     }
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserRecord user = getLoggedUserFromSession(req);
+        if (user!=null){
+            req.getRequestDispatcher("home-page").forward(req, resp);
+            return;
+        }
+
 
         boolean isLogin = req.getParameter("login") != null && req.getParameter("login").equals("1");
         if (isLogin){
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
-            UserRecord user = DbConnector.getUserByUsername(username);
-            if (user==null){
+            UserRecord userRecord = DbConnector.getUserByUsername(username);
+            if (userRecord==null){
                 req.getRequestDispatcher("login?failed=1&login=0").forward(req, resp);
                 return;
-            } else if (!authenticationPassed(user, password)) {
+            } else if (!authenticationPassed(userRecord, password)) {
                 req.getRequestDispatcher("login?failed=1&login=0").forward(req, resp);
                 return;
             } else {
                 // success
-                req.getSession().setAttribute("loggedInUser", user);
+                req.getSession().setAttribute("loggedInUser", userRecord);
                 req.getRequestDispatcher("home-page").forward(req, resp);
             }
+            return;
+        }
+
+        boolean isLoggingIn = req.getParameter("login") !=null && req.getParameter("login").equals("0");
+        if (isLoggingIn){
+            req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
             return;
         }
 
@@ -62,13 +67,13 @@ public class Login extends Controller {
 
         boolean isLoginFailed = req.getParameter("failed") != null && req.getParameter("failed").equals("1");
         if (isLoginFailed){
-            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
             return;
         }
 
 
 
-        req.getRequestDispatcher("login.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
     }
 
     private boolean authenticationPassed(UserRecord user, String password) {
