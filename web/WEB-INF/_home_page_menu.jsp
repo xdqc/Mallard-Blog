@@ -21,7 +21,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <c:if test="${not empty sessionScope.get('loggedInUser')}">
-                <li><a href="#"><span  class="glyphicon glyphicon-user" aria-hidden="true"></span>${current_username}</a></li>
+                <li><a href="#"><span  class="glyphicon glyphicon-user" aria-hidden="true"></span>${sessionScope.get('loggedInUser').getUserName()}</a></li>
                 <li><a href="#"><span  class="glyphicon glyphicon-bell" aria-hidden="true"></span>Notification</a></li>
             </c:if>
                 <li>

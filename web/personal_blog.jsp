@@ -11,7 +11,7 @@
 <html>
 <head>
 <%@include file="WEB-INF/_head.jsp"%>
-    <title>${current_username}'s Blog</title>
+    <title>${sessionScope.get("loggedInUser").getUserName()}'s Blog</title>
 </head>
 <body>
 <%@include file="WEB-INF/_home_page_logo.jsp"%>
@@ -33,11 +33,7 @@
                 </div>
             </c:if>
             <c:if test="${articles.size()!=0}">
-                <c:forEach var="blog" items="${blogs}">
-                    <c:if test="${blog.getArticle().getShowHideStatus()>0}">
-                        <%@ include file="personal_blog_articles.jsp" %>
-                    </c:if>
-                </c:forEach>
+                <%@ include file="personal_blog_articles.jsp" %>
             </c:if>
         </div>
     </div>
