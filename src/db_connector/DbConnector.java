@@ -340,7 +340,7 @@ public class DbConnector {
 
                         // find if result already contains the article
                         Blog thatBlog = blogs.stream()
-                                .filter(b -> b.getKey().equals(blog.getKey()))
+                                .filter(b -> b.getArticle().getId().equals(blog.getArticle().getId()))
                                 .findFirst().orElse(null);
 
                         // if there the blog with same Author/Article has been added to result,
@@ -358,6 +358,7 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //blogs.forEach(b -> b.);
         return blogs;
     }
 }

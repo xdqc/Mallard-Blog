@@ -3,7 +3,9 @@ package utililties;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
+import com.sun.org.apache.bcel.internal.generic.RET;
 import db_connector.DbConnector;
+import org.json.simple.JSONObject;
 
 import java.util.*;
 
@@ -37,6 +39,11 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
 
     public Blog() {}
 
+    //TODO get Json
+    public JSONObject getCommentTreeJSON(){
+        return null;
+    }
+    
     private void addListToTree() {
         // Add comment that directly under the article
         for (CommentRecord comment : commentList) {
