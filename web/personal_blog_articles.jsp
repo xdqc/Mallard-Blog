@@ -1,5 +1,5 @@
 <article class="panel animated fadeInLeft">
-    <img class="panel-img-top img-responsive" src="http://lorempixel.com/800/500"
+    <img class="panel-img-top img-responsive" src="https://picsum.photos/800/400"
          alt="random picture"/>
     <div class="panel-body">
         <h4 class="panel-title">${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</h4>
@@ -11,10 +11,12 @@
         <a href="#" class="btn btn-primary">Read more</a>
 
         <c:if test="${blog.getNumComments() > 0}">
-            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info"> Show Comments (${blog.getNumComments()})</button>
+            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info"> Show Comments
+                <span class="badge">${blog.getNumComments()}</span></button>
         </c:if>
         <c:if test="${blog.getNumComments() == 0}">
-            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info" disabled="disabled"> Show Comments (0)</button>
+            <button type="button" id="showCommentBtn-${blog.getArticle().getId()}" class="btn btn-info" disabled="disabled"> Show Comments
+                <span class="badge">0</span></button>
         </c:if>
         <div id="comment-area-${blog.getArticle().getId()}" class="">
 
@@ -51,7 +53,7 @@
                     commentArea.text(msg);
                 },
                 complete: function(){
-                    commentArea.append(' loaded.')
+                    console.log("loaded");
                 }
             });
 

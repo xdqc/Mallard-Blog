@@ -30,7 +30,7 @@
                     <h3>Username or password doesn't match.</h3>
                 </div>
             </c:if>
-            <form id="login-form" method="post" action="login">
+            <form id="login-form" method="post" action="login?login=1">
                 <fieldset>
                     <legend>Login</legend>
                     <ul>

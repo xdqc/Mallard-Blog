@@ -20,14 +20,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class PersonalBlog extends HttpServlet {
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        String dbPath = getServletContext().getRealPath("/WEB-INF/mysql.properties");
-        new DbConnector(dbPath);
-    }
+public class PersonalBlog extends Controller {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -35,14 +28,9 @@ public class PersonalBlog extends HttpServlet {
         String userId = req.getParameter("userId");
 
         // If current session does not exist, then it will NOT create a new session.
-        HttpSession session = req.getSession(false);
 
-        UserRecord loggedUser;
-        if (session == null || session.getAttribute("loggedInUser") == null) {
-            loggedUser = null;
-        } else {
-            loggedUser = (UserRecord) session.getAttribute("loggedInUser");
-        }
+        UserRecord loggedUser = getLoggedUserFromSession(req);
+
 
         UserRecord user = (articleId == null || articleId.isEmpty())
                 ? DbConnector.getUserByUserId(userId)
