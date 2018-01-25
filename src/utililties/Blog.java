@@ -5,19 +5,16 @@ import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /* The reason of creating this class is to minimize total db queries, thus enhance the performance of the web app */
 /* This is also helpful to integrate our data model */
 public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>> {
     private UserRecord author;
     private ArticleRecord article;
-    private Tree<CommentRecord> commentTree;
     private int numComments;
-    private List<CommentRecord> commentList;
+    private Tree<CommentRecord> commentTree = new Tree<>(new CommentRecord());
+    private List<CommentRecord> commentList = new ArrayList<>();
 
     public Blog(ArticleRecord article) {
         this.article = article;
@@ -25,7 +22,22 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         this.numComments = DbConnector.getCommentNumberByArticle(String.valueOf(article.getId()));
         this.commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
         this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
+        addListToTree();
+    }
 
+    public Blog(Tuple<UserRecord, ArticleRecord> tuple, List<CommentRecord> commentList){
+        this.author = tuple.Val1;
+        this.article = tuple.Val2;
+        this.commentList = commentList;
+        this.numComments = commentList.size();
+        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
+
+        addListToTree();
+    }
+
+    public Blog() {}
+
+    private void addListToTree() {
         // Add comment that directly under the article
         for (CommentRecord comment : commentList) {
             if (comment.getParentComment() == null) {
@@ -121,6 +133,18 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
      */
     @Override
     public List<CommentRecord> setValue(List<CommentRecord> value) {
-        return null;
+        return value;
+    }
+
+    public void addValue(List<CommentRecord> c) {
+        if (!c.isEmpty()){
+            this.commentList.add(c.get(0));
+        }
+        addListToTree();
+    }
+
+    public void setKey(Tuple<UserRecord, ArticleRecord> t) {
+        this.author = t.Val1;
+        this.article = t.Val2;
     }
 }

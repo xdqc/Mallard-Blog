@@ -1,6 +1,8 @@
 package db_connector;
 
 
+import ORM.tables.Article;
+import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
@@ -81,7 +83,7 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
 
@@ -99,7 +101,7 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
     public static List<ArticleRecord> getArticlesByUserId(String userId) {
@@ -210,6 +212,7 @@ public class DbConnector {
 
     /**
      * Get a UserRecord obj by searching username, NULLABLE
+     *
      * @param username
      * @return
      */
@@ -227,11 +230,12 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
     /**
      * Get Article by its id
+     *
      * @param articleId
      * @return
      */
@@ -249,11 +253,12 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return articles.isEmpty()?null:articles.get(0);
+        return articles.isEmpty() ? null : articles.get(0);
     }
 
     /**
      * Get how many comments under an article by its id.
+     *
      * @param articleId
      * @return
      */
@@ -273,10 +278,12 @@ public class DbConnector {
 
     /**
      * Get Article with Author and all Comments by articleId
+     *
      * @param articleId
      * @return
      */
     public static Blog getBlogByArticleId(String articleId) {
+        Blog blog = new Blog();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -284,16 +291,18 @@ public class DbConnector {
                     .select(USER.fields())
                     .select(ARTICLE.fields())
                     .select(COMMENT.fields())
-                    .from(USER)
-                    .join(ARTICLE)
-                    .on(ARTICLE.AUTHOR.eq(USER.ID))
-                    .join(COMMENT)
-                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
-                    .where(ARTICLE.ID.eq(Integer.valueOf(articleId)))
+                    .from((USER).join(ARTICLE).onKey())
+                    .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
                     .fetchGroups(
                             r -> new Tuple<>(r.into(USER).into(UserRecord.class), r.into(ARTICLE).into(ArticleRecord.class)),
                             r -> r.into(COMMENT).into(CommentRecord.class)
                     );
+
+            result.forEach((t, c) -> {
+                blog.setKey(t);
+                blog.addValue(c);
+            });
 
 
 
@@ -301,6 +310,6 @@ public class DbConnector {
             e.printStackTrace();
         }
 
-        return new Blog(new ArticleRecord());
+        return blog;
     }
 }
