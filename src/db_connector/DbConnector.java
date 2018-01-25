@@ -1,6 +1,8 @@
 package db_connector;
 
 
+import ORM.tables.Article;
+import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
@@ -9,16 +11,14 @@ import org.jooq.*;
 import org.jooq.impl.DSL;
 import utililties.Blog;
 import utililties.Tuple;
+import utililties.Tuple3;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static ORM.tables.Article.ARTICLE;
 import static ORM.tables.Comment.*;
@@ -81,7 +81,7 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
 
@@ -99,7 +99,7 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
     public static List<ArticleRecord> getArticlesByUserId(String userId) {
@@ -210,6 +210,7 @@ public class DbConnector {
 
     /**
      * Get a UserRecord obj by searching username, NULLABLE
+     *
      * @param username
      * @return
      */
@@ -227,11 +228,12 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user.isEmpty()?null:user.get(0);
+        return user.isEmpty() ? null : user.get(0);
     }
 
     /**
      * Get Article by its id
+     *
      * @param articleId
      * @return
      */
@@ -249,11 +251,12 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return articles.isEmpty()?null:articles.get(0);
+        return articles.isEmpty() ? null : articles.get(0);
     }
 
     /**
      * Get how many comments under an article by its id.
+     *
      * @param articleId
      * @return
      */
@@ -273,10 +276,12 @@ public class DbConnector {
 
     /**
      * Get Article with Author and all Comments by articleId
+     *
      * @param articleId
      * @return
      */
     public static Blog getBlogByArticleId(String articleId) {
+        Blog blog = new Blog();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -284,23 +289,76 @@ public class DbConnector {
                     .select(USER.fields())
                     .select(ARTICLE.fields())
                     .select(COMMENT.fields())
-                    .from(USER)
-                    .join(ARTICLE)
-                    .on(ARTICLE.AUTHOR.eq(USER.ID))
-                    .join(COMMENT)
-                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
-                    .where(ARTICLE.ID.eq(Integer.valueOf(articleId)))
+                    .from((USER).join(ARTICLE).onKey())
+                    .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .orderBy(COMMENT.CREATE_TIME.asc())
                     .fetchGroups(
                             r -> new Tuple<>(r.into(USER).into(UserRecord.class), r.into(ARTICLE).into(ArticleRecord.class)),
                             r -> r.into(COMMENT).into(CommentRecord.class)
                     );
 
+            result.forEach((t, c) -> {
+                blog.setKey(t);
+                blog.addValue(c);
+            });
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return new Blog(new ArticleRecord());
+        return blog;
+    }
+
+    public static List<Blog> getBlogsByUserId(String userId) {
+        List<Blog> blogs = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            List<Tuple3<UserRecord, ArticleRecord, CommentRecord>> result = create
+                    .select(USER.fields())
+                    .select(ARTICLE.fields())
+                    .select(COMMENT.fields())
+                    .from((USER).join(ARTICLE).onKey())
+                    .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .orderBy(COMMENT.CREATE_TIME.asc())
+                    .fetch(
+                            r->new Tuple3<>(
+                                    r.into(USER).into(UserRecord.class),
+                                    r.into(ARTICLE).into(ArticleRecord.class),
+                                    r.into(COMMENT).into(CommentRecord.class)
+                            )
+                    );
+
+            result.forEach(
+                    t-> {
+                        Blog blog = new Blog();
+                        blog.setKey(new Tuple<>(t.Val1, t.Val2));
+                        blog.getCommentList().add(t.Val3);
+
+                        // find if result already contains the article
+                        Blog thatBlog = blogs.stream()
+                                .filter(b -> b.getArticle().getId().equals(blog.getArticle().getId()))
+                                .findFirst().orElse(null);
+
+                        // if there the blog with same Author/Article has been added to result,
+                        if (thatBlog != null){
+                            // then, old article,  add comment to that blog
+                            thatBlog.getCommentList().add(t.Val3);
+                        } else {
+                            // else, new article, just add blog into result
+                            blogs.add(blog);
+                        }
+                    }
+            );
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //blogs.forEach(b -> b.);
+        return blogs;
     }
 }
