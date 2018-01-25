@@ -220,4 +220,21 @@ public class DbConnector {
         }
         return user.isEmpty()?null:user.get(0);
     }
+
+    public static ArticleRecord getArticleById(String blogId) {
+        List<ArticleRecord> articles = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            articles = create.select()
+                    .from(Article.ARTICLE)
+                    .where(Article.ARTICLE.ID.equalIgnoreCase(blogId))
+                    .fetch()
+                    .into(ArticleRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articles.isEmpty()?null:articles.get(0);
+    }
 }
