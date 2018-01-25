@@ -11,7 +11,7 @@
 <html>
 <head>
 <%@include file="WEB-INF/_head.jsp"%>
-    <title>${current_username}'s Blog</title>
+    <title>${sessionScope.get("loggedInUser").getUserName()}'s Blog</title>
 </head>
 <body>
 <%@include file="WEB-INF/_home_page_logo.jsp"%>

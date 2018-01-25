@@ -1,17 +1,14 @@
 package db_connector;
 
 
-import ORM.tables.Article;
-import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
-import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
-import jdk.management.resource.internal.inst.UnixAsynchronousSocketChannelImplRMHooks;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import utililties.Blog;
+import utililties.Tuple;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static ORM.tables.Article.ARTICLE;
@@ -282,19 +280,22 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-            Result<Record> result = create
-                    .select()
+            Map<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>> result = create
+                    .select(USER.fields())
+                    .select(ARTICLE.fields())
+                    .select(COMMENT.fields())
                     .from(USER)
                     .join(ARTICLE)
                     .on(ARTICLE.AUTHOR.eq(USER.ID))
                     .join(COMMENT)
                     .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(ARTICLE.ID.eq(Integer.valueOf(articleId)))
-                    .fetch();
+                    .fetchGroups(
+                            r -> new Tuple<>(r.into(USER).into(UserRecord.class), r.into(ARTICLE).into(ArticleRecord.class)),
+                            r -> r.into(COMMENT).into(CommentRecord.class)
+                    );
 
-            for (Record record : result) {
-                System.out.println(record.formatJSON());
-            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
