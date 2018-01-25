@@ -35,10 +35,26 @@
         $(this).toggleClass('active');
 
         if ($(this).hasClass('active')){
-            $.post("personal-blog?blog=${blog.getArticle().getId()}", function (resp) {
-                // TODO make comments display nicely
-                commentArea.text(JSON.stringify(resp));
+            $.ajax({
+                type: 'POST',
+                url: 'personal-blog?=',
+                data:  { blog: "${blog.getArticle().getId()}"},
+                cache: false,
+                beforeSend: function(){
+                    commentArea.text('loading...')
+                },
+                success: function(resp, status){
+                    // TODO make comments display nicely
+                    commentArea.text(JSON.stringify(resp));
+                },
+                error: function (msg, status) {
+                    commentArea.text(msg);
+                },
+                complete: function(){
+                    commentArea.append(' loaded.')
+                }
             });
+
             commentArea.show();
         } else {
             commentArea.hide();
