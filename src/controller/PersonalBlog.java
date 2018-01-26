@@ -1,16 +1,13 @@
 package controller;
 
 
-import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import org.json.simple.JSONObject;
 import utililties.Blog;
-import utililties.Tree;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PersonalBlog extends Controller {
 
@@ -27,20 +23,28 @@ public class PersonalBlog extends Controller {
         String articleId = req.getParameter("articleId");
         String userId = req.getParameter("userId");
 
-        // If current session does not exist, then it will NOT create a new session.
-
         UserRecord loggedUser = getLoggedUserFromSession(req);
 
-
+        // Get user to be shown by the parameter passed by home-page
         UserRecord user = (articleId == null || articleId.isEmpty())
                 ? DbConnector.getUserByUserId(userId)
                 : DbConnector.getAuthorByArticleId(articleId);
 
-        if (user == null) {
-            String errorMsg = "Too bad! We cannot find that user.";
-            req.getRequestDispatcher("error?userId=&errorMsg=" + errorMsg).forward(req, resp);
+        // Decide which user's blog going to display
+        if (user == null && loggedUser == null) {
+            String errorMsg = userId.isEmpty()
+                    ? "Please log in to check your personal blog."
+                    : "Too bad! We cannot find that user.";
+            req.getRequestDispatcher("error?userId=" + userId + "&errorMsg=" + errorMsg).forward(req, resp);
             return;
+        } else {
+            if (user == null) {
+                user = loggedUser;
+            }
+            HttpSession session = req.getSession(false);
+            session.setAttribute("browsingUser", user);
         }
+
 
         Date dob = user.getDob();
         long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
@@ -58,26 +62,20 @@ public class PersonalBlog extends Controller {
 
         userId = String.valueOf(user.getId());
 
-//        List<ArticleRecord> articles = DbConnector.getArticlesByUserId(userId);
-//        List<Blog> blogList = new LinkedList<>();
         List<Blog> blogs = DbConnector.getBlogsByUserId(userId);
-
-        if (blogs.size() > 0) {
-            // Load comments for each article
-            req.setAttribute("blogs", blogs);
-        }
+        req.setAttribute("blogs", blogs);
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
-    private void ajaxBlogHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
+    private void ajaxCommentsHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
         List<CommentRecord> comments = new LinkedList<>();
 
         blog.getCommentTree().traverse(blog.getCommentTree(), comments);
 
         Map<Integer, String> commentMap = new TreeMap<>();
         for (CommentRecord comment : comments) {
-            if (comment.getCommenter() != null){
+            if (comment.getCommenter() != null) {
                 commentMap.put(comment.getId(), comment.getContent());
             }
         }
@@ -93,10 +91,10 @@ public class PersonalBlog extends Controller {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //doGet(req, resp);
 
-        String blogId = req.getParameter("blog");
-        if (blogId != null) {
-            Blog blog = new Blog(DbConnector.getArticleById(blogId));
-            ajaxBlogHandler(req, resp, blog);
+        String articleId = req.getParameter("blog");
+        if (articleId != null) {
+            Blog blog = new Blog(DbConnector.getArticleById(articleId));
+            ajaxCommentsHandler(req, resp, blog);
             return;
         }
     }
