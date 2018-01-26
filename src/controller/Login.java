@@ -18,8 +18,22 @@ public class Login extends Controller {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (loggedUserRedirectTo("home-page", req, resp))
+        if (redirectTo("logout=1", HttpSession::invalidate, "home-page", req, resp))
             return;
+
+        if (loggedUserRedirectTo("home-page", req, resp)) {
+            return;
+        }
+
+        if (redirectTo("guest=1", "home-page", req, resp))
+            return;
+
+        if (redirectTo("failed=1", "WEB-INF/login.jsp", req, resp))
+            return;
+
+        if (redirectTo("login=0", "WEB-INF/login.jsp", req, resp)) {
+            return;
+        }
 
 
         boolean isLogin = req.getParameter("login") != null && req.getParameter("login").equals("1");
@@ -45,17 +59,6 @@ public class Login extends Controller {
         }
 
 
-        if (redirectTo("login=0", "WEB-INF/login.jsp", req, resp))
-            return;
-
-        if (redirectTo("logout=1", HttpSession::invalidate, "home-page", req, resp))
-            return;
-
-        if (redirectTo("guest=1", "home-page", req, resp))
-            return;
-
-        if (redirectTo("failed=1", "WEB-INF/login.jsp", req, resp))
-            return;
 
 
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);

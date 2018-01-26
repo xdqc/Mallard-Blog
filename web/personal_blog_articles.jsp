@@ -25,12 +25,7 @@
                         <span class="badge">0</span></button>
                 </c:if>
                 <div id="comment-area-${blog.getArticle().getId()}" class="">
-
                 </div>
-
-                    <%--this is the normal approach to show data, we will replace it with AJAX--%>
-                    <%--<c:set var="comments" value="${blog.getCommentTree()}"/>--%>
-                    <%--<%@include file="comments.jsp" %>--%>
 
             </div>
         </article>

@@ -10,27 +10,35 @@
 
 <html>
 <head>
-<%@include file="WEB-INF/_head.jsp"%>
-    <title>${sessionScope.get("loggedInUser").getUserName()}'s Blog</title>
+    <%@include file="WEB-INF/_head.jsp" %>
+    <title>${sessionScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
 <body>
-<%@include file="WEB-INF/_home_page_logo.jsp"%>
-<%@include file="WEB-INF/_home_page_menu.jsp"%>
+<%@include file="WEB-INF/_home_page_logo.jsp" %>
+<%@include file="WEB-INF/_home_page_menu.jsp" %>
 
 <div class="container">
     <div class="row">
         <%--PersonalBlog information panel--%>
         <div class="col-sm-12 col-md-3 col-lg-3">
-            <%@include file="personal_blog_profile.jsp"%>
+            <%@include file="personal_blog_profile.jsp" %>
         </div>
 
         <%--list of blogs--%>
         <div class="col-sm-12 col-md-9 col-lg-9">
+            <%--logged user create new article in his own page--%>
+            <c:if test="${sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
+                <%@include file="personal_blog_create.jsp" %>
+
+            </c:if>
+
             <c:if test="${blogs.size()==0}">
-                <div class="jumbotron">
-                    <h3>This user has no articles</h3>
-                    <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
-                </div>
+                <c:if test="${!sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
+                    <div class="jumbotron">
+                        <h3>This user has no articles</h3>
+                        <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
+                    </div>
+                </c:if>
             </c:if>
             <c:if test="${blogs.size()!=0}">
                 <%@ include file="personal_blog_articles.jsp" %>
