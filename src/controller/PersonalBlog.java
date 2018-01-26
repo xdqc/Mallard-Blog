@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +71,6 @@ public class PersonalBlog extends Controller {
 
 
     /* This is for ajax*/
-
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //doGet(req, resp);
 
@@ -86,13 +84,13 @@ public class PersonalBlog extends Controller {
         articleId = req.getParameter("content");
         if (articleId != null) {
             Blog blog = DbConnector.getBlogByArticleId(articleId);
-            ajaxContentHandler(blog, req, resp);
+            ajaxArticleContentHandler(blog, req, resp);
             return;
         }
     }
 
 
-    private void ajaxContentHandler(Blog blog, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void ajaxArticleContentHandler(Blog blog, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<Integer, String> contentMap = new HashMap<>();
         contentMap.put(blog.getArticle().getId(), blog.getArticle().getContent());
 
@@ -129,8 +127,8 @@ public class PersonalBlog extends Controller {
                 assert user != null;
                 commentJson.put("commenter", user.getFName()+" "+user.getLName());
                 commentJson.put("content", comment.getContent());
-                commentJson.put("createTime", comment.getCreateTime().toString());
-                commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toString());
+                commentJson.put("createTime", comment.getCreateTime().toLocalDateTime().toString());
+                commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toLocalDateTime().toString());
 
                 json.put(comment.getId(), commentJson);
 

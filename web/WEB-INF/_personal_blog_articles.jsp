@@ -59,22 +59,25 @@
                             commentArea.text('loading...')
                         },
                         success: function (resp, status) {
+                            commentArea.empty();
                             console.log(resp);
+
                             // TODO make comments display nicely
-                            expandComment(resp, commentArea);
+                            showCascadingComments(resp, commentArea);
 
                             //helper function recursively show comment tree
-                            function expandComment(comment, $p) {
-                                $.each(comment, function (id, comment) {
+                            function showCascadingComments(commentNode, $p) {
+                                $.each(commentNode, function (id, comment) {
                                     if (comment !== null && typeof comment === 'object') {
-                                        let $pp = $("<ul>").appendTo($p)
-                                            .append($("<li>").text(comment.commenter))
-                                            .append($("<li>").text(comment.content));
-                                        expandComment(comment, $pp)
+                                        let dl = $("<dl class='comment'>").appendTo($p)
+                                            .append($("<dt>").html(comment.commenter+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                                .append($("<span class='text-muted fa fa-clock-o'>").text(comment.createTime)));
+
+                                        let $pp = ($("<dd>").text(comment.content)).appendTo(dl);
+                                        showCascadingComments(comment, $pp)
                                     }
                                 })
                             }
-
 
                         },
                         error: function (msg, status) {
@@ -83,6 +86,7 @@
                             console.log(msg);
                         },
                         complete: function (resp) {
+                            commentArea.text();
                             console.log("loaded");
                         }
                     });
@@ -121,3 +125,10 @@
 
     </c:if>
 </c:forEach>
+
+<style type="text/css">
+    dl.comment{
+        padding-left: 2em;
+    }
+
+</style>
