@@ -1,8 +1,5 @@
 package controller;
 
-import ORM.tables.records.UserRecord;
-import db_connector.DbConnector;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,19 +13,15 @@ public class SignUp extends Controller {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        UserRecord user = getLoggedUserFromSession(req);
 
-        if (user != null) {
-            req.getRequestDispatcher("edit_profile.jsp").forward(req, resp);
+        if (loggedUserRedirectTo("edit_profile.jsp", req, resp))
             return;
-        }
 
 
-        boolean isSigningUp = req.getParameter("signUp") != null && req.getParameter("signUp").equals("0");
-        if (isSigningUp){
-            req.getRequestDispatcher("WEB-INF/sign_up.jsp").forward(req, resp);
+        if(redirectTo("signUp=0", "WEB-INF/sign_up.jsp", req, resp))
             return;
-        }
+
+
 
         boolean isSignedIn = req.getParameter("signUp") != null && req.getParameter("signUp").equals("1");
         if (isSignedIn){
@@ -40,7 +33,7 @@ public class SignUp extends Controller {
         }
 
 
-
-
     }
+
+
 }

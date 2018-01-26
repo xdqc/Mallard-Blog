@@ -3,11 +3,12 @@ package utililties;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
-import com.sun.org.apache.bcel.internal.generic.RET;
 import db_connector.DbConnector;
 import org.json.simple.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /* The reason of creating this class is to minimize total db queries, thus enhance the performance of the web app */
 /* This is also helpful to integrate our data model */

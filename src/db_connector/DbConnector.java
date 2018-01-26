@@ -311,6 +311,11 @@ public class DbConnector {
         return blog;
     }
 
+    /**
+     * Get a user's all articles with comments list on each article by userId
+     * @param userId
+     * @return
+     */
     public static List<Blog> getBlogsByUserId(String userId) {
         List<Blog> blogs = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -358,7 +363,6 @@ public class DbConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //blogs.forEach(b -> b.);
         return blogs;
     }
 }
