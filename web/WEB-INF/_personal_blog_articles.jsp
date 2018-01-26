@@ -59,13 +59,23 @@
                             commentArea.text('loading...')
                         },
                         success: function (resp, status) {
+                            //console.log(resp.responseText);
                             // TODO make comments display nicely
-                            commentArea.text(JSON.stringify(resp));
+                            var json = JSON.parse(resp.responseText)
+                            var $table = $("<table>").appendTo(commentArea);
+
+                            $.each(json, function (id, comment) {
+                                $("<tr>").appendTo($table)
+                                    .append($("<td>").text(comment["commenter"]))
+                                    .append($("<td>").text(comment.content));
+                            })
                         },
                         error: function (msg, status) {
-                            commentArea.text(msg);
+                            console.log("error!!!");
+                            console.log(status);
+                            console.log(msg);
                         },
-                        complete: function () {
+                        complete: function (resp) {
                             console.log("loaded");
                         }
                     });

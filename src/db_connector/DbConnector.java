@@ -1,8 +1,6 @@
 package db_connector;
 
 
-import ORM.tables.Article;
-import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
@@ -375,7 +373,11 @@ public class DbConnector {
                 t -> {
                     Blog blog = new Blog();
                     blog.setKey(new Tuple<>(t.Val1, t.Val2));
-                    blog.getCommentList().add(t.Val3);
+
+                    // Because of leftJoin, don't add null comment to article with on comments
+                    if (t.Val3.getId()!=null){
+                        blog.getCommentList().add(t.Val3);
+                    }
 
                     // find if result already contains the article
                     Blog thatBlog = blogs.stream()
@@ -392,5 +394,6 @@ public class DbConnector {
                     }
                 }
         );
+        blogs.forEach(Blog::convertListToTree);
     }
 }

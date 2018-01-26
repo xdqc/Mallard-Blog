@@ -3,7 +3,6 @@ package utililties;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
-import db_connector.DbConnector;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>> {
     private UserRecord author;
     private ArticleRecord article;
-    private int numComments;
+    private int numComments=0;
     private Tree<CommentRecord> commentTree = new Tree<>(new CommentRecord());
     private List<CommentRecord> commentList = new ArrayList<>();
 
@@ -25,41 +24,47 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
 //        this.numComments = DbConnector.getCommentNumberByArticle(String.valueOf(article.getId()));
 //        this.commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
 //        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
-//        addListToTree();
+//        convertListToTree();
 //    }
 
-    public Blog(Tuple<UserRecord, ArticleRecord> tuple, List<CommentRecord> commentList){
-        this.author = tuple.Val1;
-        this.article = tuple.Val2;
-        this.commentList = commentList;
-        this.numComments = commentList.size();
-        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
-
-        addListToTree();
-    }
+//    public Blog(Tuple<UserRecord, ArticleRecord> tuple, List<CommentRecord> commentList){
+//        this.author = tuple.Val1;
+//        this.article = tuple.Val2;
+//        this.commentList = commentList;
+//        this.numComments = commentList.size();
+//        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
+//
+//        convertListToTree();
+//    }
 
     public Blog() {}
 
     //TODO get Json
     public JSONObject getCommentTreeJSON(){
+
+
         return null;
     }
     
-    private void addListToTree() {
+    public void convertListToTree() {
         // Add comment that directly under the article
-        for (CommentRecord comment : commentList) {
+        for (int i = 0; i < commentList.size(); i++) {
+            CommentRecord comment = commentList.get(i);
             if (comment.getParentComment() == null) {
                 commentTree.addChild(new Tree<>(comment));
+                commentList.remove(comment);
+                numComments++;
+                i--;
             }
         }
 
         // Add children comment's to their parents
         while (commentList.size() > 0) {
-            addCommentsToTree(commentTree, commentList);
+            moveCommentsToTree(commentTree, commentList);
         }
     }
 
-    private void addCommentsToTree(Tree<CommentRecord> tree, List<CommentRecord> list) {
+    private void moveCommentsToTree(Tree<CommentRecord> tree, List<CommentRecord> list) {
         for (int i = 0; i < list.size(); i++) {
             CommentRecord comment = list.get(i);
             // Check if there is a comment in the tree can be the parent of the commentList elem
@@ -68,6 +73,7 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
                 // Add comment to its parent's children
                 parent.addChild(new Tree<>(comment));
                 list.remove(comment);
+                numComments++;
                 i--;
             }
         }
@@ -86,6 +92,7 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return commentTree;
     }
 
+    /*Used in jsp, do not delete*/
     public int getNumComments() {
         return numComments;
     }
@@ -94,7 +101,7 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         if (!c.isEmpty()){
             this.commentList.add(c.get(0));
         }
-        addListToTree();
+        convertListToTree();
     }
 
     public void setKey(Tuple<UserRecord, ArticleRecord> t) {

@@ -6,12 +6,14 @@ import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import org.json.simple.JSONObject;
 import utililties.Blog;
+import utililties.Tree;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -102,21 +104,44 @@ public class PersonalBlog extends Controller {
 
 
     private void ajaxCommentsHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
-        List<CommentRecord> comments = new LinkedList<>();
 
-        blog.getCommentTree().traverse(blog.getCommentTree(), comments);
+        JSONObject json = new JSONObject();
+        Tree<CommentRecord> tree = blog.getCommentTree();
 
-        Map<Integer, String> commentMap = new TreeMap<>();
-        for (CommentRecord comment : comments) {
-            if (comment.getCommenter() != null) {
-                commentMap.put(comment.getId(), comment.getContent());
+        putCommentTreeToJson(tree, json);
+
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        PrintWriter out = resp.getWriter();
+        out.write(json.toString());
+        System.out.println(json);
+        System.out.println(json.toJSONString());
+    }
+
+
+    /**
+     * Create a JSON object to represent the comment tree recursively
+     */
+    private void putCommentTreeToJson(Tree<CommentRecord> tree, JSONObject json){
+        for (Tree<CommentRecord> commentTree : tree.getChildren()) {
+            CommentRecord comment = commentTree.getData();
+            if (comment.getShowHideStatus()==1){
+
+                JSONObject commentJson = new JSONObject();
+                UserRecord user = DbConnector.getUserByUserId(String.valueOf(comment.getCommenter()));
+                assert user != null;
+                commentJson.put("commenter", user.getFName()+" "+user.getLName());
+                commentJson.put("content", comment.getContent());
+                commentJson.put("createTime", comment.getCreateTime());
+                commentJson.put("editTime", comment.getEditTime());
+
+                json.put(comment.getId(), commentJson);
+
+                putCommentTreeToJson(commentTree, commentJson);
             }
         }
 
-        JSONObject json = new JSONObject(commentMap);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        json.writeJSONString(resp.getWriter());
     }
 
 }
