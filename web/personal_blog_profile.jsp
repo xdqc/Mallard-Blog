@@ -32,7 +32,7 @@
                 <a href="#" class="panel-link">Follow me!</a>
             </c:if>
             <c:if test="${sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
-                <a href="#" class="panel-link">Edit my profile</a>
+                <a href="edit_profile.jsp" class="panel-link">Edit my profile</a>
             </c:if>
         </c:if>
     </div>
