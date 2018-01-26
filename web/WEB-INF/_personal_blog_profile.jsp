@@ -1,5 +1,5 @@
 <%--personal information panel--%>
-<div class="panel">
+<div class="panel" data-spy="affix" data-offset-top="200">
     <img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300" alt="panel image cap">
     <div class="panel-body">
         <h5 class="panel-title">${fname} ${lname}
@@ -47,5 +47,28 @@
         width:auto;
         margin-left:80px;
     }
+
+    .affix {
+        top: 100px;
+        z-index: 9999;
+    }
+    @media (max-width: 991px) {
+        .affix {
+            position: static;
+        }
+    }
+    @media (min-width: 992px) and (max-width: 1199px)  {
+        .affix {
+            position: fixed;
+            max-width: 213px;
+        }
+    }
+    @media (min-width: 1200px) {
+        .affix {
+            position: fixed;
+            max-width: 263px;
+        }
+    }
+
 </style>
 

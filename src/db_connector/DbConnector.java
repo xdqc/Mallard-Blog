@@ -317,7 +317,8 @@ public class DbConnector {
                     .from((USER).join(ARTICLE).onKey())
                     .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(USER.ID.eq(Integer.parseInt(userId)))
-                    .orderBy(COMMENT.CREATE_TIME.asc())
+                    .orderBy(ARTICLE.CREATE_TIME.desc(),
+                            COMMENT.CREATE_TIME.asc())
                     .fetch(
                             r -> new Tuple3<>(
                                     r.into(USER).into(UserRecord.class),
