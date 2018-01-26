@@ -110,13 +110,9 @@ public class PersonalBlog extends Controller {
 
         putCommentTreeToJson(tree, json);
 
-
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        PrintWriter out = resp.getWriter();
-        out.write(json.toString());
-        System.out.println(json);
-        System.out.println(json.toJSONString());
+        json.writeJSONString(resp.getWriter());
     }
 
 
@@ -133,8 +129,8 @@ public class PersonalBlog extends Controller {
                 assert user != null;
                 commentJson.put("commenter", user.getFName()+" "+user.getLName());
                 commentJson.put("content", comment.getContent());
-                commentJson.put("createTime", comment.getCreateTime());
-                commentJson.put("editTime", comment.getEditTime());
+                commentJson.put("createTime", comment.getCreateTime().toString());
+                commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toString());
 
                 json.put(comment.getId(), commentJson);
 

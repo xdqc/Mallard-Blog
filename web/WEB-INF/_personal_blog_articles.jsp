@@ -59,16 +59,23 @@
                             commentArea.text('loading...')
                         },
                         success: function (resp, status) {
-                            //console.log(resp.responseText);
+                            console.log(resp);
                             // TODO make comments display nicely
-                            var json = JSON.parse(resp.responseText)
-                            var $table = $("<table>").appendTo(commentArea);
+                            expandComment(resp, commentArea);
 
-                            $.each(json, function (id, comment) {
-                                $("<tr>").appendTo($table)
-                                    .append($("<td>").text(comment["commenter"]))
-                                    .append($("<td>").text(comment.content));
-                            })
+                            //helper function recursively show comment tree
+                            function expandComment(comment, $p) {
+                                $.each(comment, function (id, comment) {
+                                    if (comment !== null && typeof comment === 'object') {
+                                        let $pp = $("<ul>").appendTo($p)
+                                            .append($("<li>").text(comment.commenter))
+                                            .append($("<li>").text(comment.content));
+                                        expandComment(comment, $pp)
+                                    }
+                                })
+                            }
+
+
                         },
                         error: function (msg, status) {
                             console.log("error!!!");
@@ -101,7 +108,9 @@
                         articleContent.text(resp[${blog.getArticle().getId()}]);
                     },
                     error: function (msg, status) {
-                        articleContent.append(document.createTextNode(msg));
+                        console.log("error!!");
+                        console.log(status);
+                        console.log(msg);
                     },
                     complete: function () {
                         console.log("loaded");
