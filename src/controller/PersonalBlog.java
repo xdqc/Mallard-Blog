@@ -68,6 +68,39 @@ public class PersonalBlog extends Controller {
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
+
+    /* This is for ajax*/
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //doGet(req, resp);
+
+        String articleId = req.getParameter("comment");
+        if (articleId != null) {
+            Blog blog = DbConnector.getBlogByArticleId(articleId);
+            ajaxCommentsHandler(req, resp, blog);
+            return;
+        }
+
+        articleId = req.getParameter("content");
+        if (articleId != null) {
+            Blog blog = DbConnector.getBlogByArticleId(articleId);
+            ajaxContentHandler(blog, req, resp);
+            return;
+        }
+    }
+
+
+    private void ajaxContentHandler(Blog blog, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Map<Integer, String> contentMap = new HashMap<>();
+        contentMap.put(blog.getArticle().getId(), blog.getArticle().getContent());
+
+        JSONObject json = new JSONObject(contentMap);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        json.writeJSONString(resp.getWriter());
+    }
+
+
     private void ajaxCommentsHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
         List<CommentRecord> comments = new LinkedList<>();
 
@@ -85,19 +118,5 @@ public class PersonalBlog extends Controller {
         resp.setCharacterEncoding("UTF-8");
         json.writeJSONString(resp.getWriter());
     }
-
-
-    /* This is for ajax*/
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //doGet(req, resp);
-
-        String articleId = req.getParameter("blog");
-        if (articleId != null) {
-            Blog blog = new Blog(DbConnector.getArticleById(articleId));
-            ajaxCommentsHandler(req, resp, blog);
-            return;
-        }
-    }
-
 
 }

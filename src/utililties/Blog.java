@@ -19,14 +19,14 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
     private Tree<CommentRecord> commentTree = new Tree<>(new CommentRecord());
     private List<CommentRecord> commentList = new ArrayList<>();
 
-    public Blog(ArticleRecord article) {
-        this.article = article;
-        this.author = DbConnector.getAuthorByArticleId(String.valueOf(article.getId()));
-        this.numComments = DbConnector.getCommentNumberByArticle(String.valueOf(article.getId()));
-        this.commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
-        addListToTree();
-    }
+//    public Blog(ArticleRecord article) {
+//        this.article = article;
+//        this.author = DbConnector.getAuthorByArticleId(String.valueOf(article.getId()));
+//        this.numComments = DbConnector.getCommentNumberByArticle(String.valueOf(article.getId()));
+//        this.commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
+//        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
+//        addListToTree();
+//    }
 
     public Blog(Tuple<UserRecord, ArticleRecord> tuple, List<CommentRecord> commentList){
         this.author = tuple.Val1;

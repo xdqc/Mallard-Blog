@@ -1,7 +1,3 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
-
             <c:forEach var="blog" items="${blogs}">
                 <c:if test="${blog.getArticle().getShowHideStatus()>0}">
 
@@ -12,13 +8,18 @@
                         <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
                              alt="random picture"/>
                         <div class="panel-body">
+                            <div class="panel-text">
+                                <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
+                                        ${blog.getArticle().getCreateTime().toLocalDateTime()}   </span>
+                                <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()} <span class="fa fa-thumbs-up"></span></span>
+                            </div>
+                            <br>
+                            <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
+                                    ${blog.getArticle().getContent().substring(0,200)} ...
 
-                            <h6 class="text-muted"> ${blog.getArticle().getLikeNum()} <span
-                                    class="fa fa-thumbs-up"></span></h6>
+                            <button id="read-more-${blog.getArticle().getId()}" class="btn btn-default btn-sm">Read more</button>
+                            </div>
 
-                            <p class="panel-text">${blog.getArticle().getContent()}</p>
-
-                            <a href="#" class="btn btn-primary">Read more</a>
 
                             <c:if test="${blog.getNumComments() > 0}">
                                 <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
@@ -48,8 +49,8 @@
                             if ($(this).hasClass('active')) {
                                 $.ajax({
                                     type: 'POST',
-                                    url: 'personal-blog?=',
-                                    data: {blog: "${blog.getArticle().getId()}"},
+                                    url: 'personal-blog',
+                                    data: {comment: "${blog.getArticle().getId()}"},
                                     cache: false,
                                     beforeSend: function () {
                                         commentArea.text('loading...')
@@ -70,12 +71,31 @@
                             } else {
                                 commentArea.hide();
                             }
+                        });
 
-                        })
+                        $("#read-more-${blog.getArticle().getId()}").on("click", function () {
+                           let articleContent = $("#article-content-${blog.getArticle().getId()}");
+                           $(this).hide();
+                            $.ajax({
+                                type: 'POST',
+                                url: 'personal-blog',
+                                data: {content: "${blog.getArticle().getId()}"},
+                                cache: false,
+                                beforeSend: function () {
+                                    articleContent.append(document.createTextNode('loading...'));
+                                },
+                                success: function (resp, status) {
+                                    articleContent.text(JSON.stringify(resp));
+                                },
+                                error: function (msg, status) {
+                                    articleContent.append(document.createTextNode(msg));
+                                },
+                                complete: function () {
+                                    console.log("loaded");
+                                }
+                            });
+                        });
                     </script>
 
                 </c:if>
             </c:forEach>
-        </div>
-    </div>
-</div>
