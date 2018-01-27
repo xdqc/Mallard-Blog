@@ -72,7 +72,6 @@ public class PersonalBlog extends Controller {
 
     /* This is for ajax*/
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //doGet(req, resp);
 
         String articleId = req.getParameter("comment");
         if (articleId != null) {
