@@ -39,12 +39,6 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
 
     public Blog() {}
 
-    //TODO get Json
-    public JSONObject getCommentTreeJSON(){
-
-
-        return null;
-    }
     
     public void convertListToTree() {
         // Add comment that directly under the article

@@ -122,6 +122,7 @@ public class PersonalBlog extends Controller {
             CommentRecord comment = commentTree.getData();
             if (comment.getShowHideStatus()==1){
 
+                //FIXME: The order of commentTree is good(by createTime.asc), but need to use json array to maintain the order
                 JSONObject commentJson = new JSONObject();
                 UserRecord user = DbConnector.getUserByUserId(String.valueOf(comment.getCommenter()));
                 assert user != null;

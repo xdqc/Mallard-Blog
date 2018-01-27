@@ -17,7 +17,9 @@
                 <br>
                 <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
                         ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
-                    ...
+
+                    <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
+                         width="45" style="display: none;" aria-hidden="true">
 
                     <button id="read-more-${blog.getArticle().getId()}" class="btn btn-default btn-sm">Read more
                     </button>
@@ -26,26 +28,36 @@
 
                 <c:if test="${blog.getNumComments() > 0}">
                     <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                            class="btn btn-info"> Show
+                            class="btn btn-info">
+                        <span class="badge">${blog.getNumComments()}</span>
                         Comments
-                        <span class="badge">${blog.getNumComments()}</span></button>
+                        <span id="comment-arrow-${blog.getNumComments()}" class="fa fa-chevron-down"></span>
+                    </button>
                 </c:if>
                 <c:if test="${blog.getNumComments() == 0}">
                     <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                            class="btn btn-info"
-                            disabled="disabled"> Show Comments
-                        <span class="badge">0</span></button>
+                            class="btn btn-info" disabled="disabled"><span class="badge">0</span> Comments
+                    </button>
                 </c:if>
-                <div id="comment-area-${blog.getArticle().getId()}" class="">
+
+                <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
+                     width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
+                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default" style="display: none">
                 </div>
+
 
             </div>
         </article>
         <br>
 
         <script type="text/javascript">
+            /**
+             * AJAX comments of article
+             */
             $("#showCommentBtn-${blog.getArticle().getId()}").on("click", function () {
                 let commentArea = $("#comment-area-${blog.getArticle().getId()}");
+                let loadingImg = $("#load-comment-img-${blog.getArticle().getId()}");
+                let arrow = $("#comment-arrow-${blog.getNumComments()}");
                 // Toggle comment-area display by click this button
                 $(this).toggleClass('active');
 
@@ -56,9 +68,12 @@
                         data: {comment: "${blog.getArticle().getId()}"},
                         cache: false,
                         beforeSend: function () {
-                            commentArea.text('loading...')
+                            loadingImg.css("display", "block");
+                            arrow.removeClass("fa-chevron-down");
+                            arrow.addClass("fa-spinner fa-pulse fa-fw");
                         },
                         success: function (resp, status) {
+                            loadingImg.css("display", "none");
                             commentArea.empty();
                             console.log(resp);
 
@@ -69,15 +84,21 @@
                             function showCascadingComments(commentNode, $p) {
                                 $.each(commentNode, function (id, comment) {
                                     if (comment !== null && typeof comment === 'object') {
+                                        let ago = $.timeago(Date.parse(comment.createTime));
                                         let dl = $("<dl class='comment'>").appendTo($p)
-                                            .append($("<dt>").html(comment.commenter+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-                                                .append($("<span class='text-muted fa fa-clock-o'>").text(comment.createTime)));
-
+                                            .append($("<dt>").html(comment.commenter + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                                .append($("<span class='text-muted fa fa-clock-o'>")
+                                                    .append($("<abbr>").attr("title", comment.createTime).html("&nbsp;"+ago))));
                                         let $pp = ($("<dd>").text(comment.content)).appendTo(dl);
                                         showCascadingComments(comment, $pp)
                                     }
                                 })
                             }
+
+                            commentArea.slideDown();
+
+                            arrow.removeClass("fa-spinner fa-pulse fa-fw");
+                            arrow.addClass("fa-chevron-up");
 
                         },
                         error: function (msg, status) {
@@ -86,19 +107,23 @@
                             console.log(msg);
                         },
                         complete: function (resp) {
-                            commentArea.text();
                             console.log("loaded");
                         }
                     });
 
-                    commentArea.show();
                 } else {
-                    commentArea.hide();
+                    commentArea.slideUp();
+                    arrow.removeClass("fa-chevron-up");
+                    arrow.addClass("fa-chevron-down");
                 }
             });
 
+            /**
+             * AJAX article content
+             */
             $("#read-more-${blog.getArticle().getId()}").on("click", function () {
                 let articleContent = $("#article-content-${blog.getArticle().getId()}");
+                let loadingImg = $("#load-article-content-img-${blog.getArticle().getId()}");
                 $(this).hide();
                 $.ajax({
                     type: 'POST',
@@ -106,9 +131,10 @@
                     data: {content: "${blog.getArticle().getId()}"},
                     cache: false,
                     beforeSend: function () {
-                        articleContent.append(document.createTextNode('loading...'));
+                        loadingImg.show();
                     },
                     success: function (resp, status) {
+                        loadingImg.hide();
                         articleContent.text(resp[${blog.getArticle().getId()}]);
                     },
                     error: function (msg, status) {
@@ -127,7 +153,7 @@
 </c:forEach>
 
 <style type="text/css">
-    dl.comment{
+    dl.comment {
         padding-left: 2em;
     }
 
