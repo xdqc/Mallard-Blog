@@ -6,6 +6,7 @@ import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import org.json.simple.JSONObject;
 import utililties.Blog;
+import utililties.Tree;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -68,36 +69,73 @@ public class PersonalBlog extends Controller {
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
 
-    private void ajaxCommentsHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
-        List<CommentRecord> comments = new LinkedList<>();
 
-        blog.getCommentTree().traverse(blog.getCommentTree(), comments);
+    /* This is for ajax*/
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //doGet(req, resp);
 
-        Map<Integer, String> commentMap = new TreeMap<>();
-        for (CommentRecord comment : comments) {
-            if (comment.getCommenter() != null) {
-                commentMap.put(comment.getId(), comment.getContent());
-            }
+        String articleId = req.getParameter("comment");
+        if (articleId != null) {
+            Blog blog = DbConnector.getBlogByArticleId(articleId);
+            ajaxCommentsHandler(req, resp, blog);
+            return;
         }
 
-        JSONObject json = new JSONObject(commentMap);
+        articleId = req.getParameter("content");
+        if (articleId != null) {
+            Blog blog = DbConnector.getBlogByArticleId(articleId);
+            ajaxArticleContentHandler(blog, req, resp);
+            return;
+        }
+    }
+
+
+    private void ajaxArticleContentHandler(Blog blog, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Map<Integer, String> contentMap = new HashMap<>();
+        contentMap.put(blog.getArticle().getId(), blog.getArticle().getContent());
+
+        JSONObject json = new JSONObject(contentMap);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         json.writeJSONString(resp.getWriter());
     }
 
 
-    /* This is for ajax*/
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //doGet(req, resp);
+    private void ajaxCommentsHandler(HttpServletRequest req, HttpServletResponse resp, Blog blog) throws IOException {
 
-        String articleId = req.getParameter("blog");
-        if (articleId != null) {
-            Blog blog = new Blog(DbConnector.getArticleById(articleId));
-            ajaxCommentsHandler(req, resp, blog);
-            return;
-        }
+        JSONObject json = new JSONObject();
+        Tree<CommentRecord> tree = blog.getCommentTree();
+
+        putCommentTreeToJson(tree, json);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        json.writeJSONString(resp.getWriter());
     }
 
+
+    /**
+     * Create a JSON object to represent the comment tree recursively
+     */
+    private void putCommentTreeToJson(Tree<CommentRecord> tree, JSONObject json){
+        for (Tree<CommentRecord> commentTree : tree.getChildren()) {
+            CommentRecord comment = commentTree.getData();
+            if (comment.getShowHideStatus()==1){
+
+                JSONObject commentJson = new JSONObject();
+                UserRecord user = DbConnector.getUserByUserId(String.valueOf(comment.getCommenter()));
+                assert user != null;
+                commentJson.put("commenter", user.getFName()+" "+user.getLName());
+                commentJson.put("content", comment.getContent());
+                commentJson.put("createTime", comment.getCreateTime().toLocalDateTime().toString());
+                commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toLocalDateTime().toString());
+
+                json.put(comment.getId(), commentJson);
+
+                putCommentTreeToJson(commentTree, commentJson);
+            }
+        }
+
+    }
 
 }

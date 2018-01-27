@@ -1,6 +1,3 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
             <div class="panel-group" id="accordion">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -76,6 +73,3 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>

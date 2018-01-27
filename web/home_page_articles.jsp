@@ -16,6 +16,6 @@
             <%--</article>--%>
         <%--</c:if>--%>
     <%--</c:forEach>--%>
-    <%@include file="personal_blog_articles.jsp"%>
+    <%@include file="WEB-INF/_personal_blog_articles.jsp"%>
     <br>
 </div>
