@@ -78,9 +78,10 @@ public class PersonalBlog extends Controller {
 
         String articleId = req.getParameter("comment");
         if (articleId != null) {
-            Blog blog = DbConnector.getBlogByArticleId(articleId);
+            //Blog blog = DbConnector.getBlogByArticleId(articleId);
             Comments comments = DbConnector.getCommentsByArticleId(articleId);
-            ajaxCommentsHandler(comments, req, resp);
+            Tree<Tuple<UserRecord, CommentRecord>> commentTree = comments.getCommentTree();
+            ajaxCommentsHandler(commentTree, req, resp);
             return;
         }
 
@@ -104,7 +105,7 @@ public class PersonalBlog extends Controller {
     }
 
 
-    private void ajaxCommentsHandler(Comments comments, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void ajaxCommentsHandler(Tree<Tuple<UserRecord, CommentRecord>> comments, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         JSONArray json = new JSONArray();
         putCommentTreeToJson(comments, json);
@@ -119,7 +120,7 @@ public class PersonalBlog extends Controller {
     /**
      * Create a JSON object to represent the comment tree recursively
      */
-    private void putCommentTreeToJson(Comments tree, JSONArray json){
+    private void putCommentTreeToJson(Tree<Tuple<UserRecord, CommentRecord>> tree, JSONArray json){
         for (Tree<Tuple<UserRecord, CommentRecord>> commentTree : tree.getChildren()) {
             CommentRecord comment = commentTree.getData().Val2;
             if (comment.getShowHideStatus()==1){
@@ -141,7 +142,7 @@ public class PersonalBlog extends Controller {
                 json.add(commentArr);
 
                 if (!commentTree.getChildren().isEmpty()){
-                    putCommentTreeToJson((Comments) commentTree, commentArr);
+                    putCommentTreeToJson(commentTree, commentArr);
                 }
             }
         }
