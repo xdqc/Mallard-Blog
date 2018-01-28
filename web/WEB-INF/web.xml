@@ -67,4 +67,16 @@
         <welcome-file>home-page</welcome-file>
     </welcome-file-list>
 
+
+    <servlet>
+        <servlet-name>multimedia_gallery</servlet-name>
+        <servlet-class>controller.MultimediaGallery</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>multimedia_gallery</servlet-name>
+        <url-pattern>/multimedia-gallery</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>
