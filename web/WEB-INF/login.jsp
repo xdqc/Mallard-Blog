@@ -64,7 +64,6 @@
                             <button class="btn" id="btn-validate">Validate reCAPTCHA</button>
 
                             /*
-                            <%
                                 ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
                                 reCaptcha.setPrivateKey("your_private_key");
 
@@ -78,7 +77,6 @@
                                 } else {
                                     out.print("false");
                                 }
-                            %>
                             */
                         </div>
                     </div>
