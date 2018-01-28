@@ -2,6 +2,7 @@ package utililties;
 
 
 import ORM.tables.records.CommentRecord;
+import ORM.tables.records.UserRecord;
 
 import java.rmi.activation.ActivationGroup_Stub;
 import java.util.LinkedList;
@@ -12,6 +13,8 @@ public class Tree<T> {
     private List<Tree<T>> children;
     private T data;
     private Tree<T> root;
+
+    public Tree(){}
 
     public Tree(T rootData) {
         root = this;
@@ -63,6 +66,20 @@ public class Tree<T> {
         } else {
             for (Tree<CommentRecord> child: n.children) {
                 Tree<CommentRecord> result = findParentComment(child, s);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Tree<Tuple<UserRecord, CommentRecord>> findParentComment(Tree<Tuple<UserRecord, CommentRecord>> n, Tuple<UserRecord, CommentRecord> s) {
+        if (Objects.equals(n.getData().Val2.getId(), s.Val2.getParentComment())) {
+            return n;
+        } else {
+            for (Tree<Tuple<UserRecord, CommentRecord>> child: n.getChildren()) {
+                Tree<Tuple<UserRecord, CommentRecord>> result = findParentComment(child, s);
                 if (result != null) {
                     return result;
                 }
