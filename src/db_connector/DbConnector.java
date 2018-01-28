@@ -1,8 +1,12 @@
 package db_connector;
 
 
+import ORM.tables.Article;
+import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
+
 import ORM.tables.records.ArticleRecord;
+import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import org.jooq.*;
@@ -20,6 +24,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import static ORM.tables.Article.ARTICLE;
+import static ORM.tables.Attachment.ATTACHMENT;
 import static ORM.tables.Comment.*;
 import static ORM.tables.User.*;
 
@@ -147,7 +152,7 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             articles = create.select()
-                    .from(ARTICLE)
+                    .from(Article.ARTICLE)
                     .orderBy(ARTICLE.LIKE_NUM.desc())
                     .fetch()
                     .into(ArticleRecord.class);
@@ -160,6 +165,11 @@ public class DbConnector {
     //get follower number by userId
     public static int getFollowerNumber(String userId) {
         int result = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
             result = create.selectCount()
@@ -175,6 +185,11 @@ public class DbConnector {
     //get post number by userId
     public static int getPostNumber(String userId) {
         int result = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
             result = create.selectCount()
@@ -412,6 +427,28 @@ public class DbConnector {
                 }
         );
         blogs.forEach(Blog::convertListToTree);
+    }
+
+
+    /**
+     * Get attachment by article id
+     **/
+    public static List<AttachmentRecord> getAttachmentByArticleId(String articleId) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            attachments = create
+                    .select(ATTACHMENT.fields())
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(articleId)))
+                    .fetch()
+                    .into(AttachmentRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
     }
 
 }

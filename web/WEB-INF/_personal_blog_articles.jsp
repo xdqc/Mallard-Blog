@@ -27,6 +27,8 @@
                 </div>
                 <br>
 
+                <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia Gallery</a>
+
                 <c:if test="${blog.getNumComments() > 0}">
                     <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                             class="btn btn-info show-comment-btn">
