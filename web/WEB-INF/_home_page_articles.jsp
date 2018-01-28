@@ -35,6 +35,6 @@
             <%--</article>--%>
         <%--</c:if>--%>
     <%--</c:forEach>--%>
-    <%@include file="personal_blog_articles.jsp"%>
+    <%@include file="_personal_blog_articles.jsp"%>
     <br>
 </div>

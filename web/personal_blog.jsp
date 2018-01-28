@@ -21,7 +21,7 @@
     <div class="row">
         <%--PersonalBlog information panel--%>
         <div class="col-sm-12 col-md-3 col-lg-3">
-            <%@include file="personal_blog_profile.jsp" %>
+            <%@include file="WEB-INF/_personal_blog_profile.jsp" %>
         </div>
 
         <%--list of blogs--%>
@@ -37,11 +37,11 @@
 
             <%--logged user create new article in his own page--%>
             <c:if test="${sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
-                <%@include file="personal_blog_create.jsp" %>
+                <%@include file="WEB-INF/_personal_blog_create.jsp" %>
             </c:if>
 
             <c:if test="${blogs.size()!=0}">
-                <%@ include file="personal_blog_articles.jsp" %>
+                <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
             </c:if>
         </div>
     </div>

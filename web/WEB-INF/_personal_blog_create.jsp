@@ -1,6 +1,3 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
             <div class="panel-group" id="accordion">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -52,7 +49,7 @@
                                     <div class="well well-sm well-primary">
                                         <form class="form form-inline " role="form">
                                             <div class="form-group">
-                                                <input type="datetime" class="form-control" value="" placeholder="Date" required/>
+                                                <input type="datetime-local" class="form-control" value="" placeholder="Date" required/>
                                             </div>
                                             <div class="form-group">
                                                 <select class="form-control text-input-dialog">
@@ -76,6 +73,3 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
