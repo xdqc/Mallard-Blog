@@ -44,7 +44,7 @@
 
                 <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
                      width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
-                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default" style="display: none">
+                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default comment-area" style="display: none">
                 </div>
             </div>
         </article>
@@ -54,10 +54,49 @@
 
 <style type="text/css">
     dl.comment {
-        padding-left: 2em;
+        padding: 1em 0 0 2em;
+        margin-bottom: 10px;
     }
 
+    dd {
+        position: relative;
+    }
+
+    a.reply-comment-btn {
+        padding-left: 2em;
+    }
+    .comment-area{
+        margin: 10px;
+        padding: 10px;
+    }
+    .reply-text{
+        margin: 0 20px 10px 0;
+    }
+    .popup {
+        margin: -15px 0 20px 0;
+        padding: 10px;
+        background: lightgrey;
+        border-radius: 5px;
+        width: 80%;
+        position: relative;
+        top:20px;
+        display: none;
+    }
+    .popup .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+    }
+    .popup .close:hover {
+        color: #06D85F;
+    }
 </style>
+
+
 
 <script type="text/javascript">
 
@@ -77,8 +116,23 @@
                             .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                                 .append($("<span class='text-muted fa fa-clock-o'>")
                                     .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
+
+                        const replyBtn = $("<a class='reply-comment-btn fa fa-comments-o'>")
+                            .attr("id", "reply-comment-btn-" + cmtId)
+                            .attr("href", "#popup-reply-" + cmtId)
+                            .text(" reply");
+
+                        const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
+                            .append(($("<textarea class='reply-text form-control' rows='2' required>")
+                                .attr("id", "reply-text-" + cmtId))
+                                .attr("placeholder", "Reply to "+ comment["commenter"]))
+                            .append(($("<input type='submit' class='reply-submit btn btn-primary' value='reply'>")
+                                .attr("id", "reply-submit-" + cmtId)))
+                            .append($("<a class='close' href='#/'>").html("&times;"));
+
                         //This is a special use case of exploiting of var hijacking to access it outside loop
-                        var $pp = ($("<dd>").text(comment.content)).appendTo($dl);
+                        var $pp = ($("<dd>").text(comment.content)).appendTo($dl)
+                            .append(replyBtn).append(replyForm);
                     }
                 }
             } else {
@@ -124,6 +178,8 @@
                     console.log(msg);
                 },
                 complete: () => {
+                    removeReplyBtn();
+                    showReply();
                     console.log("loaded");
                 }
             });
@@ -166,5 +222,7 @@
             }
         });
     });
+
+
 
 </script>
