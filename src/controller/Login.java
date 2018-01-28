@@ -17,9 +17,21 @@ public class Login extends Controller {
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserRecord user = getLoggedUserFromSession(req);
-        if (user!=null){
-            req.getRequestDispatcher("home-page").forward(req, resp);
+
+        if (redirectTo("logout=1", HttpSession::invalidate, "home-page", req, resp))
+            return;
+
+        if (loggedUserRedirectTo("home-page", req, resp)) {
+            return;
+        }
+
+        if (redirectTo("guest=1", "home-page", req, resp))
+            return;
+
+        if (redirectTo("failed=1", "WEB-INF/login.jsp", req, resp))
+            return;
+
+        if (redirectTo("login=0", "WEB-INF/login.jsp", req, resp)) {
             return;
         }
 
@@ -31,9 +43,11 @@ public class Login extends Controller {
 
             UserRecord userRecord = DbConnector.getUserByUsername(username);
             if (userRecord==null){
+                cleanAllParameters(req);
                 req.getRequestDispatcher("login?failed=1&login=0").forward(req, resp);
                 return;
             } else if (!authenticationPassed(userRecord, password)) {
+                cleanAllParameters(req);
                 req.getRequestDispatcher("login?failed=1&login=0").forward(req, resp);
                 return;
             } else {
@@ -44,37 +58,13 @@ public class Login extends Controller {
             return;
         }
 
-        boolean isLoggingIn = req.getParameter("login") !=null && req.getParameter("login").equals("0");
-        if (isLoggingIn){
-            req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
-            return;
-        }
-
-        boolean isLogout = req.getParameter("logout") !=null && req.getParameter("logout").equals("1");
-        if (isLogout){
-            // CLEAR SESSION
-            HttpSession session = req.getSession(false);
-            session.invalidate();
-            req.getRequestDispatcher("home-page").forward(req, resp);
-            return;
-        }
-
-        boolean isGuest = req.getParameter("guest") != null && req.getParameter("guest").equals("1");
-        if (isGuest){
-            req.getRequestDispatcher("home-page").forward(req, resp);
-            return;
-        }
-
-        boolean isLoginFailed = req.getParameter("failed") != null && req.getParameter("failed").equals("1");
-        if (isLoginFailed){
-            req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
-            return;
-        }
 
 
 
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
     }
+
+
 
     private boolean authenticationPassed(UserRecord user, String password) {
         //TODO implement auth

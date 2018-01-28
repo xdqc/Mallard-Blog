@@ -84,11 +84,11 @@
                     </div>
                     <input id="login_btn" type="submit" class="btn btn-primary" value="Login">
                 </form>
-                <span style="position: relative">
+                <div style="position: relative; margin: -48px 0 0 80px">
                 <form action="sign-up?signUp=0" method="post">
                     <input type="submit" id="signUp_btn" class="btn btn-default" value="Sign Up">
                 </form>
-                </span>
+                </div>
             </div>
         </div>
         <div class="col-md-3">

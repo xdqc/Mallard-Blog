@@ -1,8 +1,6 @@
 package db_connector;
 
 
-import ORM.tables.Article;
-import ORM.tables.Comment;
 import ORM.tables.FollowRelation;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
@@ -233,9 +231,6 @@ public class DbConnector {
 
     /**
      * Get Article by its id
-     *
-     * @param articleId
-     * @return
      */
     public static ArticleRecord getArticleById(String articleId) {
         List<ArticleRecord> articles = new ArrayList<>();
@@ -256,9 +251,6 @@ public class DbConnector {
 
     /**
      * Get how many comments under an article by its id.
-     *
-     * @param articleId
-     * @return
      */
     public static int getCommentNumberByArticle(String articleId) {
         int result = 0;
@@ -276,9 +268,6 @@ public class DbConnector {
 
     /**
      * Get Article with Author and all Comments by articleId
-     *
-     * @param articleId
-     * @return
      */
     public static Blog getBlogByArticleId(String articleId) {
         Blog blog = new Blog();
@@ -311,6 +300,9 @@ public class DbConnector {
         return blog;
     }
 
+    /**
+     * Get a user's all articles with comments list on each article by userId
+     */
     public static List<Blog> getBlogsByUserId(String userId) {
         List<Blog> blogs = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -323,42 +315,85 @@ public class DbConnector {
                     .from((USER).join(ARTICLE).onKey())
                     .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(USER.ID.eq(Integer.parseInt(userId)))
-                    .orderBy(COMMENT.CREATE_TIME.asc())
+                    .orderBy(ARTICLE.CREATE_TIME.desc(),
+                            COMMENT.CREATE_TIME.asc())
                     .fetch(
-                            r->new Tuple3<>(
+                            r -> new Tuple3<>(
                                     r.into(USER).into(UserRecord.class),
                                     r.into(ARTICLE).into(ArticleRecord.class),
                                     r.into(COMMENT).into(CommentRecord.class)
                             )
                     );
 
-            result.forEach(
-                    t-> {
-                        Blog blog = new Blog();
-                        blog.setKey(new Tuple<>(t.Val1, t.Val2));
-                        blog.getCommentList().add(t.Val3);
-
-                        // find if result already contains the article
-                        Blog thatBlog = blogs.stream()
-                                .filter(b -> b.getArticle().getId().equals(blog.getArticle().getId()))
-                                .findFirst().orElse(null);
-
-                        // if there the blog with same Author/Article has been added to result,
-                        if (thatBlog != null){
-                            // then, old article,  add comment to that blog
-                            thatBlog.getCommentList().add(t.Val3);
-                        } else {
-                            // else, new article, just add blog into result
-                            blogs.add(blog);
-                        }
-                    }
-            );
+            addResultToBlogList(blogs, result);
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //blogs.forEach(b -> b.);
         return blogs;
+    }
+
+    /**
+     * Get articles sort by hot degree(like_num)
+     **/
+    public static List<Blog> getHotBlogsSort() {
+        List<Blog> blogs = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            List<Tuple3<UserRecord, ArticleRecord, CommentRecord>> result = create
+                    .select(USER.fields())
+                    .select(ARTICLE.fields())
+                    .select(COMMENT.fields())
+                    .from((USER).join(ARTICLE).onKey())
+                    .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .orderBy(ARTICLE.LIKE_NUM.desc(),
+                            COMMENT.CREATE_TIME.asc())
+                    .fetch(
+                            r -> new Tuple3<>(
+                                    r.into(USER).into(UserRecord.class),
+                                    r.into(ARTICLE).into(ArticleRecord.class),
+                                    r.into(COMMENT).into(CommentRecord.class)
+                            )
+                    );
+
+            addResultToBlogList(blogs, result);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
+    }
+
+    /*Helper function*/
+    private static void addResultToBlogList(List<Blog> blogs, List<Tuple3<UserRecord, ArticleRecord, CommentRecord>> result) {
+        result.forEach(
+                t -> {
+                    Blog blog = new Blog();
+                    blog.setKey(new Tuple<>(t.Val1, t.Val2));
+
+                    // Because of leftJoin, don't add null comment to article with on comments
+                    if (t.Val3.getId()!=null){
+                        blog.getCommentList().add(t.Val3);
+                    }
+
+                    // find if result already contains the article
+                    Blog thatBlog = blogs.stream()
+                            .filter(b -> b.getArticle().getId().equals(blog.getArticle().getId()))
+                            .findFirst().orElse(null);
+
+                    // if there the blog with same Author/Article has been added to result,
+                    if (thatBlog != null) {
+                        // then, old article,  add comment to that blog
+                        thatBlog.getCommentList().add(t.Val3);
+                    } else {
+                        // else, new article, just add blog into result
+                        blogs.add(blog);
+                    }
+                }
+        );
+        blogs.forEach(Blog::convertListToTree);
     }
 }
