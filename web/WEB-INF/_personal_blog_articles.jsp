@@ -17,10 +17,12 @@
                 <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
                         ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
 
-                    <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
+                    <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif"
+                         alt="loading..."
                          width="45" style="display: none;" aria-hidden="true">
 
-                    <button id="read-more-${blog.getArticle().getId()}" class="btn btn-default btn-sm read-more-btn">Read more
+                    <button id="read-more-${blog.getArticle().getId()}" class="btn btn-default btn-sm read-more-btn">
+                        Read more
                     </button>
                 </div>
                 <br>
@@ -35,7 +37,8 @@
                 </c:if>
                 <c:if test="${blog.getNumComments() == 0}">
                     <button type="button" id="show-comment-btn-${blog.getArticle().getId()}"
-                            class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span> Comments
+                            class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span>
+                        Comments
                     </button>
                 </c:if>
 
@@ -57,11 +60,28 @@
 </style>
 
 <script type="text/javascript">
+
+    const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
+
+    //helper function recursively show comment tree
+    // TODO make comments display nicely
+    const showCascadingComments = (commentNode, $p) => commentNode
+        .filter((id, comment) => comment !== null && typeof comment === 'object')
+        .forEach((id, comment) => {
+            const ago = $.timeago(Date.parse(comment["createTime"]));
+            const dl = $("<dl class='comment'>").appendTo($p)
+                .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                    .append($("<span class='text-muted fa fa-clock-o'>")
+                        .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
+            const $pp = ($("<dd>").text(comment.content)).appendTo(dl);
+            showCascadingComments(comment, $pp)
+        });
+
     /**
      * AJAX comments of article
      */
-    $(".show-comment-btn").on("click", function () {
-        const articleID = $(this).attr("id").slice($(this).attr("id").lastIndexOf("-") + 1);
+    $(".show-comment-btn").on("click", () => {
+        const articleID = entityId($(this));
         const commentArea = $("#comment-area-" + articleID);
         const loadingImg = $("#load-comment-img-" + articleID);
         const arrow = $("#comment-arrow-" + articleID);
@@ -84,35 +104,19 @@
                     commentArea.empty();
                     console.log(resp);
 
-                    // TODO make comments display nicely
                     showCascadingComments(resp, commentArea);
-
-                    //helper function recursively show comment tree
-                    function showCascadingComments(commentNode, $p) {
-                        $.each(commentNode, function (id, comment) {
-                            if (comment !== null && typeof comment === 'object') {
-                                const ago = $.timeago(Date.parse(comment["createTime"]));
-                                const dl = $("<dl class='comment'>").appendTo($p)
-                                    .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-                                        .append($("<span class='text-muted fa fa-clock-o'>")
-                                            .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
-                                const $pp = ($("<dd>").text(comment.content)).appendTo(dl);
-                                showCascadingComments(comment, $pp)
-                            }
-                        })
-                    }
 
                     commentArea.slideDown();
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
                     arrow.addClass("fa-chevron-up");
 
                 },
-                error: function (msg, status) {
+                error: (msg, status) => {
                     console.log("error!!!");
                     console.log(status);
                     console.log(msg);
                 },
-                complete: function () {
+                complete: () => {
                     console.log("loaded");
                 }
             });
@@ -127,8 +131,8 @@
     /**
      * AJAX article content
      */
-    $(".read-more-btn").on("click", function () {
-        const articleID = $(this).attr("id").slice($(this).attr("id").lastIndexOf("-") + 1);
+    $(".read-more-btn").on("click", () => {
+        const articleID = entityId($(this));
         const articleContent = $("#article-content-" + articleID);
         const loadingImg = $("#load-article-content-img-" + articleID);
         $(this).hide();
@@ -137,19 +141,20 @@
             url: 'personal-blog',
             data: {content: articleID},
             cache: false,
-            beforeSend: function () {
+            beforeSend: () => {
                 loadingImg.show();
             },
-            success: function (resp) {
+
+            success: resp => {
                 loadingImg.hide();
                 articleContent.text(resp[articleID]);
             },
-            error: function (msg, status) {
+            error: (msg, status) => {
                 console.log("error!!");
                 console.log(status);
                 console.log(msg);
             },
-            complete: function () {
+            complete: () => {
                 console.log("loaded");
             }
         });
