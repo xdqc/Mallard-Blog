@@ -96,7 +96,28 @@
     }
 </style>
 
-
+<c:if test="${empty sessionScope.get('loggedInUser')}">
+    <script type="text/javascript">
+        const removeReplyBtn = () => {
+            $(".reply-comment-btn").remove()
+        }
+    </script>
+</c:if>
+<c:if test="${not empty sessionScope.get('loggedInUser')}">
+    <script type="text/javascript">
+        const removeReplyBtn = () => {};
+        const showReply = () => $("a.reply-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            const cmtId = entityId($(this));
+            const replyForm = $("#popup-reply-" + cmtId);
+            replyForm.slideDown();
+            console.log(replyForm);
+            $(".close").on("click", function () {
+                replyForm.slideUp();
+            })
+        })
+    </script>
+</c:if>
 
 <script type="text/javascript">
 
