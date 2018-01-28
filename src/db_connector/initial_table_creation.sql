@@ -4,12 +4,13 @@ create table article
 		primary key,
 	content varchar(16384) null,
 	author int not null,
-	like_num int null,
-	abuse_num int null,
+	like_num int default '0' null,
+	abuse_num int default '0' null,
 	create_time datetime not null,
 	edit_time datetime null,
 	valid_time datetime null,
-	show_hide_status tinyint(1) default '1' null
+	show_hide_status tinyint(1) default '1' null,
+	title varchar(128) not null
 )
 ;
 
@@ -26,8 +27,9 @@ create table attachment
 	mime varchar(32) not null,
 	attach_type varchar(1) not null,
 	ownby int not null,
+	isActivate tinyint(1) default '0' null,
 	constraint attachment_article_id_fk
-		foreign key (ownby) references article (id)
+	foreign key (ownby) references article (id)
 )
 ;
 
@@ -43,14 +45,14 @@ create table comment
 	commenter int not null,
 	create_time datetime not null,
 	edit_time datetime null,
-	abuse_num int null,
+	abuse_num int default '0' null,
 	show_hide_status tinyint(1) default '1' null,
-	parent_article int null,
+	parent_article int not null,
 	parent_comment int null,
 	constraint comment_article_id_fk
-		foreign key (parent_article) references article (id),
+	foreign key (parent_article) references article (id),
 	constraint comment_comment_id_fk
-		foreign key (parent_comment) references comment (id)
+	foreign key (parent_comment) references comment (id)
 )
 ;
 
@@ -68,7 +70,7 @@ create index comment_user_id_fk
 
 alter table attachment
 	add constraint attachment_comment_id_fk
-		foreign key (ownby) references comment (id)
+foreign key (ownby) references comment (id)
 ;
 
 create table follow_relation
@@ -76,7 +78,8 @@ create table follow_relation
 	id int auto_increment
 		primary key,
 	followee int not null,
-	follower int not null
+	follower int not null,
+	isValid tinyint(1) default '1' not null
 )
 ;
 
@@ -103,40 +106,41 @@ create table user
 	create_time datetime not null,
 	country varchar(32) null,
 	description varchar(512) null,
+	isValid tinyint(1) default '1' not null,
 	constraint user_user_name_uindex
-		unique (user_name),
+	unique (user_name),
 	constraint user_email_uindex
-		unique (email)
+	unique (email)
 )
 ;
 
 alter table article
 	add constraint article_user_id_fk
-		foreign key (author) references user (id)
+foreign key (author) references user (id)
 ;
 
 alter table attachment
 	add constraint attachment_user_id_fk
-		foreign key (ownby) references user (id)
+foreign key (ownby) references user (id)
 ;
 
 alter table comment
 	add constraint comment_user_id_fk
-		foreign key (commenter) references user (id)
+foreign key (commenter) references user (id)
 ;
 
 alter table follow_relation
 	add constraint follow_relation_followed_id_fk
-		foreign key (followee) references user (id)
+foreign key (followee) references user (id)
 ;
 
 alter table follow_relation
 	add constraint follow_relation_user_id_fk
-		foreign key (followee) references user (id)
+foreign key (followee) references user (id)
 ;
 
 alter table follow_relation
 	add constraint follow_relation_following_id_fk
-		foreign key (follower) references user (id)
+foreign key (follower) references user (id)
 ;
 
