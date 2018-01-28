@@ -5,13 +5,14 @@ import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /* The reason of creating this class is to minimize total db queries, thus enhance the performance of the web app */
 /* This is also helpful to integrate our data model */
-public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>> {
+public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>>, Serializable {
     private UserRecord author;
     private ArticleRecord article;
     private int numComments=0;

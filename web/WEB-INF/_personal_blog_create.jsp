@@ -49,7 +49,7 @@
                                     <div class="well well-sm well-primary">
                                         <form class="form form-inline " role="form">
                                             <div class="form-group">
-                                                <input type="datetime" class="form-control" value="" placeholder="Date" required/>
+                                                <input type="datetime-local" class="form-control" value="" placeholder="Date" required/>
                                             </div>
                                             <div class="form-group">
                                                 <select class="form-control text-input-dialog">

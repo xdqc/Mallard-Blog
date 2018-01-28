@@ -8,6 +8,7 @@ import ORM.tables.records.UserRecord;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import utililties.Blog;
+import utililties.Comments;
 import utililties.Tuple;
 import utililties.Tuple3;
 
@@ -120,44 +121,24 @@ public class DbConnector {
         return articles;
     }
 
-    public static List<CommentRecord> getCommentsByArticleId(String articleId) {
-        List<CommentRecord> comments = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-            comments = create.select()
-                    .from(COMMENT)
-                    .join(ARTICLE)
-                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
-                    .where(ARTICLE.ID.equalIgnoreCase(articleId))
-                    .orderBy(COMMENT.CREATE_TIME.desc())
-                    .fetch()
-                    .into(CommentRecord.class);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return comments;
-    }
-
-    public static List<CommentRecord> getCommentsByParentCommentId(String commentId) {
-        List<CommentRecord> comments = new ArrayList<>();
-
-        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-            comments = create.select()
-                    .from(COMMENT)
-                    .where(COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
-                    .fetch()
-                    .into(CommentRecord.class);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return comments;
-    }
+//    public static List<CommentRecord> getCommentsByParentCommentId(String commentId) {
+//        List<CommentRecord> comments = new ArrayList<>();
+//
+//        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+//            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+//
+//            comments = create.select()
+//                    .from(COMMENT)
+//                    .where(COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
+//                    .fetch()
+//                    .into(CommentRecord.class);
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return comments;
+//    }
 
     //get articles sort by hot degree(like_num)
     public static List<ArticleRecord> getHotArticlesSort() {
@@ -335,6 +316,42 @@ public class DbConnector {
     }
 
     /**
+     * Get an article's comments with commenter
+     * @param articleId
+     * @return
+     */
+    public static Comments getCommentsByArticleId(String articleId) {
+        Comments comments = new Comments();
+
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            List<Tuple<UserRecord, CommentRecord>> commentList = create
+                    .select(USER.fields())
+                    .select(COMMENT.fields())
+                    .from(COMMENT)
+                    .join(USER).onKey()
+                    .join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(ARTICLE.ID.equalIgnoreCase(articleId))
+                    .orderBy(COMMENT.CREATE_TIME.asc())
+                    .fetch(
+                            r -> new Tuple<>(
+                                    r.into(USER).into(UserRecord.class),
+                                    r.into(COMMENT).into(CommentRecord.class)
+                            )
+                    );
+
+            comments.setCommentList(commentList);
+            comments.convertListToTree();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
+
+    /**
      * Get articles sort by hot degree(like_num)
      **/
     public static List<Blog> getHotBlogsSort() {
@@ -396,4 +413,5 @@ public class DbConnector {
         );
         blogs.forEach(Blog::convertListToTree);
     }
+
 }

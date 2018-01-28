@@ -32,7 +32,7 @@
                             class="btn btn-info show-comment-btn">
                         <span class="badge">${blog.getNumComments()}</span>
                         Comments
-                        <span id="comment-arrow-${blog.getNumComments()}" class="fa fa-chevron-down"></span>
+                        <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
                     </button>
                 </c:if>
                 <c:if test="${blog.getNumComments() == 0}">
@@ -64,30 +64,41 @@
     const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
     //helper function recursively show comment tree
-    // TODO make comments display nicely
-    const showCascadingComments = (commentNode, $p) => commentNode
-        .filter((id, comment) => comment !== null && typeof comment === 'object')
-        .forEach((id, comment) => {
-            const ago = $.timeago(Date.parse(comment["createTime"]));
-            const dl = $("<dl class='comment'>").appendTo($p)
-                .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-                    .append($("<span class='text-muted fa fa-clock-o'>")
-                        .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
-            const $pp = ($("<dd>").text(comment.content)).appendTo(dl);
-            showCascadingComments(comment, $pp)
-        });
+    const showCascadingComments = (commentArr, $p) => {
+        // To exploit var hijacking, do not use arrow functions, just use for loop.
+        for (let commentNode of commentArr) {
+            if (!$.isArray(commentNode)) {
+                for (let cmtId in commentNode) {
+                    // get a value of json without pre-knowing its key
+                    if (commentNode.hasOwnProperty(cmtId)) {
+                        const comment = commentNode[cmtId];
+                        const ago = $.timeago(Date.parse(comment["createTime"]));
+                        const $dl = $("<dl class='comment'>").appendTo($p)
+                            .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                .append($("<span class='text-muted fa fa-clock-o'>")
+                                    .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
+                        //This is a special use case of exploiting of var hijacking to access it outside loop
+                        var $pp = ($("<dd>").text(comment.content)).appendTo($dl);
+                    }
+                }
+            } else {
+                //The first elem in commentNode will ALWAYS be a commentObj, so $pp will SURELY be initialized
+                showCascadingComments(commentNode, $pp);
+            }
+        }
+    };
+
 
     /**
      * AJAX comments of article
      */
-    $(".show-comment-btn").on("click", () => {
+    $(".show-comment-btn").on("click", function () {
         const articleID = entityId($(this));
         const commentArea = $("#comment-area-" + articleID);
         const loadingImg = $("#load-comment-img-" + articleID);
         const arrow = $("#comment-arrow-" + articleID);
         // Toggle comment-area display by click this button
         $(this).toggleClass('active');
-
         if ($(this).hasClass('active')) {
             $.ajax({
                 type: 'POST',
@@ -102,14 +113,10 @@
                 success: function (resp) {
                     loadingImg.css("display", "none");
                     commentArea.empty();
-                    console.log(resp);
-
-                    showCascadingComments(resp, commentArea);
-
+                    resp.forEach(comments => showCascadingComments(comments, commentArea));
                     commentArea.slideDown();
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
                     arrow.addClass("fa-chevron-up");
-
                 },
                 error: (msg, status) => {
                     console.log("error!!!");
@@ -131,7 +138,7 @@
     /**
      * AJAX article content
      */
-    $(".read-more-btn").on("click", () => {
+    $(".read-more-btn").on("click", function () {
         const articleID = entityId($(this));
         const articleContent = $("#article-content-" + articleID);
         const loadingImg = $("#load-article-content-img-" + articleID);
