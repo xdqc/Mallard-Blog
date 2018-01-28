@@ -1,5 +1,4 @@
 <div class="col-sm-12 col-md-9 col-lg-9">
-<<<<<<< HEAD
     <c:forEach var="blog" items="${articles}">
         <c:if test="${blog.getShowHideStatus()>0}">
             <article class="card animated fadeInLeft">
@@ -19,7 +18,6 @@
         </c:if>
     </c:forEach>
 </div>
-=======
     <%--<c:forEach var="blog" items="${blogs}">--%>
         <%--<c:if test="${blog.getArticle().getShowHideStatus()>0}">--%>
             <%--<article class="panel animated fadeInLeft">--%>
@@ -40,4 +38,3 @@
     <%@include file="personal_blog_articles.jsp"%>
     <br>
 </div>
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335

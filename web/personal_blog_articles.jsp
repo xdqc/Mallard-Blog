@@ -20,6 +20,8 @@
 
                             <a href="#" class="btn btn-primary">Read more</a>
 
+                            <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia Gallery</a>
+
                             <c:if test="${blog.getNumComments() > 0}">
                                 <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                                         class="btn btn-info"> Show
@@ -41,7 +43,7 @@
 
                     <script type="text/javascript">
                         $("#showCommentBtn-${blog.getArticle().getId()}").on("click", function () {
-                            let commentArea = $("#comment-area-${blog.getArticle().getId()}");
+                            var commentArea = $("#comment-area-${blog.getArticle().getId()}");
                             // Toggle comment-area display by click this button
                             $(this).toggleClass('active');
 

@@ -29,7 +29,7 @@
             <c:if test="${blogs.size()==0}">
                 <c:if test="${!sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
                     <div class="jumbotron">
-                        <h3>This user has no articles</h3>
+                        <h3>This user has no articles</h3>0n
                         <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
                     </div>
                 </c:if>

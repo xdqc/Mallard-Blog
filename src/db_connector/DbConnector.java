@@ -2,14 +2,11 @@ package db_connector;
 
 
 import ORM.tables.Article;
-<<<<<<< HEAD
+import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
-import ORM.tables.User;
-=======
-import ORM.tables.Comment;
-import ORM.tables.FollowRelation;
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
+
 import ORM.tables.records.ArticleRecord;
+import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import org.jooq.*;
@@ -26,6 +23,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import static ORM.tables.Article.ARTICLE;
+import static ORM.tables.Attachment.ATTACHMENT;
 import static ORM.tables.Comment.*;
 import static ORM.tables.User.*;
 
@@ -127,16 +125,6 @@ public class DbConnector {
         return articles;
     }
 
-<<<<<<< HEAD
-    //get articles sort by hot degree(like_num)
-    public static List<ArticleRecord> getHotArticlesSort() {
-        List<ArticleRecord> articles = new ArrayList<>();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-=======
     public static List<CommentRecord> getCommentsByArticleId(String articleId) {
         List<CommentRecord> comments = new ArrayList<>();
 
@@ -179,18 +167,12 @@ public class DbConnector {
     //get articles sort by hot degree(like_num)
     public static List<ArticleRecord> getHotArticlesSort() {
         List<ArticleRecord> articles = new ArrayList<>();
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             articles = create.select()
-<<<<<<< HEAD
                     .from(Article.ARTICLE)
-                    .orderBy(Article.ARTICLE.LIKE_NUM.desc())
-=======
-                    .from(ARTICLE)
                     .orderBy(ARTICLE.LIKE_NUM.desc())
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
                     .fetch()
                     .into(ArticleRecord.class);
         } catch (SQLException e) {
@@ -202,14 +184,11 @@ public class DbConnector {
     //get follower number by userId
     public static int getFollowerNumber(String userId) {
         int result = 0;
-<<<<<<< HEAD
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-=======
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
             result = create.selectCount()
@@ -225,18 +204,11 @@ public class DbConnector {
     //get post number by userId
     public static int getPostNumber(String userId) {
         int result = 0;
-<<<<<<< HEAD
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-            result = create.selectCount()
-                    .from(Article.ARTICLE)
-                    .where(Article.ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
-=======
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
             result = create.selectCount()
@@ -302,15 +274,12 @@ public class DbConnector {
             result = create.selectCount()
                     .from(COMMENT)
                     .where(COMMENT.PARENT_ARTICLE.eq(Integer.parseInt(articleId)))
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
                     .fetchOne(0, int.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Get Article with Author and all Comments by articleId
@@ -436,5 +405,27 @@ public class DbConnector {
                 }
         );
     }
->>>>>>> d73bd7bd9b6aa532acb3d3b87f7e86e03064e335
+
+
+    /**
+     * Get attachment by article id
+     **/
+    public static List<AttachmentRecord> getAttachmentByArticleId(String articleId) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            attachments = create
+                    .select(ATTACHMENT.fields())
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(articleId)))
+                    .fetch()
+                    .into(AttachmentRecord.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+
 }
