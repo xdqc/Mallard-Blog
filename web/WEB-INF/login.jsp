@@ -23,7 +23,6 @@
             width:19em;
         }
     </style>
-
 </head>
 <body>
 <div class="container" style="height: 60%">
@@ -62,22 +61,23 @@
                             <div id="recaptcha" class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX">
                             </div>
                             <button class="btn" id="btn-validate">Validate reCAPTCHA</button>
+                            <script>
+                                $( '#btn-validate' ).click(function(){
+                                    var $captcha = $( '#recaptcha' ),
+                                        response = grecaptcha.getResponse();
 
-                            /*
-                                ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-                                reCaptcha.setPrivateKey("your_private_key");
-
-                                String remoteip = request.getParameter("remoteip");
-                                String challenge = request.getParameter("challenge");
-                                String res = request.getParameter("response");
-                                ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteip, challenge, res);
-
-                                if (reCaptchaResponse.isValid()) {
-                                    out.print("true");
-                                } else {
-                                    out.print("false");
-                                }
-                            */
+                                    if (response.length === 0) {
+                                        $( '.msg-error').text( "reCAPTCHA is mandatory" );
+                                        if( !$captcha.hasClass( "error" ) ){
+                                            $captcha.addClass( "error" );
+                                        }
+                                    } else {
+                                        $( '.msg-error' ).text('');
+                                        $captcha.removeClass( "error" );
+                                        alert( 'reCAPTCHA marked' );
+                                    }
+                                })
+                            </script>
                         </div>
                     </div>
                     <input id="login_btn" type="submit" class="btn btn-primary" value="Login">
