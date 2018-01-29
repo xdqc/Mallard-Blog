@@ -22,7 +22,7 @@ public class MultimediaGallery  extends Controller {
         List<AttachmentRecord> attachments = DbConnector.getAttachmentByArticleId(articleId);
         req.setAttribute("attachments", attachments);
 
-        req.getRequestDispatcher("/multimedia_gallery.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/_multimedia_gallery.jsp").forward(req, resp);
     }
 
     @Override
