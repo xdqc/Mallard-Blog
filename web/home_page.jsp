@@ -12,7 +12,6 @@
 <script type="text/javascript" src="javascript/personal_blog.js"></script>
 <title>Mallard Blog</title>
 <body>
-<%@ include file="WEB-INF/_home_page_logo.jsp" %>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div class="container">
     <div class="row">
