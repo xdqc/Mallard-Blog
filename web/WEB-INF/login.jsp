@@ -33,7 +33,12 @@
             <div class="panel panel-default" style="box-shadow: 1px 3px 4px 2px floralwhite; border-color: lightgray; margin-top: 20em ; padding: 5em;">
                 <c:if test="${not empty param.failed}">
                     <div>
-                        <h4 style="color: red">Username or password doesn't match.</h4>
+                        <h4 class="bg-warning">Username or password doesn't match.</h4>
+                    </div>
+                </c:if>
+                <c:if test="${not empty param.login && param.login.equals('newSignUp')}">
+                    <div>
+                        <h4 class="bg-success">Congratulations you have signed up ! Please Login now </h4>
                     </div>
                 </c:if>
 
