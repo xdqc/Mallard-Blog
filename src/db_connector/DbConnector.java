@@ -333,6 +333,7 @@ public class DbConnector {
 
     /**
      * Get an article's comments with commenter
+     *
      * @param articleId
      * @return
      */
@@ -408,7 +409,7 @@ public class DbConnector {
                     blog.setKey(new Tuple<>(t.Val1, t.Val2));
 
                     // Because of leftJoin, don't add null comment to article with on comments
-                    if (t.Val3.getId()!=null){
+                    if (t.Val3.getId() != null) {
                         blog.getCommentList().add(t.Val3);
                     }
 
@@ -452,21 +453,47 @@ public class DbConnector {
         return attachments;
     }
 
-
-    public static boolean insertNewUser(UserRecord user) {
+    /**
+     * Insert a article to db
+     *
+     * @param article new Article to be inserted to db
+     * @return success or not
+     */
+    public static boolean insertNewArticle(ArticleRecord article) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-//             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
-//                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
-//                     .execute();
-
+            create.insertInto(ARTICLE, ARTICLE.AUTHOR, ARTICLE.TITLE, ARTICLE.CONTENT, ARTICLE.CREATE_TIME, ARTICLE.VALID_TIME)
+                    .values(article.getAuthor(), article.getTitle(), article.getContent(), article.getCreateTime(), article.getValidTime())
+                    .execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
-return true;
-
+        return true;
     }
+
+
+//    /**
+//     *
+//     * @param user
+//     * @return
+//     */
+//    public static boolean insertNewUser(UserRecord user) {
+//
+//            try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+//                DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+//
+//                //             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
+//                //                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
+//                //                     .execute();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//
+//        return true;
+//
+//    }
+
 }

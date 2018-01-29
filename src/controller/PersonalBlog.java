@@ -1,11 +1,14 @@
 package controller;
 
 
+import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import utililties.Blog;
 import utililties.Comments;
 import utililties.Tree;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +79,7 @@ public class PersonalBlog extends Controller {
     /* This is for ajax*/
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        /*Read more content*/
         String articleId = req.getParameter("comment");
         if (articleId != null) {
             //Blog blog = DbConnector.getBlogByArticleId(articleId);
@@ -84,12 +89,38 @@ public class PersonalBlog extends Controller {
             return;
         }
 
+        /*Load comments tree*/
         articleId = req.getParameter("content");
         if (articleId != null) {
             Blog blog = DbConnector.getBlogByArticleId(articleId);
             ajaxArticleContentHandler(blog, req, resp);
             return;
         }
+
+        /*Create new article*/
+        String articleStr = req.getParameter("newArticle");
+        if (articleStr != null) {
+
+            try {
+                JSONObject article = (JSONObject) new JSONParser().parse(articleStr);
+                ArticleRecord articleRecord = new ArticleRecord();
+                articleRecord.setTitle((String) article.get("title"));
+                articleRecord.setContent((String) article.get("content"));
+                articleRecord.setAuthor(Integer.parseInt((String) article.get("authorId")));
+                articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
+                articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
+
+                String msg =(DbConnector.insertNewArticle(articleRecord)) ? "success" : "error";
+                resp.setContentType("text/html");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(msg);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
     }
 
 
@@ -112,7 +143,6 @@ public class PersonalBlog extends Controller {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         json.writeJSONString(resp.getWriter());
-        System.out.println(json);
     }
 
 
