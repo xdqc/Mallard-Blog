@@ -15,7 +15,7 @@
         <div class="col-6 ">
             <div id="box" class="panel panel-default" style= "border-color: lightgray; box-shadow: 1px 3px 4px 5px floralwhite ;" >
                 <div style="margin-left: 3%">
-                    <form action="sign-up?signUp=1" method="post">
+                    <form action="sign-up?editProfile=1" method="post">
                         <h2 style="text-align: center">Edit Your Profile</h2>
 
                         <c:set var = "user" scope = "session" value = "${sessionScope.get('loggedInUser')}"/>
@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="lastN">Last Name:</label>
-                                    <input class="form-control" type="text" id="lastN" name="lname" >
+                                    <input class="form-control" type="text" id="lastN" name="lname" value="${user.getLName()}" >
                                     <br>
                                 </div>
                             </div><br><br>
@@ -42,7 +42,7 @@
                                 <div style="width: 50%">
                                     <label for="gnd"><strong>Gender:</strong></label>
                                     <select  class="radio-inline" id="gnd" name="gender" >
-                                        <option name="gender" selected>please select</option>
+                                        <option name="gender" value="${user.getGender()}"></option>
                                         <option value="0" name="gender">Female</option>
                                         <option value="1" name="gender">Male</option>
                                         <option value="2" name="gender">Other</option>
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="DOB">Date Of Birth</label>
-                                    <input class="form-control" type="date" id="DOB" value="dob">
+                                    <input class="form-control" type="date" id="DOB" value="${user.getDob()}">
                                     <br><br>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                 <div style="width: 40%">
                                     <label for="cuntry">Country:  </label>
                                     <select id="cuntry" name="country">
-                                        <option value="nz">New Zealand</option>
+                                        <option selected>${user.getCountry()}</option>
                                         <option> Afghanistan </option>
                                         <option> Albania</option>
                                         <option> Algeria</option>
@@ -215,6 +215,7 @@
                                         <option> Namibia</option>
                                         <option> Nepal</option>
                                         <option> Netherlands</option>
+                                        <option> New Zealand</option>
                                         <option> Nicaragua</option>
                                         <option> Niger</option>
                                         <option> Nigeria</option>
@@ -293,7 +294,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <p><strong>Description:</strong></p>
-                                    <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8"></textarea>
+                                    <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8" placeholder="${user.getDescription()}"></textarea>
                                     <br><br>
                                 </div>
                             </div>
