@@ -11,7 +11,6 @@
 <%@ include file="WEB-INF/_head.jsp" %>
 <title>Mallard Blog</title>
 <body>
-<%@ include file="WEB-INF/_home_page_logo.jsp" %>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div>
     <%@ include file="WEB-INF/_home_page_articles.jsp" %>
