@@ -52,9 +52,9 @@
                                            required/>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control text-input-dialog">
-                                        <option>Draft</option>
+                                    <select class="form-control text-input-dialog" id="create-time-${sessionScope.get("loggedInUser").getId()}">
                                         <option>Published</option>
+                                        <option>Draft</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -73,3 +73,12 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+
+    })
+</script>

@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Article extends TableImpl<ArticleRecord> {
 
-    private static final long serialVersionUID = 1347551893;
+    private static final long serialVersionUID = -879846693;
 
     /**
      * The reference instance of <code>mallard_dev.article</code>
@@ -62,6 +62,11 @@ public class Article extends TableImpl<ArticleRecord> {
     public final TableField<ArticleRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).identity(true), this, "");
 
     /**
+     * The column <code>mallard_dev.article.title</code>.
+     */
+    public final TableField<ArticleRecord, String> TITLE = createField("title", org.jooq.impl.SQLDataType.VARCHAR(128).nullable(false), this, "");
+
+    /**
      * The column <code>mallard_dev.article.content</code>.
      */
     public final TableField<ArticleRecord, String> CONTENT = createField("content", org.jooq.impl.SQLDataType.VARCHAR(16384), this, "");
@@ -74,12 +79,12 @@ public class Article extends TableImpl<ArticleRecord> {
     /**
      * The column <code>mallard_dev.article.like_num</code>.
      */
-    public final TableField<ArticleRecord, Integer> LIKE_NUM = createField("like_num", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ArticleRecord, Integer> LIKE_NUM = createField("like_num", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>mallard_dev.article.abuse_num</code>.
      */
-    public final TableField<ArticleRecord, Integer> ABUSE_NUM = createField("abuse_num", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ArticleRecord, Integer> ABUSE_NUM = createField("abuse_num", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>mallard_dev.article.create_time</code>.

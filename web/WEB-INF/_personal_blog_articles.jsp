@@ -1,5 +1,5 @@
 <c:forEach var="blog" items="${blogs}">
-    <c:if test="${blog.getArticle().getShowHideStatus()>0}">
+    <c:if test="${blog.getArticle().getShowHideStatus()>0} && ${blog.getAuthor().getIsValid()>0}">
         <article class="panel panel-info">
             <div class="panel-heading">
                 <h4 class="panel-title">${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</h4>
@@ -62,7 +62,7 @@
         margin-bottom: 10px;
     }
 
-    dd {
+    dd.comment {
         position: relative;
     }
 
@@ -130,7 +130,6 @@
                 })
             });
         }
-
     </script>
 </c:if>
 

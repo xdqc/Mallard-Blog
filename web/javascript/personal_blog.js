@@ -11,7 +11,7 @@ const showCascadingComments = (commentArr, $p) => {
                     const comment = commentNode[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
                     const $dl = $("<dl class='comment'>").appendTo($p)
-                        .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                        .append($("<dt class='comment'>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
 
@@ -29,7 +29,7 @@ const showCascadingComments = (commentArr, $p) => {
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
-                    var $pp = ($("<dd>").text(comment.content)).appendTo($dl)
+                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl)
                         .append(replyBtn).append(replyForm);
                 }
             }
