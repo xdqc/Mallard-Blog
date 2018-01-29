@@ -110,7 +110,9 @@ public class PersonalBlog extends Controller {
                 articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
                 articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
 
-                String msg =(DbConnector.insertNewArticle(articleRecord)) ? "success" : "error";
+                System.out.println(articleRecord);
+                String msg = "success";
+                        //DbConnector.insertNewArticle(articleRecord) ? "success" : "error";
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write(msg);

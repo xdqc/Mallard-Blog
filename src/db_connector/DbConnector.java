@@ -475,25 +475,25 @@ public class DbConnector {
     }
 
 
-//    /**
-//     *
-//     * @param user
-//     * @return
-//     */
-//    public static boolean insertNewUser(UserRecord user) {
-//
-//            try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-//                DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-//
-//                //             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
-//                //                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
-//                //                     .execute();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//
-//        return true;
-//
-//    }
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public static boolean insertNewUser(UserRecord user) {
+
+            try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+                DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+                //             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
+                //                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
+                //                     .execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        return true;
+
+    }
 
 }
