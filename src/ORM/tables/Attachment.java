@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Attachment extends TableImpl<AttachmentRecord> {
 
-    private static final long serialVersionUID = 1035410941;
+    private static final long serialVersionUID = -1458580323;
 
     /**
      * The reference instance of <code>mallard_dev.attachment</code>
@@ -84,6 +84,11 @@ public class Attachment extends TableImpl<AttachmentRecord> {
      * The column <code>mallard_dev.attachment.ownby</code>.
      */
     public final TableField<AttachmentRecord, Integer> OWNBY = createField("ownby", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>mallard_dev.attachment.isActivate</code>.
+     */
+    public final TableField<AttachmentRecord, Byte> ISACTIVATE = createField("isActivate", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * Create a <code>mallard_dev.attachment</code> table reference

@@ -35,6 +35,10 @@ public class Login extends Controller {
             return;
         }
 
+        if (redirectTo("login=newSignUp", "WEB-INF/login.jsp", req, resp)) {
+            return;
+        }
+
 
         boolean isLogin = req.getParameter("login") != null && req.getParameter("login").equals("1");
         if (isLogin){

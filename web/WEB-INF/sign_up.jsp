@@ -24,7 +24,10 @@
     <div class="col-6 ">
         <div id="box" class="panel panel-default" style= "border-color: lightgray; box-shadow: 1px 3px 4px 5px floralwhite ;" >
             <div style="margin-left: 3%">
-                <form action="sign-up?signUp=1" method="post">
+                <%--showing login option after successfully signing up--%>
+                <div  id="login-page" style="display: none; "></div>
+
+                <form action="sign-up?signUp=1" method="post" class="form-horizontal" id="user-profile">
 
 
                     <h3>Personal Information:</h3>
@@ -33,7 +36,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="firstN">First Name:</label>
-                            <input class="form-control" type="text" id="firstN" name="fname">
+                            <input class="form-control" type="text" id="firstN" name="fname" placeholder="First Name" required>
                             <br>
                         </div>
                     </div>
@@ -41,7 +44,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="lastN">Last Name:</label>
-                            <input class="form-control" type="text" id="lastN" name="lname">
+                            <input class="form-control" type="text" id="lastN" name="lname"  placeholder="Last Name" required>
                             <br>
                         </div>
                     </div><br><br>
@@ -50,7 +53,7 @@
                         <div style="width: 50%">
                             <label for="gnd"><strong>Gender:</strong></label>
                             <select  class="radio-inline" id="gnd" name="gender" >
-                                <option name="gender" selected>please select</option>
+                                <option name="gender" selected>Please select</option>
                                 <option value="0" name="gender">Female</option>
                                 <option value="1" name="gender">Male</option>
                                 <option value="2" name="gender">Other</option>
@@ -63,7 +66,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="DOB">Date Of Birth</label>
-                            <input class="form-control" type="date" id="DOB" value="dob">
+                            <input class="form-control" type="date" name="dob" id="DOB" value="1990-01-01" required>
                             <br><br>
                         </div>
                     </div>
@@ -77,7 +80,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="usr">User Name:  </label>
-                            <input class="form-control" type="text" id="usr" name="userName" required >
+                            <input class="form-control" type="text" id="usr" name="userName"  placeholder="User Name" required >
                             <br><br>
                         </div>
                     </div>
@@ -86,7 +89,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="emil">Email:   </label>
-                            <input class="form-control" type="email" id="emil" name="email" required>
+                            <input class="form-control" type="email" id="emil" name="email"  placeholder="Email" required>
                             <br><br>
                         </div>
                     </div>
@@ -95,7 +98,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="passrd">Password:  </label>
-                            <input class="form-control" type="password" id="passrd" name="password" required>
+                            <input class="form-control" type="password" id="passrd" name="password"  placeholder="Password" required>
                             <br><br>
                         </div>
                     </div>
@@ -103,8 +106,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="passrd2">Re-type Password:  </label>
-                            <input class="form-control" type="password" id="passrd2" name="password" required>
+                            <label for="passrd2">Re-Enter Password:  </label>
+                            <input class="form-control" type="password" id="passrd2" name="password"  placeholder="Re-Enter" required>
                             <br><br>
                         </div>
                     </div>
@@ -116,7 +119,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="addr">Address:  </label>
-                            <input class="form-control" type="text" id="addr" name="address">
+                            <input class="form-control" type="text" id="addr" name="address"  placeholder="Address" required>
                             <br><br>
                         </div>
                     </div>
@@ -124,7 +127,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="cty">City:  </label>
-                            <input class="form-control" type="text" id="cty" name="city">
+                            <input class="form-control" type="text" id="cty" name="city"  placeholder="City" required>
                             <br><br>
                         </div>
                     </div>
@@ -133,7 +136,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="ste" >State:  </label>
-                            <input class="form-control" type="text" id="ste" name="state">
+                            <input class="form-control" type="text" id="ste" name="state"  placeholder="State" required>
                             <br><br>
                         </div>
                     </div>
@@ -144,7 +147,7 @@
                         <div style="width: 50%">
                             <label for="cuntry">Country:  </label>
                             <select id="cuntry" name="country">
-                                <option value="nz">New Zealand</option>
+                                <option selected>New Zealand</option>
                                 <option> Afghanistan </option>
                                 <option> Albania</option>
                                 <option> Algeria</option>
@@ -341,14 +344,14 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <p><strong>Description:</strong></p>
-                            <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8"></textarea>
+                            <textarea style="overflow: auto; resize: none" name="description" cols="60"  placeholder="Describe Your Self" rows="8"></textarea>
                             <br><br>
                         </div>
                     </div>
                     </div>
 
                     <div class="form-inline">
-                        <input style="width: 10em; align-content: space-around" class="form-control" type="submit" value="Sign Up!">
+                        <input style="width: 10em; align-content: space-around" class="form-control" type="submit" value="Sign Up!" id="submit-btn">
                         <input style="width: 10em" class="form-control" type="reset" value="Cancel">
                         <br><br><br><br><br>
                     </div>
@@ -358,5 +361,53 @@
     </div>
 </div>
 </div>
+
+
 </body>
+
+<script>
+    const loginPage = $('#login-page');
+    $('form#user-profile').on('submit', function(event) {
+        event.preventDefault(); // or return false, your choice
+        console.log($(this).serialize());
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            data: $(this).serialize(),
+            success: function(resp, status) {
+                // if success, HTML response is expected, so replace current
+                if(resp === "success"){
+                    alert("congratulations you have signed up !");
+                    redirectToLogin();
+
+                }
+                else if (resp === "error"){
+                    alert("SQL error");
+                }
+            },
+            error: function (data, status) {
+                alert(status);
+            }
+
+        });
+    });
+
+    function redirectToLogin() {
+        $.ajax({
+            url: 'login',
+            type: 'post',
+            data: 'login=newSignUp',
+            success: function(resp, status) {
+                $('form#user-profile').hide();
+                loginPage.html(resp);
+                loginPage.slideDown();
+            },
+            error: function (resp, status) {
+                alert(status);
+                console.log(resp);
+            }
+
+        });
+    }
+</script>
 </html>
