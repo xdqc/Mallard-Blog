@@ -48,21 +48,23 @@
                         <div class="well well-sm well-primary">
                             <form class="form form-inline " role="form">
                                 <div class="form-group">
-                                    <input type="datetime-local" class="form-control" value="" placeholder="Date"
-                                           required/>
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control text-input-dialog" id="create-time-${sessionScope.get("loggedInUser").getId()}">
-                                        <option>Published</option>
-                                        <option>Draft</option>
+                                    <select class="form-control text-input-dialog publish-mode"
+                                            id="publish-mode-${sessionScope.get("loggedInUser").getId()}">
+                                        <option value="publish">Publish</option>
+                                        <option value="draft">Draft</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <span class="glyphicon glyphicon-floppy-disk"></span> Save
+                                    <input type="datetime-local" class="form-control publish-time"
+                                           id="publish-time-${sessionScope.get("loggedInUser").getId()}" value=""
+                                           placeholder="Date" style="display: none" required/>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-sm publish" id="publish-${sessionScope.get("loggedInUser").getId()}">
+                                        <span class="fa fa-floppy-o"></span> Publish
                                     </button>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="glyphicon glyphicon-eye-open"></span> Preview
+                                    <button type="button" class="btn btn-default btn-sm preview" id="preview-${sessionScope.get("loggedInUser").getId()}">
+                                        <span class="fa fa-eye"></span> Preview
                                     </button>
                                 </div>
                             </form>
@@ -75,10 +77,23 @@
 </div>
 
 <script type="text/javascript">
-
-
     $(document).ready(function () {
 
+        $("select.publish-mode").on("change", function() {
+            const datePicker = $("input.publish-time");
+            const publishBtn = $("button.publish");
+            if (this.value==="publish"){
+                datePicker.hide();
+                publishBtn.text("Publish");
+                publishBtn.children().removeClass("fa-floppy-o");
+                publishBtn.children().addClass("fa-eye");
+            } else if (this.value==="draft"){
+                datePicker.show();
+                publishBtn.text("Save");
+                publishBtn.children().removeClass("fa-eye");
+                publishBtn.children().addClass("fa-floppy-o");
+            }
+        })
 
     })
 </script>
