@@ -58,9 +58,6 @@ public class Login extends Controller {
             return;
         }
 
-
-
-
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
     }
 

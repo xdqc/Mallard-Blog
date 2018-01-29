@@ -62,7 +62,7 @@
                             </div>
                             <button class="btn" id="btn-validate">Validate reCAPTCHA</button>
                             <script>
-                                $( '#btn-validate' ).click(function(){
+                                $('#btn-validate').click(function(){
                                     var $captcha = $( '#recaptcha' ),
                                         response = grecaptcha.getResponse();
 
@@ -76,7 +76,7 @@
                                         $captcha.removeClass( "error" );
                                         alert( 'reCAPTCHA marked' );
                                     }
-                                })
+                                });
                             </script>
                         </div>
                     </div>
