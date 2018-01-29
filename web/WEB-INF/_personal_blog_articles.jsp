@@ -1,5 +1,5 @@
 <c:forEach var="blog" items="${blogs}">
-    <c:if test="${blog.getArticle().getShowHideStatus()>0}">
+    <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info">
             <div class="panel-heading">
                 <h4 class="panel-title">${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</h4>
@@ -62,7 +62,7 @@
         margin-bottom: 10px;
     }
 
-    dd {
+    dd.comment {
         position: relative;
     }
 
@@ -110,12 +110,12 @@
         function removeReplyBtn() {
             $(".reply-comment-btn").remove()
         }
+        function showReply() {}
     </script>
 </c:if>
 <c:if test="${not empty sessionScope.get('loggedInUser')}">
     <script type="text/javascript">
-        function removeReplyBtn() {
-        }
+        function removeReplyBtn() {}
 
         function showReply() {
             $("a.reply-comment-btn").on("click", function (e) {
@@ -130,7 +130,6 @@
                 })
             });
         }
-
     </script>
 </c:if>
 

@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FollowRelation extends TableImpl<FollowRelationRecord> {
 
-    private static final long serialVersionUID = -1101357612;
+    private static final long serialVersionUID = 727937302;
 
     /**
      * The reference instance of <code>mallard_dev.follow_relation</code>
@@ -69,6 +69,11 @@ public class FollowRelation extends TableImpl<FollowRelationRecord> {
      * The column <code>mallard_dev.follow_relation.follower</code>.
      */
     public final TableField<FollowRelationRecord, Integer> FOLLOWER = createField("follower", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>mallard_dev.follow_relation.isValid</code>.
+     */
+    public final TableField<FollowRelationRecord, Byte> ISVALID = createField("isValid", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * Create a <code>mallard_dev.follow_relation</code> table reference

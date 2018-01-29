@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -1425428159;
+    private static final long serialVersionUID = -1773933459;
 
     /**
      * The reference instance of <code>mallard_dev.user</code>
@@ -112,9 +112,29 @@ public class User extends TableImpl<UserRecord> {
     public final TableField<UserRecord, String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR(32), this, "");
 
     /**
+     * The column <code>mallard_dev.user.state</code>.
+     */
+    public final TableField<UserRecord, String> STATE = createField("state", org.jooq.impl.SQLDataType.VARCHAR(32), this, "");
+
+    /**
+     * The column <code>mallard_dev.user.city</code>.
+     */
+    public final TableField<UserRecord, String> CITY = createField("city", org.jooq.impl.SQLDataType.VARCHAR(32), this, "");
+
+    /**
+     * The column <code>mallard_dev.user.address</code>.
+     */
+    public final TableField<UserRecord, String> ADDRESS = createField("address", org.jooq.impl.SQLDataType.VARCHAR(128), this, "");
+
+    /**
      * The column <code>mallard_dev.user.description</code>.
      */
     public final TableField<UserRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR(512), this, "");
+
+    /**
+     * The column <code>mallard_dev.user.isValid</code>.
+     */
+    public final TableField<UserRecord, Byte> ISVALID = createField("isValid", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * Create a <code>mallard_dev.user</code> table reference

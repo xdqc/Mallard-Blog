@@ -122,10 +122,10 @@ public class PersonalBlog extends Controller {
     private void putCommentTreeToJson(Tree<Tuple<UserRecord, CommentRecord>> tree, JSONArray json){
         for (Tree<Tuple<UserRecord, CommentRecord>> commentTree : tree.getChildren()) {
             CommentRecord comment = commentTree.getData().Val2;
-            if (comment.getShowHideStatus()==1){
+            UserRecord user = commentTree.getData().Val1;
+            if (comment.getShowHideStatus()==1 && user.getIsvalid()==1){
 
                 JSONObject commentJson = new JSONObject();
-                UserRecord user = commentTree.getData().Val1;
                 assert user != null;
                 commentJson.put("commenter", user.getFName()+" "+user.getLName());
                 commentJson.put("content", comment.getContent());
