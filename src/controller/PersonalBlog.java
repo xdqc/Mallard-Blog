@@ -63,7 +63,6 @@ public class PersonalBlog extends Controller {
         req.setAttribute("age", age);
         req.setAttribute("current_username", user.getUserName());
 
-
         userId = String.valueOf(user.getId());
 
         List<Blog> blogs = DbConnector.getBlogsByUserId(userId);
