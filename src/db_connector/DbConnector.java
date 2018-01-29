@@ -5,6 +5,7 @@ import ORM.tables.Article;
 import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
 
+import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.CommentRecord;
@@ -449,6 +450,26 @@ public class DbConnector {
             e.printStackTrace();
         }
         return attachments;
+    }
+
+    /**
+     * Insert a article to db
+     * @param article new Article to be inserted to db
+     * @return success or not
+     */
+    public static boolean insertNewArticle(ArticleRecord article) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.insertInto(ARTICLE, ARTICLE.AUTHOR, ARTICLE.TITLE, ARTICLE.CONTENT, ARTICLE.CREATE_TIME, ARTICLE.VALID_TIME)
+                    .values(article.getAuthor(), article.getTitle(), article.getContent(), article.getCreateTime(), article.getValidTime())
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 }

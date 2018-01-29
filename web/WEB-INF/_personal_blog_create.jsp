@@ -12,11 +12,12 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Title" required/>
+                            <input type="text" class="form-control title" placeholder="Title" required/>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" placeholder="Content" rows="5" required></textarea>
+                            <textarea class="form-control content" placeholder="Content" rows="5" required></textarea>
                         </div>
+                        <img src="pictures/uploading.gif" alt="uploading..." class="uploading-img">;
                     </div>
                 </div>
                 <div class="row">
@@ -55,17 +56,19 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <button type="button" class="btn btn-success btn-sm publish"
+                                            id="publish-${sessionScope.get("loggedInUser").getId()}">
+                                        <span class="fa fa-paper-plane"></span> Publish
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm preview"
+                                            id="preview-${sessionScope.get("loggedInUser").getId()}">
+                                        <span class="fa fa-eye"></span> Preview
+                                    </button>
+                                </div>
+                                <div class="form-group">
                                     <input type="datetime-local" class="form-control publish-time"
                                            id="publish-time-${sessionScope.get("loggedInUser").getId()}" value=""
                                            placeholder="Date" style="display: none" required/>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-sm publish" id="publish-${sessionScope.get("loggedInUser").getId()}">
-                                        <span class="fa fa-floppy-o"></span> Publish
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-sm preview" id="preview-${sessionScope.get("loggedInUser").getId()}">
-                                        <span class="fa fa-eye"></span> Preview
-                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -76,24 +79,89 @@
     </div>
 </div>
 
+<style type="text/css">
+    img.uploading-img {
+        width: 100px;
+        position: absolute;
+        top: 30%;
+        right: 45%;
+        opacity: 0.618;
+        display: none;
+    }
+</style>
+
 <script type="text/javascript">
+
+    const datePicker = $("input.publish-time");
+    const publishBtn = $("button.publish");
+    const publishMode = $("select.publish-mode");
+    const uploadingImg = $("img.uploading-img");
+
     $(document).ready(function () {
-
-        $("select.publish-mode").on("change", function() {
-            const datePicker = $("input.publish-time");
-            const publishBtn = $("button.publish");
-            if (this.value==="publish"){
+        publishMode.on("change", function () {
+            if (this.value === "publish") {
                 datePicker.hide();
-                publishBtn.text("Publish");
-                publishBtn.children().removeClass("fa-floppy-o");
-                publishBtn.children().addClass("fa-eye");
-            } else if (this.value==="draft"){
-                datePicker.show();
-                publishBtn.text("Save");
-                publishBtn.children().removeClass("fa-eye");
-                publishBtn.children().addClass("fa-floppy-o");
-            }
-        })
+                publishBtn.empty();
+                publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>"));
+                publishBtn.html(" Publish");
 
+            } else if (this.value === "draft") {
+                datePicker.show();
+                publishBtn.empty();
+                publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>"));
+                publishBtn.html(" Save");
+            }
+        });
+
+        publishBtn.on("click", function () {
+            datePicker.val(new Date());
+            let availableDate = new Date();
+            if (publishMode[0].value==="draft"){
+                if (datePicker.val()===""){
+                    alert("you have to choose a date and time");
+                    return;
+                }
+                availableDate = new Date(datePicker.val());
+            }
+
+            const article = {};
+            article["title"] = $("input.title").val();
+            article["content"] = $("textarea.content").val();
+            article["authorId"] = entityId($(this));
+            article["createTime"] = new Date().getTime();
+            article["validTime"] = availableDate.getTime();
+
+            console.log(article);
+
+            //Ajax post to servlet
+            $.ajax({
+                type: 'POST',
+                url: 'personal-blog',
+                data: {newArticle: JSON.stringify(article)},
+                cache: false,
+                beforeSend: () => {
+                    uploadingImg.show();
+                },
+
+                success: resp => {
+                    uploadingImg.hide();
+                    $("input.title").val("");
+                    $("textarea.content").val("");
+                    const msg = publishMode[0].value==="publish" ? "Your article are published."
+                        : "Your article will be visible to public on " + availableDate.toLocaleString();
+                    alert("Congratulations " + msg);
+                    console.log(resp);
+                },
+                error: (msg, status) => {
+                    console.log("error!!");
+                    console.log(status);
+                    console.log(msg);
+                },
+                complete: () => {
+                    console.log("loaded");
+                }
+
+            })
+        });
     })
 </script>

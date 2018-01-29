@@ -24,7 +24,6 @@ public class Comments extends Tree<Tuple<UserRecord, CommentRecord>> implements 
         // Add comment that directly under the article
         for (int i = 0; i < commentList.size(); i++) {
             Tuple<UserRecord, CommentRecord> comment = commentList.get(i);
-            System.out.println(comment.Val2.getParentComment());
             if (comment.Val2.getParentComment() == null) {
                 this.commentTree.addChild(new Tree<>(comment));
                 commentList.remove(comment);
