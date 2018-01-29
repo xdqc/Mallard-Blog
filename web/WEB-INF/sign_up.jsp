@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="firstN">First Name:</label>
-                            <input class="form-control" type="text" id="firstN" name="fname">
+                            <input class="form-control" type="text" id="firstN" name="fname" required>
                             <br>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="lastN">Last Name:</label>
-                            <input class="form-control" type="text" id="lastN" name="lname">
+                            <input class="form-control" type="text" id="lastN" name="lname" required>
                             <br>
                         </div>
                     </div><br><br>
@@ -63,7 +63,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="DOB">Date Of Birth</label>
-                            <input class="form-control" type="date" id="DOB" value="dob">
+                            <input class="form-control" type="date" id="DOB" value="dob" required>
                             <br><br>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="addr">Address:  </label>
-                            <input class="form-control" type="text" id="addr" name="address">
+                            <input class="form-control" type="text" id="addr" name="address" required>
                             <br><br>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="cty">City:  </label>
-                            <input class="form-control" type="text" id="cty" name="city">
+                            <input class="form-control" type="text" id="cty" name="city" required>
                             <br><br>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="ste" >State:  </label>
-                            <input class="form-control" type="text" id="ste" name="state">
+                            <input class="form-control" type="text" id="ste" name="state" required>
                             <br><br>
                         </div>
                     </div>
