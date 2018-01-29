@@ -14,7 +14,6 @@
     <title>${sessionScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
 <body>
-<%@include file="WEB-INF/_home_page_logo.jsp" %>
 <%@include file="WEB-INF/_home_page_menu.jsp" %>
 
 <div class="container">

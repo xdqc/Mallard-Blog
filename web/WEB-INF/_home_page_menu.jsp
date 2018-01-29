@@ -9,13 +9,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-xbt" aria-hidden="true"></span>&nbsp;Welcome
-                home!&nbsp;&nbsp;</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><img src="/pictures/Logo.png" alt="Logo" width="120"  height="50">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
                 <li class="active">
                     <a class="navbar-brand" href="home-page"><span class="glyphicon glyphicon-home"
                                                                    aria-hidden="true"></span>&nbsp;Home</a>
