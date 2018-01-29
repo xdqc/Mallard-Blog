@@ -1,5 +1,4 @@
 <%--personal information card--%>
-<div class="col-sm-12 col-md-3 col-lg-3">
     <div class="card">
         <img class="card-img-top img-responsive" src="http://i.pravatar.cc/300" alt="Card image cap">
         <div class="card-body">
@@ -25,4 +24,3 @@
             </div>
         </dl>
     </div>
-</div>

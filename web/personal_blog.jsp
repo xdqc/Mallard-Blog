@@ -11,6 +11,7 @@
 <html>
 <head>
     <%@include file="WEB-INF/_head.jsp" %>
+    <script type="text/javascript" src="javascript/personal_blog.js"></script>
     <title>${sessionScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
 <body>

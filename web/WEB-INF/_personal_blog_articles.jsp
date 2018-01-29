@@ -27,7 +27,8 @@
                 </div>
                 <br>
 
-                <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia Gallery</a>
+                <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
+                    Gallery</a>
 
                 <c:if test="${blog.getNumComments() > 0}">
                     <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
@@ -46,7 +47,8 @@
 
                 <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
                      width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
-                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default" style="display: none">
+                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default comment-area"
+                     style="display: none">
                 </div>
             </div>
         </article>
@@ -56,117 +58,82 @@
 
 <style type="text/css">
     dl.comment {
+        padding: 1em 0 0 2em;
+        margin-bottom: 10px;
+    }
+
+    dd {
+        position: relative;
+    }
+
+    a.reply-comment-btn {
         padding-left: 2em;
     }
 
+    .comment-area {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .reply-text {
+        margin: 0 20px 10px 0;
+    }
+
+    .popup {
+        margin: -15px 0 20px 0;
+        padding: 10px;
+        background: lightgrey;
+        border-radius: 5px;
+        width: 80%;
+        position: relative;
+        top: 20px;
+        display: none;
+    }
+
+    .popup .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transition: all 200ms;
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .popup .close:hover {
+        color: #06D85F;
+    }
 </style>
 
-<script type="text/javascript">
-
-    const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
-
-    //helper function recursively show comment tree
-    const showCascadingComments = (commentArr, $p) => {
-        // To exploit var hijacking, do not use arrow functions, just use for loop.
-        for (let commentNode of commentArr) {
-            if (!$.isArray(commentNode)) {
-                for (let cmtId in commentNode) {
-                    // get a value of json without pre-knowing its key
-                    if (commentNode.hasOwnProperty(cmtId)) {
-                        const comment = commentNode[cmtId];
-                        const ago = $.timeago(Date.parse(comment["createTime"]));
-                        const $dl = $("<dl class='comment'>").appendTo($p)
-                            .append($("<dt>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-                                .append($("<span class='text-muted fa fa-clock-o'>")
-                                    .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
-                        //This is a special use case of exploiting of var hijacking to access it outside loop
-                        var $pp = ($("<dd>").text(comment.content)).appendTo($dl);
-                    }
-                }
-            } else {
-                //The first elem in commentNode will ALWAYS be a commentObj, so $pp will SURELY be initialized
-                showCascadingComments(commentNode, $pp);
-            }
+<c:if test="${empty sessionScope.get('loggedInUser')}">
+    <script type="text/javascript">
+        function removeReplyBtn() {
+            $(".reply-comment-btn").remove()
         }
-    };
+    </script>
+</c:if>
+<c:if test="${not empty sessionScope.get('loggedInUser')}">
+    <script type="text/javascript">
+        function removeReplyBtn() {
+        }
 
-
-    /**
-     * AJAX comments of article
-     */
-    $(".show-comment-btn").on("click", function () {
-        const articleID = entityId($(this));
-        const commentArea = $("#comment-area-" + articleID);
-        const loadingImg = $("#load-comment-img-" + articleID);
-        const arrow = $("#comment-arrow-" + articleID);
-        // Toggle comment-area display by click this button
-        $(this).toggleClass('active');
-        if ($(this).hasClass('active')) {
-            $.ajax({
-                type: 'POST',
-                url: 'personal-blog',
-                data: {comment: articleID},
-                cache: false,
-                beforeSend: function () {
-                    loadingImg.css("display", "block");
-                    arrow.removeClass("fa-chevron-down");
-                    arrow.addClass("fa-spinner fa-pulse fa-fw");
-                },
-                success: function (resp) {
-                    loadingImg.css("display", "none");
-                    commentArea.empty();
-                    resp.forEach(comments => showCascadingComments(comments, commentArea));
-                    commentArea.slideDown();
-                    arrow.removeClass("fa-spinner fa-pulse fa-fw");
-                    arrow.addClass("fa-chevron-up");
-                },
-                error: (msg, status) => {
-                    console.log("error!!!");
-                    console.log(status);
-                    console.log(msg);
-                },
-                complete: () => {
-                    console.log("loaded");
-                }
+        function showReply() {
+            $("a.reply-comment-btn").on("click", function (e) {
+                e.preventDefault();
+                console.log($(this));
+                const cmtId = entityId($(this));
+                const replyForm = $("#popup-reply-" + cmtId);
+                replyForm.slideDown();
+                console.log(replyForm);
+                $(".close").on("click", function () {
+                    replyForm.slideUp();
+                })
             });
-
-        } else {
-            commentArea.slideUp();
-            arrow.removeClass("fa-chevron-up");
-            arrow.addClass("fa-chevron-down");
         }
-    });
 
-    /**
-     * AJAX article content
-     */
-    $(".read-more-btn").on("click", function () {
-        const articleID = entityId($(this));
-        const articleContent = $("#article-content-" + articleID);
-        const loadingImg = $("#load-article-content-img-" + articleID);
-        $(this).hide();
-        $.ajax({
-            type: 'POST',
-            url: 'personal-blog',
-            data: {content: articleID},
-            cache: false,
-            beforeSend: () => {
-                loadingImg.show();
-            },
+    </script>
+</c:if>
 
-            success: resp => {
-                loadingImg.hide();
-                articleContent.text(resp[articleID]);
-            },
-            error: (msg, status) => {
-                console.log("error!!");
-                console.log(status);
-                console.log(msg);
-            },
-            complete: () => {
-                console.log("loaded");
-            }
-        });
-    });
+<script type="text/javascript">
 
 </script>
