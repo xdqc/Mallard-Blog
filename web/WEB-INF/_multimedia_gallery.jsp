@@ -10,8 +10,8 @@
 <html>
 <head>
     <title>Title</title>
-    <script type="text/javascript" src="javascript/jquery.js"></script>
-    <script type="text/javascript" src="javascript/html5gallery.js"></script>
+    <script type="text/javascript" src="../javascript/jquery.js"></script>
+    <script type="text/javascript" src="../javascript/html5gallery.js"></script>
 </head>
 <body>
 <div style="display:none;" class="html5gallery" data-skin="horizontal" data-width="800" data-height="600">
