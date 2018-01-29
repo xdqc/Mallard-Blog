@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Comment extends TableImpl<CommentRecord> {
 
-    private static final long serialVersionUID = 1358613499;
+    private static final long serialVersionUID = 419279490;
 
     /**
      * The reference instance of <code>mallard_dev.comment</code>
@@ -84,22 +84,22 @@ public class Comment extends TableImpl<CommentRecord> {
     /**
      * The column <code>mallard_dev.comment.abuse_num</code>.
      */
-    public final TableField<CommentRecord, Integer> ABUSE_NUM = createField("abuse_num", org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-    /**
-     * The column <code>mallard_dev.comment.show_hide_status</code>.
-     */
-    public final TableField<CommentRecord, Byte> SHOW_HIDE_STATUS = createField("show_hide_status", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
+    public final TableField<CommentRecord, Integer> ABUSE_NUM = createField("abuse_num", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>mallard_dev.comment.parent_article</code>.
      */
-    public final TableField<CommentRecord, Integer> PARENT_ARTICLE = createField("parent_article", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<CommentRecord, Integer> PARENT_ARTICLE = createField("parent_article", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>mallard_dev.comment.parent_comment</code>.
      */
     public final TableField<CommentRecord, Integer> PARENT_COMMENT = createField("parent_comment", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>mallard_dev.comment.show_hide_status</code>.
+     */
+    public final TableField<CommentRecord, Byte> SHOW_HIDE_STATUS = createField("show_hide_status", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * Create a <code>mallard_dev.comment</code> table reference
