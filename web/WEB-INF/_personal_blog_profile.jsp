@@ -38,37 +38,5 @@
     </div>
 </div>
 
-<style type="text/css">
-    .list-group-item dt {
-        width:auto;
-        margin-left:auto;
-    }
-    .list-group-item dd {
-        width:auto;
-        margin-left:80px;
-    }
 
-    .affix {
-        top: 100px;
-        z-index: 9999;
-    }
-    @media (max-width: 991px) {
-        .affix {
-            position: static;
-        }
-    }
-    @media (min-width: 992px) and (max-width: 1199px)  {
-        .affix {
-            position: fixed;
-            max-width: 213px;
-        }
-    }
-    @media (min-width: 1200px) {
-        .affix {
-            position: fixed;
-            max-width: 263px;
-        }
-    }
-
-</style>
 

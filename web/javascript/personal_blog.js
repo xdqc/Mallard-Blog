@@ -178,6 +178,7 @@ $(document).ready(function () {
             },
             success: function (resp) {
                 editArea.html(resp);
+                //TODO make the edit area has own props, works for each article
             },
             error: (msg, status) => {
                 console.log("error!!!");
@@ -238,6 +239,108 @@ $(document).ready(function () {
         //TODO reply, edit comments ajax
 
     }
+
+
+
+    /*Creating article functions*/
+    const datePicker = $("input.publish-time");
+    const publishBtn = $("button.publish");
+    const publishMode = $("select.publish-mode");
+    const uploadingImg = $("img.uploading-img");
+
+    publishMode.on("change", function () {
+        if (this.value === "publish") {
+            datePicker.hide();
+            publishBtn.empty();
+            publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+
+        } else if (this.value === "draft") {
+            datePicker.show();
+            publishBtn.empty();
+            publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+        }
+    });
+
+    let availableDate = new Date();
+    let date = new Date();
+    date = moment(date).format("YYYY-MM-DDTkk:mm");
+    datePicker.val(date);
+
+    publishBtn.on("click", function (e) {
+        e.preventDefault();
+        const title = $("input.title");
+        const content = $("textarea.content");
+        if (title.val()===""){
+            swal({
+                title: "Need a title!",
+                text: "Write something interesting:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputPlaceholder: "Write title"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("You need to write a title!");
+                    return false;
+                }
+                return title.val(inputValue);
+            });
+            return;
+        }
+
+        if (content.val()===""){
+            swal("Write something!", "You need to !", "warning");
+            return;
+        }
+
+        if (publishMode[0].value==="draft"){
+            if (datePicker.val()===""){
+                alert("Available time is required.");
+                return;
+            }
+            date = datePicker.val();
+            date = moment(date).format("YYYY-MM-DDTkk:mm");
+            availableDate = new Date(date);
+        }
+
+        const article = {};
+        article["title"] = title.val();
+        article["content"] = content.val();
+        article["authorId"] = entityId($(this));
+        article["createTime"] = new Date().getTime();
+        article["validTime"] = availableDate.getTime();
+
+        //Ajax post to servlet
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {newArticle: JSON.stringify(article)},
+            cache: false,
+            beforeSend: () => {
+                uploadingImg.show();
+            },
+
+            success: resp => {
+                uploadingImg.hide();
+                $("input.title").val("");
+                $("textarea.content").val("");
+                const msg = publishMode[0].value==="publish" ? "Your article are published."
+                    : "Your article will be visible to public on " + availableDate.toLocaleString();
+                swal("Congratulations ",msg,"success");
+                console.log(resp);
+            },
+            error: (msg, status) => {
+                console.log("error!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+                console.log("loaded");
+            }
+
+        })
+    });
 
 });
 

@@ -37,4 +37,7 @@
 
     <!-- For upload files page generate multiple row -->
     <script type="text/javascript" src="javascript/uploadFile.js"></script>
+
+    <link rel="stylesheet" href="css/personal_panel.css">
+        <link rel="stylesheet" href="css/article.css">
 </head>

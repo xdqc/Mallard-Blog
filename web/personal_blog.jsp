@@ -30,7 +30,7 @@
             <c:if test="${blogs.size()==0}">
                 <c:if test="${!sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
                     <div class="jumbotron">
-                        <h3>This user has no articles</h3>0n
+                        <h3>This user has no articles</h3>
                         <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
                     </div>
                 </c:if>
@@ -38,7 +38,7 @@
 
             <%--logged user create new article in his own page--%>
             <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
-                <%@include file="WEB-INF/_personal_blog_create.jsp" %>
+                <%@include file="WEB-INF/_personal_blog_create.jsp"%>
             </c:if>
 
             <c:if test="${blogs.size()!=0}">
