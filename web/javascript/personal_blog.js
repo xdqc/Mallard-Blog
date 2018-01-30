@@ -28,6 +28,11 @@ const showCascadingComments = (commentArr, $p) => {
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
+                    /*
+
+
+                     */
+
                     //This is a special use case of exploiting of var hijacking to access it outside loop
                     var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl)
                         .append(replyBtn).append(replyForm);
