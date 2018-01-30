@@ -17,41 +17,54 @@ function showCascadingComments(commentArr, $p) {
 
                     const replyBtn = $("<a class='reply-comment-btn fa fa-comments-o'>")
                         .attr("id", "reply-comment-btn-" + cmtId)
-                        .attr("href", "#popup-reply-" + cmtId)
+                        //.attr("href", "#popup-reply-" + cmtId)
                         .text(" reply");
 
                     const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
                             .attr("placeholder", "Reply to " + comment["commenter"]))
-                        .append(($("<input type='submit' class='reply-submit btn btn-primary' value='reply'>")
+                        .append(($("<input type='submit' class='reply-submit btn btn-success' value='Reply'>")
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
                     const editBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
-                        .attr("href", "#popup-edit-" + cmtId)
+                        //.attr("href", "#popup-edit-" + cmtId)
                         .text(" edit");
 
                     const editForm = $("<form class='popup'>").attr("id", "popup-edit-" + cmtId)
-                        .append(($("<textarea class='edit-text form-control' rows='2' required>")
+                        .append(($("<textarea class='edit-text form-control' rows='1' required>")
                             .attr("id", "edit-text-" + cmtId))
-                            .attr("text", comment["content"]))
-                        .append(($("<input type='submit' class='edit-submit btn btn-primary' value='edit'>")
+                            .val(comment["content"]))
+                        .append(($("<input type='submit' class='edit-submit btn btn-success' value='Edit'>")
                             .attr("id", "edit-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
+                    const deleteBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
+                        .attr("id", "delete-comment-btn-" + cmtId)
+                        //.attr("href", "#popup-delete-" + cmtId)
+                        .text(" delete");
 
+                    const deleteForm = $("<form class='popup'>").attr("id", "popup-delete-" + cmtId)
+                        .append(($("<input type='submit' class='delete-submit btn btn-danger' value='Delete'>")
+                            .attr("id", "delete-submit-" + cmtId)))
+                        .append(($("<input type='button' class='delete-submit btn btn-default' value='Cancel'>")
+                            .attr("id", "delete-cancel-" + cmtId)));
+                        //.append($("<a class='close' href='#/'>").html("&times;"));
 
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
                     var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
 
-                    if(loggedInUser!==0) {
+                    if (loggedInUser !== 0) {
                         $pp.append(replyBtn).append(replyForm);
                     }
-                    if(loggedInUser==comment["commenterId"]){
+                    if (loggedInUser === comment["commenterId"]) {
                         $pp.append(editBtn).append(editForm);
+                    }
+                    if (loggedInUser === comment["articleAuthorId"] || loggedInUser === comment["commenterId"]) {
+                        $pp.append(deleteBtn).append(deleteForm);
                     }
                 }
             }
@@ -144,12 +157,15 @@ $(document).ready(function () {
         });
     });
 
+    /**
+     * Functions to handle comment buttons clicks
+     */
     function commentActions() {
         $(".reply-comment-btn").on("click", function (e) {
             e.preventDefault();
             console.log($(this));
             const cmtId = entityId($(this));
-            const replyForm = $("#popup-reply-"+cmtId);
+            const replyForm = $("#popup-reply-" + cmtId);
             replyForm.slideDown();
             console.log(replyForm);
             $(".close").on("click", function () {
@@ -160,7 +176,7 @@ $(document).ready(function () {
         $(".edit-comment-btn").on("click", function (e) {
             e.preventDefault();
             const cmtId = entityId($(this));
-            const editForm = $("#popup-edit-"+cmtId);
+            const editForm = $("#popup-edit-" + cmtId);
             editForm.slideDown();
             console.log(editForm);
             $(".close").on("click", function () {

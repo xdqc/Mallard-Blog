@@ -9,10 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import utililties.Blog;
-import utililties.Comments;
-import utililties.Tree;
-import utililties.Tuple;
+import utililties.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -84,7 +81,7 @@ public class PersonalBlog extends Controller {
         if (articleId != null) {
             //Blog blog = DbConnector.getBlogByArticleId(articleId);
             Comments comments = DbConnector.getCommentsByArticleId(articleId);
-            Tree<Tuple<UserRecord, CommentRecord>> commentTree = comments.getCommentTree();
+            Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = comments.getCommentTree();
             ajaxCommentsHandler(commentTree, req, resp);
             return;
         }
@@ -137,7 +134,7 @@ public class PersonalBlog extends Controller {
     }
 
 
-    private void ajaxCommentsHandler(Tree<Tuple<UserRecord, CommentRecord>> comments, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void ajaxCommentsHandler(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> comments, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         JSONArray json = new JSONArray();
         putCommentTreeToJson(comments, json);
@@ -151,16 +148,18 @@ public class PersonalBlog extends Controller {
     /**
      * Create a JSON object to represent the comment tree recursively
      */
-    private void putCommentTreeToJson(Tree<Tuple<UserRecord, CommentRecord>> tree, JSONArray json){
-        for (Tree<Tuple<UserRecord, CommentRecord>> commentTree : tree.getChildren()) {
+    private void putCommentTreeToJson(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> tree, JSONArray json){
+        for (Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree : tree.getChildren()) {
             CommentRecord comment = commentTree.getData().Val2;
-            UserRecord user = commentTree.getData().Val1;
-            if (comment.getShowHideStatus()==1 && user.getIsvalid()==1){
+            UserRecord commenter = commentTree.getData().Val1;
+            UserRecord articleAuthor = commentTree.getData().Val3;
+            if (comment.getShowHideStatus()==1 && commenter.getIsvalid()==1){
 
                 JSONObject commentJson = new JSONObject();
-                assert user != null;
-                commentJson.put("commenterId", user.getId());
-                commentJson.put("commenter", user.getFName()+" "+user.getLName());
+                assert commenter != null;
+                commentJson.put("articleAuthorId", articleAuthor.getId());
+                commentJson.put("commenterId", commenter.getId());
+                commentJson.put("commenter", commenter.getFName()+" "+commenter.getLName());
                 commentJson.put("content", comment.getContent());
                 commentJson.put("createTime", comment.getCreateTime().toLocalDateTime().toString());
                 commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toLocalDateTime().toString());

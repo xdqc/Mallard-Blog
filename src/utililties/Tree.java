@@ -74,12 +74,12 @@ public class Tree<T> {
         return null;
     }
 
-    public Tree<Tuple<UserRecord, CommentRecord>> findParentComment(Tree<Tuple<UserRecord, CommentRecord>> n, Tuple<UserRecord, CommentRecord> s) {
+    public Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> findParentComment(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> n, Tuple3<UserRecord, CommentRecord, UserRecord> s) {
         if (Objects.equals(n.getData().Val2.getId(), s.Val2.getParentComment())) {
             return n;
         } else {
-            for (Tree<Tuple<UserRecord, CommentRecord>> child: n.getChildren()) {
-                Tree<Tuple<UserRecord, CommentRecord>> result = findParentComment(child, s);
+            for (Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> child: n.getChildren()) {
+                Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> result = findParentComment(child, s);
                 if (result != null) {
                     return result;
                 }

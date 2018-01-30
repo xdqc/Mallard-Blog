@@ -343,18 +343,22 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-            List<Tuple<UserRecord, CommentRecord>> commentList = create
-                    .select(USER.fields())
+            List<Tuple3<UserRecord, CommentRecord, UserRecord>> commentList = create
+                    .select(USER.as("Commenter").fields())
                     .select(COMMENT.fields())
-                    .from(COMMENT)
-                    .join(USER).onKey()
-                    .join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .select(USER.as("Author").fields())
+                    .from(
+                            (COMMENT).join(USER.as("Commenter")).onKey())
+                    .join(
+                            (ARTICLE).join(USER.as("Author")).onKey())
+                    .on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(ARTICLE.ID.equalIgnoreCase(articleId))
                     .orderBy(COMMENT.CREATE_TIME.asc())
                     .fetch(
-                            r -> new Tuple<>(
-                                    r.into(USER).into(UserRecord.class),
-                                    r.into(COMMENT).into(CommentRecord.class)
+                            r -> new Tuple3<>(
+                                    r.into(USER.as("Commenter")).into(UserRecord.class),
+                                    r.into(COMMENT).into(CommentRecord.class),
+                                    r.into(USER.as("Author")).into(UserRecord.class)
                             )
                     );
 
