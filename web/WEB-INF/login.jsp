@@ -14,9 +14,6 @@
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
     <style>
-        .msg-error{
-            color: red;
-        }
         #g-recaptcha error{
             border:solid 2px #c64848;
             padding: .2em;
@@ -61,28 +58,9 @@
                     <br>
 
                     <div class="form-group">
+                        <label class="control-label">reCaptcha</label>
                         <div style="width: 50%">
-                            <span class="msg-error error" ></span>
-                            <div id="recaptcha" class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX">
-                            </div>
-                            <button class="btn" id="btn-validate">Validate reCAPTCHA</button>
-                            <script>
-                                $('#btn-validate').click(function(){
-                                    var $captcha = $( '#recaptcha' ),
-                                        response = grecaptcha.getResponse();
-
-                                    if (response.length === 0) {
-                                        $( '.msg-error').text( "reCAPTCHA is mandatory" );
-                                        if( !$captcha.hasClass( "error" ) ){
-                                            $captcha.addClass( "error" );
-                                        }
-                                    } else {
-                                        $( '.msg-error' ).text('');
-                                        $captcha.removeClass( "error" );
-                                        alert( 'reCAPTCHA marked' );
-                                    }
-                                });
-                            </script>
+                            <div class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX"></div>
                         </div>
                     </div>
                     <input id="login_btn" type="submit" class="btn btn-primary" value="Login">
