@@ -1,7 +1,15 @@
+"use strict";
+
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
+const createOrEditArticleHandler = () => {$(".accordion-bar").on("click", function () {
+    const articleId = entityId($(this));
+    $(".panel-collapse").collapse('hide');
+    articleActions(articleId);
+})};
+
 //helper function recursively show comment tree
-function showCascadingComments(commentArr, $p) {
+const showCascadingComments = (commentArr, $p) => {
     // To exploit var hijacking, do not use arrow functions, just use for loop.
     for (let commentNode of commentArr) {
         if (!$.isArray(commentNode)) {
@@ -78,13 +86,14 @@ function showCascadingComments(commentArr, $p) {
             showCascadingComments(commentNode, $pp);
         }
     }
-}
+};
 
 
 $(document).ready(function () {
+    createOrEditArticleHandler();
 
     /**
-     * AJAX comments of article
+     * AJAX load comments of article
      */
     $(".show-comment-btn").on("click", function () {
         const articleID = entityId($(this));
@@ -118,7 +127,6 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
-                    console.log(loggedInUser);
                     commentActions();
                 }
             });
@@ -131,7 +139,7 @@ $(document).ready(function () {
     });
 
     /**
-     * AJAX article content
+     * AJAX load article content
      */
     $(".read-more-btn").on("click", function () {
         const articleID = entityId($(this));
@@ -163,7 +171,7 @@ $(document).ready(function () {
     });
 
     /**
-     * Ajax edit article area
+     * Ajax load edit article area
      */
     $(".edit-article-btn").on("click", function () {
 
@@ -174,25 +182,25 @@ $(document).ready(function () {
             url: 'personal-blog',
             data: {editArticle: articleId},
             cache: false,
-            beforeSend: function () {
+            beforeSend: () => {
             },
-            success: function (resp) {
+            success: (resp) => {
                 editArea.html(resp);
-                //TODO make the edit area has own props, works for each article
             },
             error: (msg, status) => {
-                console.log("error!!!");
+                console.log("error of loading edit area!!!");
                 console.log(status);
                 console.log(msg);
             },
             complete: () => {
+                createOrEditArticleHandler();
             }
         })
     });
 
 
     /**
-     * Functions to handle comment buttons clicks
+     * Functions to handle replying, editing and deleting comments
      */
     function commentActions() {
         $(".reply-comment-btn").on("click", function (e) {
@@ -240,107 +248,112 @@ $(document).ready(function () {
 
     }
 
+    /**
+     * Functions to handle creating and editing articles
+     */
+    function articleActions(id) {
+        console.log(id + "is crleaing?");
 
+        const datePicker = $("input.publish-time");
+        const publishBtn = $("button.publish");
+        const publishMode = $("select.publish-mode");
+        const uploadingImg = $("img.uploading-img");
 
-    /*Creating article functions*/
-    const datePicker = $("input.publish-time");
-    const publishBtn = $("button.publish");
-    const publishMode = $("select.publish-mode");
-    const uploadingImg = $("img.uploading-img");
+        publishMode.on("change", function () {
+            if (this.value === "publish") {
+                datePicker.hide();
+                publishBtn.empty();
+                publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
 
-    publishMode.on("change", function () {
-        if (this.value === "publish") {
-            datePicker.hide();
-            publishBtn.empty();
-            publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+            } else if (this.value === "draft") {
+                datePicker.show();
+                publishBtn.empty();
+                publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+            }
+        });
 
-        } else if (this.value === "draft") {
-            datePicker.show();
-            publishBtn.empty();
-            publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
-        }
-    });
+        let availableDate = new Date();
+        let date = new Date();
+        date = moment(date).format("YYYY-MM-DDTkk:mm");
+        datePicker.val(date);
 
-    let availableDate = new Date();
-    let date = new Date();
-    date = moment(date).format("YYYY-MM-DDTkk:mm");
-    datePicker.val(date);
-
-    publishBtn.on("click", function (e) {
-        e.preventDefault();
-        const title = $("input.title");
-        const content = $("textarea.content");
-        if (title.val()===""){
-            swal({
-                title: "Need a title!",
-                text: "Write something interesting:",
-                type: "input",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                inputPlaceholder: "Write title"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("You need to write a title!");
-                    return false;
-                }
-                return title.val(inputValue);
-            });
-            return;
-        }
-
-        if (content.val()===""){
-            swal("Write something!", "You need to !", "warning");
-            return;
-        }
-
-        if (publishMode[0].value==="draft"){
-            if (datePicker.val()===""){
-                alert("Available time is required.");
+        publishBtn.on("click", function (e) {
+            e.preventDefault();
+            
+            const title = $("input.title");
+            const content = $("textarea.content");
+            if (title.val()===""){
+                swal({
+                    title: "Need a title!",
+                    text: "Write something interesting:",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    inputPlaceholder: "Write title"
+                }, function (inputValue) {
+                    if (inputValue === false) return false;
+                    if (inputValue === "") {
+                        swal.showInputError("You need to write a title!");
+                        return false;
+                    }
+                    return title.val(inputValue);
+                });
                 return;
             }
-            date = datePicker.val();
-            date = moment(date).format("YYYY-MM-DDTkk:mm");
-            availableDate = new Date(date);
-        }
 
-        const article = {};
-        article["title"] = title.val();
-        article["content"] = content.val();
-        article["authorId"] = entityId($(this));
-        article["createTime"] = new Date().getTime();
-        article["validTime"] = availableDate.getTime();
-
-        //Ajax post to servlet
-        $.ajax({
-            type: 'POST',
-            url: 'personal-blog',
-            data: {newArticle: JSON.stringify(article)},
-            cache: false,
-            beforeSend: () => {
-                uploadingImg.show();
-            },
-
-            success: resp => {
-                uploadingImg.hide();
-                $("input.title").val("");
-                $("textarea.content").val("");
-                const msg = publishMode[0].value==="publish" ? "Your article are published."
-                    : "Your article will be visible to public on " + availableDate.toLocaleString();
-                swal("Congratulations ",msg,"success");
-                console.log(resp);
-            },
-            error: (msg, status) => {
-                console.log("error!!");
-                console.log(status);
-                console.log(msg);
-            },
-            complete: () => {
-                console.log("loaded");
+            if (content.val()===""){
+                swal("Write something!", "You need to !", "warning");
+                return;
             }
 
-        })
-    });
+            if (publishMode[0].value==="draft"){
+                if (datePicker.val()===""){
+                    alert("Available time is required.");
+                    return;
+                }
+                date = datePicker.val();
+                date = moment(date).format("YYYY-MM-DDTkk:mm");
+                availableDate = new Date(date);
+            }
 
+            const article = {};
+            article["title"] = title.val();
+            article["content"] = content.val();
+            article["authorId"] = entityId($(this));
+            article["createTime"] = new Date().getTime();
+            article["validTime"] = availableDate.getTime();
+
+            //Ajax post to servlet
+            $.ajax({
+                type: 'POST',
+                url: 'personal-blog',
+                data: {newArticle: JSON.stringify(article)},
+                cache: false,
+                beforeSend: () => {
+                    uploadingImg.show();
+                },
+
+                success: resp => {
+                    uploadingImg.hide();
+                    $("input.title").val("");
+                    $("textarea.content").val("");
+                    const msg = publishMode[0].value==="publish" ? "Your article are published."
+                        : "Your article will be visible to public on " + availableDate.toLocaleString();
+                    swal("Congratulations ",msg,"success");
+                    console.log(resp);
+                },
+                error: (msg, status) => {
+                    console.log("error!!");
+                    console.log(status);
+                    console.log(msg);
+                },
+                complete: () => {
+                    console.log("loaded");
+                }
+
+            })
+        });
+    }
+    
 });
 

@@ -127,9 +127,9 @@ public class PersonalBlog extends Controller {
         /*Edit existing article*/
         String articleToBeEdit = req.getParameter("editArticle");
         if (articleToBeEdit != null){
-            if (redirectTo("editArticle="+articleToBeEdit, "WEB-INF/_personal_blog_create.jsp", req, resp)) {
-                return;
-            }
+            req.setAttribute("articleId", articleToBeEdit);
+            req.getRequestDispatcher("WEB-INF/_personal_blog_create.jsp").forward(req,resp);
+            return;
         }
 
 

@@ -1,22 +1,30 @@
-<div class="panel-group" id="accordion">
-    <div class="panel panel-primary">
+<div class="panel-group" id="accordion-${articleId}">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span
-                        class="glyphicon glyphicon-file">
-                            </span>POST NEW ARTICLE</a>
+                <a class="accordion-bar" id="accordion-bar-${articleId}" data-toggle="collapse" data-parent="#accordion"
+                    href="#collapse-${articleId}"><span class="glyphicon glyphicon-file"></span>
+                    <c:if test="${not empty articleId}">
+                        Edit this article
+                    </c:if>
+                    <c:if test="${empty articleId}">
+                        POST NEW ARTICLE
+                    </c:if>
+                </a>
             </h4>
         </div>
-        <div id="collapseOne" class="panel-collapse collapse in">
+        <div id="collapse-${articleId}" class="panel-collapse collapse">
             <div class="panel-body">
                 <div class="container"></div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control title" placeholder="Title" required/>
+                            <input type="text" class="form-control title" id="input-article-title-${articleId}"
+                                   placeholder="Title" required/>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control content" placeholder="Content" rows="5" required></textarea>
+                            <textarea class="form-control content" id="input-article-content-${articleId}"
+                                      placeholder="Content" rows="5" required></textarea>
                         </div>
                         <img src="pictures/uploading.gif" alt="uploading..." class="uploading-img">
                     </div>
@@ -25,7 +33,7 @@
                     <div class="col-md-6">
                         <div class="well well-sm well-primary">
                             <div class="input-group image-preview">
-                                <%@include file="_upload_file.jsp"%>
+                                <%@include file="_upload_file.jsp" %>
                             </div><!-- /input-group image-preview [TO HERE]-->
                         </div>
                     </div>
@@ -34,24 +42,24 @@
                             <form class="form form-inline " role="form">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-success publish"
-                                            id="publish-${sessionScope.get("loggedInUser").getId()}">
+                                            id="publish-${articleId}">
                                         <span class="fa fa-paper-plane"> Publish</span>
                                     </button>
                                     <button type="button" class="btn btn-default preview"
-                                            id="preview-${sessionScope.get("loggedInUser").getId()}">
+                                            id="preview-${articleId}">
                                         <span class="fa fa-eye"> Preview</span>
                                     </button>
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control text-input-dialog publish-mode"
-                                            id="publish-mode-${sessionScope.get("loggedInUser").getId()}">
+                                            id="publish-mode-${articleId}">
                                         <option value="publish">Publish</option>
                                         <option value="draft">Draft</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <input type="datetime-local" class="form-control publish-time"
-                                           id="publish-time-${sessionScope.get("loggedInUser").getId()}" value=""
+                                           id="publish-time-${articleId}" value=""
                                            placeholder="Date" style="display: none" required/>
                                 </div>
                             </form>
