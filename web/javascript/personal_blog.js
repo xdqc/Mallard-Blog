@@ -163,6 +163,34 @@ $(document).ready(function () {
     });
 
     /**
+     * Ajax edit article area
+     */
+    $(".edit-article-btn").on("click", function () {
+
+        const articleId = entityId($(this));
+        const editArea = $("#edit-article-area-"+articleId);
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {editArticle: articleId},
+            cache: false,
+            beforeSend: function () {
+            },
+            success: function (resp) {
+                editArea.html(resp);
+            },
+            error: (msg, status) => {
+                console.log("error!!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+            }
+        })
+    });
+
+
+    /**
      * Functions to handle comment buttons clicks
      */
     function commentActions() {

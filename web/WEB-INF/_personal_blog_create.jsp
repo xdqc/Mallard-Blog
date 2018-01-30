@@ -121,9 +121,9 @@
                         swal.showInputError("You need to write a title!");
                         return false;
                     }
-                    title.val(inputValue);
+                    return title.val(inputValue);
                 });
-
+                return;
             }
 
             if (content.val()===""){

@@ -6,16 +6,27 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
         <article class="panel panel-info">
             <div class="panel-heading">
                 <h4 class="panel-title">${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</h4>
+
             </div>
-            <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
-                 alt="random picture"/>
             <div class="panel-body">
                 <div class="panel-text">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
-                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span
-                            class="fa fa-thumbs-up"></span></span>
+                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span class="fa fa-thumbs-up"></span></span>
+
+                        <%--edit article button--%>
+                    <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
+                        <span class="edit-article-btn btn btn-default"
+                              id="edit-article-btn-${blog.getArticle().getId()}"><span class="fa fa-pencil"></span> Edit</span>
+                    </c:if>
                 </div>
+
+                <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
+                     alt="random picture"/>
+
+                    <%--display multimedia gallery here by ajax--%>
+                <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
+
                 <br>
                 <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
                         ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
@@ -28,8 +39,12 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
                         Read more
                     </button>
                 </div>
+
+                <div id="edit-article-area-${blog.getArticle().getId()}"></div>
+
                 <br>
-                <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload multimedia</a>
+                <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
+                    multimedia</a>
                 <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
                     Gallery</a>
 
@@ -72,9 +87,11 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
     a.reply-comment-btn {
         padding-left: 2em;
     }
+
     a.edit-comment-btn {
         padding-left: 2em;
     }
+
     a.delete-comment-btn {
         padding-left: 2em;
     }
@@ -87,6 +104,7 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
     .reply-text {
         margin: 0 20px 10px 0;
     }
+
     .edit-text {
         margin: 0 20px 10px 0;
     }

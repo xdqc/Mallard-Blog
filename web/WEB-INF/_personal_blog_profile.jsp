@@ -28,10 +28,10 @@
     </dl>
     <div class="panel-body">
         <c:if test="${not empty sessionScope.get('loggedInUser')}">
-            <c:if test="${!sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
+            <c:if test="${!sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
                 <a href="#" class="panel-link">Follow me!</a>
             </c:if>
-            <c:if test="${sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
+            <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
                 <a href="../edit_profile.jsp" class="panel-link">Edit my profile</a>
             </c:if>
         </c:if>

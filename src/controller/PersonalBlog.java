@@ -46,8 +46,9 @@ public class PersonalBlog extends Controller {
             if (user == null) {
                 user = loggedUser;
             }
-            HttpSession session = req.getSession(false);
-            session.setAttribute("browsingUser", user);
+            req.setAttribute("browsingUser", user);
+//            HttpSession session = req.getSession(false);
+//            session.setAttribute("browsingUser", user);
         }
 
 
@@ -124,6 +125,12 @@ public class PersonalBlog extends Controller {
         }
 
         /*Edit existing article*/
+        String articleToBeEdit = req.getParameter("editArticle");
+        if (articleToBeEdit != null){
+            if (redirectTo("editArticle="+articleToBeEdit, "WEB-INF/_personal_blog_create.jsp", req, resp)) {
+                return;
+            }
+        }
 
 
     }
