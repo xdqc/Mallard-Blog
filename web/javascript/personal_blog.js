@@ -42,41 +42,17 @@ function showCascadingComments(commentArr, $p) {
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
 
-                    function showReplyForm (loggedUser) {
-                        if (loggedUser === 0) {
-                            return;
-                        }
-                        replyBtn.on("click", function (e) {
-                            e.preventDefault();
-                            replyForm.slideDown();
-                            console.log(replyForm);
-                            $(".close").on("click", function () {
-                                replyForm.slideUp();
-                            })
-                        });
-                    }
-
-                    function showEditForm (loggedUser) {
-                        //Comparing string and number here
-                        if (loggedUser != comment["commenterId"]) {
-                            editBtn.remove();
-                            return;
-                        }
-                        editBtn.on("click", function (e) {
-                            e.preventDefault();
-                            editForm.slideDown();
-                            console.log(editForm);
-                            $(".close").on("click", function () {
-                                editForm.slideUp();
-                            })
-                        });
-                    };
 
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
-                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl)
-                        .append(replyBtn).append(replyForm)
-                        .append(editBtn).append(editForm);
+                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
+
+                    if(loggedInUser!==0) {
+                        $pp.append(replyBtn).append(replyForm);
+                    }
+                    if(loggedInUser==comment["commenterId"]){
+                        $pp.append(editBtn).append(editForm);
+                    }
                 }
             }
         } else {
@@ -125,14 +101,7 @@ $(document).ready(function () {
                 },
                 complete: () => {
                     console.log(loggedInUser);
-                    if (loggedInUser===0){
-                        $(".reply-comment-btn").remove();
-                        $(".edit-comment-btn").remove();
-                        $(".delete-comment-btn").remove();
-                    } else {
-                        showReplyForm(loggedInUser);
-                        showEditForm(loggedInUser);
-                    }
+                    commentActions();
                 }
             });
 
@@ -174,6 +143,31 @@ $(document).ready(function () {
             }
         });
     });
+
+    function commentActions() {
+        $(".reply-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            console.log($(this));
+            const cmtId = entityId($(this));
+            const replyForm = $("#popup-reply-"+cmtId);
+            replyForm.slideDown();
+            console.log(replyForm);
+            $(".close").on("click", function () {
+                replyForm.slideUp();
+            })
+        });
+
+        $(".edit-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            const cmtId = entityId($(this));
+            const editForm = $("#popup-edit-"+cmtId);
+            editForm.slideDown();
+            console.log(editForm);
+            $(".close").on("click", function () {
+                editForm.slideUp();
+            })
+        });
+    }
 
 });
 
