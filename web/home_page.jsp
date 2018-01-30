@@ -9,6 +9,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <%@ include file="WEB-INF/_head.jsp" %>
+<script type="text/javascript" src="javascript/moment-with-locales.js"></script>
 <script type="text/javascript" src="javascript/personal_blog.js"></script>
 <title>Mallard Blog</title>
 <body>

@@ -24,6 +24,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.1/jquery.timeago.js"
             integrity="sha256-eAM7NHrUqBdkWBYcUVaGo55W9YMG8UAQIceYOf9xnjg=" crossorigin="anonymous"></script>
 
-        <!-- For upload files page generate multiple row -->
-        <script type="text/javascript" src="javascript/uploadFile.js"></script>
+    <%--sweet-alert--%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"
+            integrity="sha256-Y6AEuvugryve80FgzPE3e2EONgfiYPcaSaqF+vIFGIA=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css"
+          integrity="sha256-k66BSDvi6XBdtM2RH6QQvCz2wk81XcWsiZ3kn6uFTmM=" crossorigin="anonymous"/>
+
+
+    <script type="text/javascript">
+        let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
+    </script>
+
+    <!-- For upload files page generate multiple row -->
+    <script type="text/javascript" src="javascript/uploadFile.js"></script>
+
+    <link rel="stylesheet" href="css/personal_panel.css">
+        <link rel="stylesheet" href="css/article.css">
 </head>

@@ -11,8 +11,9 @@
 <html>
 <head>
     <%@include file="WEB-INF/_head.jsp" %>
+    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
-    <title>${sessionScope.get("browsingUser").getUserName()}'s Blog</title>
+    <title>${requestScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
 <body>
 <%@include file="WEB-INF/_home_page_menu.jsp" %>
@@ -27,17 +28,17 @@
         <%--list of blogs--%>
         <div class="col-sm-12 col-md-9 col-lg-9">
             <c:if test="${blogs.size()==0}">
-                <c:if test="${!sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
+                <c:if test="${!sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
                     <div class="jumbotron">
-                        <h3>This user has no articles</h3>0n
+                        <h3>This user has no articles</h3>
                         <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
                     </div>
                 </c:if>
             </c:if>
 
             <%--logged user create new article in his own page--%>
-            <c:if test="${sessionScope.get('loggedInUser').equals(sessionScope.get('browsingUser'))}">
-                <%@include file="WEB-INF/_personal_blog_create.jsp" %>
+            <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
+                <%@include file="WEB-INF/_personal_blog_create.jsp"%>
             </c:if>
 
             <c:if test="${blogs.size()!=0}">
