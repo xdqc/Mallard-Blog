@@ -75,6 +75,9 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
     a.edit-comment-btn {
         padding-left: 2em;
     }
+    a.delete-comment-btn {
+        padding-left: 2em;
+    }
 
     .comment-area {
         margin: 10px;
@@ -110,36 +113,8 @@ getQueryString : <%= request.getSession().getAttributeNames() %><br>
     }
 
     .popup .close:hover {
-        color: #06D85F;
+        color: #E6484F;
     }
 </style>
-
-<%--<c:if test="${empty sessionScope.get('loggedInUser')}">--%>
-    <%--<script type="text/javascript">--%>
-        <%--function removeReplyBtn() {--%>
-            <%--$(".reply-comment-btn").remove()--%>
-        <%--}--%>
-        <%--function showReplyForm() {}--%>
-    <%--</script>--%>
-<%--</c:if>--%>
-<%--<c:if test="${not empty sessionScope.get('loggedInUser')}">--%>
-    <%--<script type="text/javascript">--%>
-        <%--function removeReplyBtn() {}--%>
-
-        <%--function showReplyForm() {--%>
-            <%--$("a.reply-comment-btn").on("click", function (e) {--%>
-                <%--e.preventDefault();--%>
-                <%--console.log($(this));--%>
-                <%--const cmtId = entityId($(this));--%>
-                <%--const replyForm = $("#popup-reply-" + cmtId);--%>
-                <%--replyForm.slideDown();--%>
-                <%--console.log(replyForm);--%>
-                <%--$(".close").on("click", function () {--%>
-                    <%--replyForm.slideUp();--%>
-                <%--})--%>
-            <%--});--%>
-        <%--}--%>
-    <%--</script>--%>
-<%--</c:if>--%>
 
 

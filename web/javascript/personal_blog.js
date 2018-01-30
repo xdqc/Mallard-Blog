@@ -41,17 +41,11 @@ function showCascadingComments(commentArr, $p) {
                             .attr("id", "edit-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
-                    const deleteBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
+                    const deleteBtn = $("<a class='delete-comment-btn fa fa-pencil-square-o'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
                         //.attr("href", "#popup-delete-" + cmtId)
                         .text(" delete");
 
-                    const deleteForm = $("<form class='popup'>").attr("id", "popup-delete-" + cmtId)
-                        .append(($("<input type='submit' class='delete-submit btn btn-danger' value='Delete'>")
-                            .attr("id", "delete-submit-" + cmtId)))
-                        .append(($("<input type='button' class='delete-submit btn btn-default' value='Cancel'>")
-                            .attr("id", "delete-cancel-" + cmtId)));
-                        //.append($("<a class='close' href='#/'>").html("&times;"));
 
                     /*
 
@@ -62,14 +56,21 @@ function showCascadingComments(commentArr, $p) {
                     var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
 
                     if (loggedInUser !== 0) {
-                        $pp.append(replyBtn).append(replyForm);
+                        $pp.append(replyBtn);
                     }
                     if (loggedInUser === comment["commenterId"]) {
-                        $pp.append(editBtn).append(editForm);
+                        $pp.append(editBtn);
                     }
                     if (loggedInUser === comment["articleAuthorId"] || loggedInUser === comment["commenterId"]) {
-                        $pp.append(deleteBtn).append(deleteForm);
+                        $pp.append(deleteBtn);
                     }
+                    if (loggedInUser !== 0) {
+                        $pp.append(replyForm);
+                    }
+                    if (loggedInUser === comment["commenterId"]) {
+                        $pp.append(editForm);
+                    }
+
                 }
             }
         } else {
@@ -171,7 +172,6 @@ $(document).ready(function () {
             const cmtId = entityId($(this));
             const replyForm = $("#popup-reply-" + cmtId);
             replyForm.slideDown();
-            console.log(replyForm);
             $(".close").on("click", function () {
                 replyForm.slideUp();
             })
@@ -182,11 +182,33 @@ $(document).ready(function () {
             const cmtId = entityId($(this));
             const editForm = $("#popup-edit-" + cmtId);
             editForm.slideDown();
-            console.log(editForm);
             $(".close").on("click", function () {
                 editForm.slideUp();
             })
         });
+
+        $(".delete-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            const cmtId = entityId($(this));
+
+            swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this comment!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
+                    //TODO delete the comment
+                    swal("Deleted!", "This comment has been deleted.", "success");
+                });
+
+        });
+
+        //TODO reply, edit comments ajax
+
     }
 
 });

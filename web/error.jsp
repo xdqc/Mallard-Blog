@@ -6,7 +6,6 @@
     <title>You got an error</title>
 </head>
 <body>
-<%@ include file="WEB-INF/_home_page_logo.jsp" %>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div class="jumbotron jumbotron-sm">
     <div class="container">

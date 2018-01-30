@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <textarea class="form-control content" placeholder="Content" rows="5" required></textarea>
                         </div>
-                        <img src="/pictures/uploading.gif" alt="uploading..." class="uploading-img">
+                        <img src="pictures/uploading.gif" alt="uploading..." class="uploading-img">
                     </div>
                 </div>
                 <div class="row">
@@ -105,15 +105,29 @@
 
         publishBtn.on("click", function (e) {
             e.preventDefault();
-            const title = $("input.title").val();
-            const content = $("textarea.content").val();
-            if (title===""){
-                alert("Title is required.");
-                return;
+            const title = $("input.title");
+            const content = $("textarea.content");
+            if (title.val()===""){
+                swal({
+                    title: "Need a title!",
+                    text: "Write something interesting:",
+                    type: "input",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    inputPlaceholder: "Write title"
+                }, function (inputValue) {
+                    if (inputValue === false) return false;
+                    if (inputValue === "") {
+                        swal.showInputError("You need to write a title!");
+                        return false;
+                    }
+                    title.val(inputValue);
+                });
+
             }
 
-            if (content===""){
-                alert("Content is required.");
+            if (content.val()===""){
+                swal("Write something!", "You need to !", "warning");
                 return;
             }
 
@@ -128,8 +142,8 @@
             }
 
             const article = {};
-            article["title"] = title;
-            article["content"] = content;
+            article["title"] = title.val();
+            article["content"] = content.val();
             article["authorId"] = entityId($(this));
             article["createTime"] = new Date().getTime();
             article["validTime"] = availableDate.getTime();
@@ -150,7 +164,7 @@
                     $("textarea.content").val("");
                     const msg = publishMode[0].value==="publish" ? "Your article are published."
                         : "Your article will be visible to public on " + availableDate.toLocaleString();
-                    alert("Congratulations " + msg);
+                    swal("Congratulations ",msg,"success");
                     console.log(resp);
                 },
                 error: (msg, status) => {

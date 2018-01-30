@@ -83,6 +83,7 @@ public class PersonalBlog extends Controller {
             Comments comments = DbConnector.getCommentsByArticleId(articleId);
             Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = comments.getCommentTree();
             ajaxCommentsHandler(commentTree, req, resp);
+            cleanAllParameters(req);
             return;
         }
 
@@ -91,6 +92,7 @@ public class PersonalBlog extends Controller {
         if (articleId != null) {
             Blog blog = DbConnector.getBlogByArticleId(articleId);
             ajaxArticleContentHandler(blog, req, resp);
+            cleanAllParameters(req);
             return;
         }
 
@@ -117,8 +119,12 @@ public class PersonalBlog extends Controller {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            cleanAllParameters(req);
             return;
         }
+
+        /*Edit existing article*/
+
 
     }
 
