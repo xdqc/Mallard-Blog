@@ -1,3 +1,6 @@
+getServletPath : <%= request.getServletPath() %><br>
+getQueryString : <%= request.getQueryString() %><br>
+getQueryString : <%= request.getSession().getAttributeNames() %><br>
 <c:forEach var="blog" items="${blogs}">
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info">
@@ -26,7 +29,7 @@
                     </button>
                 </div>
                 <br>
-
+                <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload multimedia</a>
                 <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
                     Gallery</a>
 

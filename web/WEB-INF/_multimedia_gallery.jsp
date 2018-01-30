@@ -18,10 +18,10 @@
 
 <c:forEach var="attachment" items="${attachments}">
     <!-- Add images to Gallery -->
-    <a href="${attachment.getPath()}/${attachment.getFilename()}.${attachment.getMime()}"><img src="${attachment.getPath()}/${attachment.getFilename()}_thumbnail.jpg" alt="${attachment.getFilename()}"></a>
+    <a href="${attachment.getPath()}${attachment.getFilename()}.${attachment.getMime()}"><img src="${attachment.getPath()}${attachment.getFilename()}_thumbnail.png" alt="${attachment.getFilename()}"></a>
 </c:forEach>
     <!-- Add videos to Gallery -->
-    <!--a href="pictures/Big_Buck_Bunny.mp4"><img src="pictures/Big_Buck_Bunny.jpg" alt="Big Buck Bunny, Copyright Blender Foundation"></a -->
+    <!--a href="multimedia/Big_Buck_Bunny.mp4"><img src="multimedia/Big_Buck_Bunny.jpg" alt="Big Buck Bunny, Copyright Blender Foundation"></a -->
 
     <!-- Add Youtube video to Gallery -->
     <!--a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg" alt="Youtube Video"></a-->

@@ -17,31 +17,14 @@
                         <div class="form-group">
                             <textarea class="form-control content" placeholder="Content" rows="5" required></textarea>
                         </div>
-                        <img src="pictures/uploading.gif" alt="uploading..." class="uploading-img">;
+                        <img src="/pictures/uploading.gif" alt="uploading..." class="uploading-img">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="well well-sm well-primary">
                             <div class="input-group image-preview">
-                                <input type="text" class="form-control image-preview-filename"
-                                       disabled="disabled">
-                                <!-- don't give a name === doesn't send on POST/GET -->
-                                <div class="input-group-btn">
-                                    <!-- image-preview-clear button -->
-                                    <button type="button" class="btn btn-default image-preview-clear"
-                                            style="display:none;">
-                                        <span class="glyphicon glyphicon-remove"></span> Clear
-                                    </button>
-                                    <!-- image-preview-input -->
-                                    <div class="btn btn-default image-preview-input">
-                                        <span class="glyphicon glyphicon-folder-open"></span>
-                                        <span class="image-preview-input-title">Browse</span>
-                                        <input type="file" accept="image/png, image/jpeg, image/gif"
-                                               name="input-file-preview"/>
-                                        <!-- rename it -->
-                                    </div>
-                                </div>
+                                <%@include file="_upload_file.jsp" %>
                             </div><!-- /input-group image-preview [TO HERE]-->
                         </div>
                     </div>

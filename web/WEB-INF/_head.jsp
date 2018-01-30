@@ -28,4 +28,6 @@
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
     </script>
 
+        <!-- For upload files page generate multiple row -->
+        <script type="text/javascript" src="javascript/uploadFile.js"></script>
 </head>
