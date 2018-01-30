@@ -45,10 +45,10 @@ public class SignUp extends Controller {
             user.setDescription(req.getParameter("description"));
 
             System.out.println(user);
-            String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
+            // String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(msg);
+          //  resp.getWriter().write(msg);
         }
     }
 
