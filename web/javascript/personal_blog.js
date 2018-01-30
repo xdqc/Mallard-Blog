@@ -1,7 +1,7 @@
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
 //helper function recursively show comment tree
-const showCascadingComments = (commentArr, $p) => {
+function showCascadingComments(commentArr, $p) {
     // To exploit var hijacking, do not use arrow functions, just use for loop.
     for (let commentNode of commentArr) {
         if (!$.isArray(commentNode)) {
@@ -23,14 +23,60 @@ const showCascadingComments = (commentArr, $p) => {
                     const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
-                            .attr("placeholder", "Reply to "+ comment["commenter"]))
+                            .attr("placeholder", "Reply to " + comment["commenter"]))
                         .append(($("<input type='submit' class='reply-submit btn btn-primary' value='reply'>")
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
+                    const editBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
+                        .attr("id", "delete-comment-btn-" + cmtId)
+                        .attr("href", "#popup-edit-" + cmtId)
+                        .text(" edit");
+
+                    const editForm = $("<form class='popup'>").attr("id", "popup-edit-" + cmtId)
+                        .append(($("<textarea class='edit-text form-control' rows='2' required>")
+                            .attr("id", "edit-text-" + cmtId))
+                            .attr("text", comment["content"]))
+                        .append(($("<input type='submit' class='edit-submit btn btn-primary' value='edit'>")
+                            .attr("id", "edit-submit-" + cmtId)))
+                        .append($("<a class='close' href='#/'>").html("&times;"));
+
+
+                    function showReplyForm (loggedUser) {
+                        if (loggedUser === 0) {
+                            return;
+                        }
+                        replyBtn.on("click", function (e) {
+                            e.preventDefault();
+                            replyForm.slideDown();
+                            console.log(replyForm);
+                            $(".close").on("click", function () {
+                                replyForm.slideUp();
+                            })
+                        });
+                    }
+
+                    function showEditForm (loggedUser) {
+                        //Comparing string and number here
+                        if (loggedUser != comment["commenterId"]) {
+                            editBtn.remove();
+                            return;
+                        }
+                        editBtn.on("click", function (e) {
+                            e.preventDefault();
+                            editForm.slideDown();
+                            console.log(editForm);
+                            $(".close").on("click", function () {
+                                editForm.slideUp();
+                            })
+                        });
+                    };
+
+
                     //This is a special use case of exploiting of var hijacking to access it outside loop
                     var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl)
-                        .append(replyBtn).append(replyForm);
+                        .append(replyBtn).append(replyForm)
+                        .append(editBtn).append(editForm);
                 }
             }
         } else {
@@ -38,10 +84,10 @@ const showCascadingComments = (commentArr, $p) => {
             showCascadingComments(commentNode, $pp);
         }
     }
-};
+}
+
 
 $(document).ready(function () {
-
 
     /**
      * AJAX comments of article
@@ -78,9 +124,15 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
-                    removeReplyBtn();
-                    showReply();
-                    console.log("loaded");
+                    console.log(loggedInUser);
+                    if (loggedInUser===0){
+                        $(".reply-comment-btn").remove();
+                        $(".edit-comment-btn").remove();
+                        $(".delete-comment-btn").remove();
+                    } else {
+                        showReplyForm(loggedInUser);
+                        showEditForm(loggedInUser);
+                    }
                 }
             });
 

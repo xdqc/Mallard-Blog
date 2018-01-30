@@ -24,4 +24,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.1/jquery.timeago.js"
             integrity="sha256-eAM7NHrUqBdkWBYcUVaGo55W9YMG8UAQIceYOf9xnjg=" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">
+        let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
+    </script>
+
 </head>

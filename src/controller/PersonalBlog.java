@@ -159,6 +159,7 @@ public class PersonalBlog extends Controller {
 
                 JSONObject commentJson = new JSONObject();
                 assert user != null;
+                commentJson.put("commenterId", user.getId());
                 commentJson.put("commenter", user.getFName()+" "+user.getLName());
                 commentJson.put("content", comment.getContent());
                 commentJson.put("createTime", comment.getCreateTime().toLocalDateTime().toString());

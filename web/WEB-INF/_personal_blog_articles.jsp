@@ -69,6 +69,9 @@
     a.reply-comment-btn {
         padding-left: 2em;
     }
+    a.edit-comment-btn {
+        padding-left: 2em;
+    }
 
     .comment-area {
         margin: 10px;
@@ -76,6 +79,9 @@
     }
 
     .reply-text {
+        margin: 0 20px 10px 0;
+    }
+    .edit-text {
         margin: 0 20px 10px 0;
     }
 
@@ -105,34 +111,32 @@
     }
 </style>
 
-<c:if test="${empty sessionScope.get('loggedInUser')}">
-    <script type="text/javascript">
-        function removeReplyBtn() {
-            $(".reply-comment-btn").remove()
-        }
-        function showReply() {}
-    </script>
-</c:if>
-<c:if test="${not empty sessionScope.get('loggedInUser')}">
-    <script type="text/javascript">
-        function removeReplyBtn() {}
+<%--<c:if test="${empty sessionScope.get('loggedInUser')}">--%>
+    <%--<script type="text/javascript">--%>
+        <%--function removeReplyBtn() {--%>
+            <%--$(".reply-comment-btn").remove()--%>
+        <%--}--%>
+        <%--function showReplyForm() {}--%>
+    <%--</script>--%>
+<%--</c:if>--%>
+<%--<c:if test="${not empty sessionScope.get('loggedInUser')}">--%>
+    <%--<script type="text/javascript">--%>
+        <%--function removeReplyBtn() {}--%>
 
-        function showReply() {
-            $("a.reply-comment-btn").on("click", function (e) {
-                e.preventDefault();
-                console.log($(this));
-                const cmtId = entityId($(this));
-                const replyForm = $("#popup-reply-" + cmtId);
-                replyForm.slideDown();
-                console.log(replyForm);
-                $(".close").on("click", function () {
-                    replyForm.slideUp();
-                })
-            });
-        }
-    </script>
-</c:if>
+        <%--function showReplyForm() {--%>
+            <%--$("a.reply-comment-btn").on("click", function (e) {--%>
+                <%--e.preventDefault();--%>
+                <%--console.log($(this));--%>
+                <%--const cmtId = entityId($(this));--%>
+                <%--const replyForm = $("#popup-reply-" + cmtId);--%>
+                <%--replyForm.slideDown();--%>
+                <%--console.log(replyForm);--%>
+                <%--$(".close").on("click", function () {--%>
+                    <%--replyForm.slideUp();--%>
+                <%--})--%>
+            <%--});--%>
+        <%--}--%>
+    <%--</script>--%>
+<%--</c:if>--%>
 
-<script type="text/javascript">
 
-</script>
