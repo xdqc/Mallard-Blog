@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<%@include file="_home_page_logo.jsp"%>
+
 <%@include file="_home_page_menu.jsp"%>
 
 

@@ -1,7 +1,7 @@
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
 //helper function recursively show comment tree
-const showCascadingComments = (commentArr, $p) => {
+function showCascadingComments(commentArr, $p) {
     // To exploit var hijacking, do not use arrow functions, just use for loop.
     for (let commentNode of commentArr) {
         if (!$.isArray(commentNode)) {
@@ -17,16 +17,35 @@ const showCascadingComments = (commentArr, $p) => {
 
                     const replyBtn = $("<a class='reply-comment-btn fa fa-comments-o'>")
                         .attr("id", "reply-comment-btn-" + cmtId)
-                        .attr("href", "#popup-reply-" + cmtId)
+                        //.attr("href", "#popup-reply-" + cmtId)
                         .text(" reply");
 
                     const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
-                            .attr("placeholder", "Reply to "+ comment["commenter"]))
-                        .append(($("<input type='submit' class='reply-submit btn btn-primary' value='reply'>")
+                            .attr("placeholder", "Reply to " + comment["commenter"]))
+                        .append(($("<input type='submit' class='reply-submit btn btn-success' value='Reply'>")
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
+
+                    const editBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
+                        .attr("id", "delete-comment-btn-" + cmtId)
+                        //.attr("href", "#popup-edit-" + cmtId)
+                        .text(" edit");
+
+                    const editForm = $("<form class='popup'>").attr("id", "popup-edit-" + cmtId)
+                        .append(($("<textarea class='edit-text form-control' rows='1' required>")
+                            .attr("id", "edit-text-" + cmtId))
+                            .val(comment["content"]))
+                        .append(($("<input type='submit' class='edit-submit btn btn-success' value='Edit'>")
+                            .attr("id", "edit-submit-" + cmtId)))
+                        .append($("<a class='close' href='#/'>").html("&times;"));
+
+                    const deleteBtn = $("<a class='delete-comment-btn fa fa-pencil-square-o'>")
+                        .attr("id", "delete-comment-btn-" + cmtId)
+                        //.attr("href", "#popup-delete-" + cmtId)
+                        .text(" delete");
+
 
                     /*
 
@@ -34,8 +53,24 @@ const showCascadingComments = (commentArr, $p) => {
                      */
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
-                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl)
-                        .append(replyBtn).append(replyForm);
+                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
+
+                    if (loggedInUser !== 0) {
+                        $pp.append(replyBtn);
+                    }
+                    if (loggedInUser === comment["commenterId"]) {
+                        $pp.append(editBtn);
+                    }
+                    if (loggedInUser === comment["articleAuthorId"] || loggedInUser === comment["commenterId"]) {
+                        $pp.append(deleteBtn);
+                    }
+                    if (loggedInUser !== 0) {
+                        $pp.append(replyForm);
+                    }
+                    if (loggedInUser === comment["commenterId"]) {
+                        $pp.append(editForm);
+                    }
+
                 }
             }
         } else {
@@ -43,10 +78,10 @@ const showCascadingComments = (commentArr, $p) => {
             showCascadingComments(commentNode, $pp);
         }
     }
-};
+}
+
 
 $(document).ready(function () {
-
 
     /**
      * AJAX comments of article
@@ -83,9 +118,8 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
-                    removeReplyBtn();
-                    showReply();
-                    console.log("loaded");
+                    console.log(loggedInUser);
+                    commentActions();
                 }
             });
 
@@ -126,6 +160,186 @@ $(document).ready(function () {
                 console.log("loaded");
             }
         });
+    });
+
+    /**
+     * Ajax edit article area
+     */
+    $(".edit-article-btn").on("click", function () {
+
+        const articleId = entityId($(this));
+        const editArea = $("#edit-article-area-"+articleId);
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {editArticle: articleId},
+            cache: false,
+            beforeSend: function () {
+            },
+            success: function (resp) {
+                editArea.html(resp);
+                //TODO make the edit area has own props, works for each article
+            },
+            error: (msg, status) => {
+                console.log("error!!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+            }
+        })
+    });
+
+
+    /**
+     * Functions to handle comment buttons clicks
+     */
+    function commentActions() {
+        $(".reply-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            console.log($(this));
+            const cmtId = entityId($(this));
+            const replyForm = $("#popup-reply-" + cmtId);
+            replyForm.slideDown();
+            $(".close").on("click", function () {
+                replyForm.slideUp();
+            })
+        });
+
+        $(".edit-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            const cmtId = entityId($(this));
+            const editForm = $("#popup-edit-" + cmtId);
+            editForm.slideDown();
+            $(".close").on("click", function () {
+                editForm.slideUp();
+            })
+        });
+
+        $(".delete-comment-btn").on("click", function (e) {
+            e.preventDefault();
+            const cmtId = entityId($(this));
+
+            swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this comment!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
+                    //TODO delete the comment
+                    swal("Deleted!", "This comment has been deleted.", "success");
+                });
+
+        });
+
+        //TODO reply, edit comments ajax
+
+    }
+
+
+
+    /*Creating article functions*/
+    const datePicker = $("input.publish-time");
+    const publishBtn = $("button.publish");
+    const publishMode = $("select.publish-mode");
+    const uploadingImg = $("img.uploading-img");
+
+    publishMode.on("change", function () {
+        if (this.value === "publish") {
+            datePicker.hide();
+            publishBtn.empty();
+            publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+
+        } else if (this.value === "draft") {
+            datePicker.show();
+            publishBtn.empty();
+            publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+        }
+    });
+
+    let availableDate = new Date();
+    let date = new Date();
+    date = moment(date).format("YYYY-MM-DDTkk:mm");
+    datePicker.val(date);
+
+    publishBtn.on("click", function (e) {
+        e.preventDefault();
+        const title = $("input.title");
+        const content = $("textarea.content");
+        if (title.val()===""){
+            swal({
+                title: "Need a title!",
+                text: "Write something interesting:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputPlaceholder: "Write title"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("You need to write a title!");
+                    return false;
+                }
+                return title.val(inputValue);
+            });
+            return;
+        }
+
+        if (content.val()===""){
+            swal("Write something!", "You need to !", "warning");
+            return;
+        }
+
+        if (publishMode[0].value==="draft"){
+            if (datePicker.val()===""){
+                alert("Available time is required.");
+                return;
+            }
+            date = datePicker.val();
+            date = moment(date).format("YYYY-MM-DDTkk:mm");
+            availableDate = new Date(date);
+        }
+
+        const article = {};
+        article["title"] = title.val();
+        article["content"] = content.val();
+        article["authorId"] = entityId($(this));
+        article["createTime"] = new Date().getTime();
+        article["validTime"] = availableDate.getTime();
+
+        //Ajax post to servlet
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {newArticle: JSON.stringify(article)},
+            cache: false,
+            beforeSend: () => {
+                uploadingImg.show();
+            },
+
+            success: resp => {
+                uploadingImg.hide();
+                $("input.title").val("");
+                $("textarea.content").val("");
+                const msg = publishMode[0].value==="publish" ? "Your article are published."
+                    : "Your article will be visible to public on " + availableDate.toLocaleString();
+                swal("Congratulations ",msg,"success");
+                console.log(resp);
+            },
+            error: (msg, status) => {
+                console.log("error!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+                console.log("loaded");
+            }
+
+        })
     });
 
 });

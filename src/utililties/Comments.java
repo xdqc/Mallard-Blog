@@ -8,22 +8,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comments extends Tree<Tuple<UserRecord, CommentRecord>> implements Serializable{
+public class Comments extends Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> implements Serializable{
     private int numComments = 0;
-    private Tree<Tuple<UserRecord, CommentRecord>> commentTree = new Tree<>(new Tuple<>(new UserRecord(), new CommentRecord()));
+    private Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = new Tree<>(new Tuple3<>(new UserRecord(), new CommentRecord(), new UserRecord()));
 
-    public Comments(Tuple<UserRecord, CommentRecord> rootData) {
+    public Comments(Tuple3<UserRecord, CommentRecord, UserRecord> rootData) {
         super(rootData);
     }
 
     public Comments(){ }
 
-    private List<Tuple<UserRecord, CommentRecord>> commentList = new ArrayList<>();
+    private List<Tuple3<UserRecord, CommentRecord, UserRecord>> commentList = new ArrayList<>();
 
     public void convertListToTree() {
         // Add comment that directly under the article
         for (int i = 0; i < commentList.size(); i++) {
-            Tuple<UserRecord, CommentRecord> comment = commentList.get(i);
+            Tuple3<UserRecord, CommentRecord, UserRecord> comment = commentList.get(i);
             if (comment.Val2.getParentComment() == null) {
                 this.commentTree.addChild(new Tree<>(comment));
                 commentList.remove(comment);
@@ -38,11 +38,11 @@ public class Comments extends Tree<Tuple<UserRecord, CommentRecord>> implements 
         }
     }
 
-    private void moveCommentsToTree(Tree<Tuple<UserRecord, CommentRecord>> tree, List<Tuple<UserRecord, CommentRecord>> list) {
+    private void moveCommentsToTree(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> tree, List<Tuple3<UserRecord, CommentRecord, UserRecord>> list) {
         for (int i = 0; i < list.size(); i++) {
-            Tuple<UserRecord, CommentRecord> comment = list.get(i);
+            Tuple3<UserRecord, CommentRecord, UserRecord> comment = list.get(i);
             // Check if there is a comment in the tree can be the parent of the commentList elem
-            Tree<Tuple<UserRecord, CommentRecord>> parent = tree.findParentComment(tree, comment);
+            Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> parent = tree.findParentComment(tree, comment);
             if (parent != null) {
                 // Add comment to its parent's children
                 parent.addChild(new Comments(list.get(i)));
@@ -53,7 +53,7 @@ public class Comments extends Tree<Tuple<UserRecord, CommentRecord>> implements 
         }
     }
 
-    public void setCommentList(List<Tuple<UserRecord, CommentRecord>> commentList) {
+    public void setCommentList(List<Tuple3<UserRecord, CommentRecord, UserRecord>> commentList) {
         this.commentList = commentList;
     }
 
@@ -61,7 +61,7 @@ public class Comments extends Tree<Tuple<UserRecord, CommentRecord>> implements 
         return numComments;
     }
 
-    public Tree<Tuple<UserRecord, CommentRecord>> getCommentTree() {
+    public Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> getCommentTree() {
         return commentTree;
     }
 }

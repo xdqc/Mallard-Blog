@@ -1,0 +1,70 @@
+dl.comment {
+    padding: 1em 0 0 2em;
+    margin-bottom: 10px;
+}
+
+dd.comment {
+    position: relative;
+}
+
+a.reply-comment-btn {
+    padding-left: 2em;
+}
+
+a.edit-comment-btn {
+    padding-left: 2em;
+}
+
+a.delete-comment-btn {
+    padding-left: 2em;
+}
+
+.comment-area {
+    margin: 10px;
+    padding: 10px;
+}
+
+.reply-text {
+    margin: 0 20px 10px 0;
+}
+
+.edit-text {
+    margin: 0 20px 10px 0;
+}
+
+.popup {
+    margin: -15px 0 20px 0;
+    padding: 10px;
+    background: lightgrey;
+    border-radius: 5px;
+    width: 80%;
+    position: relative;
+    top: 20px;
+    display: none;
+}
+
+.popup .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+}
+
+.popup .close:hover {
+    color: #E6484F;
+}
+
+img.uploading-img {
+    width: 100px;
+    position: absolute;
+    top: 30%;
+    right: 45%;
+    opacity: 0.618;
+    display: none;
+}
+button.publish{
+    width: 100px;
+}

@@ -64,9 +64,6 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<ArticleRecord, UserRecord> ARTICLE_USER_ID_FK = ForeignKeys0.ARTICLE_USER_ID_FK;
-    public static final ForeignKey<AttachmentRecord, ArticleRecord> ATTACHMENT_ARTICLE_ID_FK = ForeignKeys0.ATTACHMENT_ARTICLE_ID_FK;
-    public static final ForeignKey<AttachmentRecord, CommentRecord> ATTACHMENT_COMMENT_ID_FK = ForeignKeys0.ATTACHMENT_COMMENT_ID_FK;
-    public static final ForeignKey<AttachmentRecord, UserRecord> ATTACHMENT_USER_ID_FK = ForeignKeys0.ATTACHMENT_USER_ID_FK;
     public static final ForeignKey<CommentRecord, UserRecord> COMMENT_USER_ID_FK = ForeignKeys0.COMMENT_USER_ID_FK;
     public static final ForeignKey<CommentRecord, ArticleRecord> COMMENT_ARTICLE_ID_FK = ForeignKeys0.COMMENT_ARTICLE_ID_FK;
     public static final ForeignKey<CommentRecord, CommentRecord> COMMENT_COMMENT_ID_FK = ForeignKeys0.COMMENT_COMMENT_ID_FK;
@@ -98,9 +95,6 @@ public class Keys {
 
     private static class ForeignKeys0 extends AbstractKeys {
         public static final ForeignKey<ArticleRecord, UserRecord> ARTICLE_USER_ID_FK = createForeignKey(ORM.Keys.KEY_USER_PRIMARY, Article.ARTICLE, "article_user_id_fk", Article.ARTICLE.AUTHOR);
-        public static final ForeignKey<AttachmentRecord, ArticleRecord> ATTACHMENT_ARTICLE_ID_FK = createForeignKey(ORM.Keys.KEY_ARTICLE_PRIMARY, Attachment.ATTACHMENT, "attachment_article_id_fk", Attachment.ATTACHMENT.OWNBY);
-        public static final ForeignKey<AttachmentRecord, CommentRecord> ATTACHMENT_COMMENT_ID_FK = createForeignKey(ORM.Keys.KEY_COMMENT_PRIMARY, Attachment.ATTACHMENT, "attachment_comment_id_fk", Attachment.ATTACHMENT.OWNBY);
-        public static final ForeignKey<AttachmentRecord, UserRecord> ATTACHMENT_USER_ID_FK = createForeignKey(ORM.Keys.KEY_USER_PRIMARY, Attachment.ATTACHMENT, "attachment_user_id_fk", Attachment.ATTACHMENT.OWNBY);
         public static final ForeignKey<CommentRecord, UserRecord> COMMENT_USER_ID_FK = createForeignKey(ORM.Keys.KEY_USER_PRIMARY, Comment.COMMENT, "comment_user_id_fk", Comment.COMMENT.COMMENTER);
         public static final ForeignKey<CommentRecord, ArticleRecord> COMMENT_ARTICLE_ID_FK = createForeignKey(ORM.Keys.KEY_ARTICLE_PRIMARY, Comment.COMMENT, "comment_article_id_fk", Comment.COMMENT.PARENT_ARTICLE);
         public static final ForeignKey<CommentRecord, CommentRecord> COMMENT_COMMENT_ID_FK = createForeignKey(ORM.Keys.KEY_COMMENT_PRIMARY, Comment.COMMENT, "comment_comment_id_fk", Comment.COMMENT.PARENT_COMMENT);

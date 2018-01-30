@@ -52,7 +52,8 @@ public class HomePage extends Controller {
         req.setAttribute("description", user.getDescription());
         req.setAttribute("age", age);
 
-
+        // user will not edit article on homepage
+        req.setAttribute("browsingUser", null);
         req.getRequestDispatcher("/home_page.jsp").forward(req, resp);
     }
 

@@ -15,7 +15,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
@@ -40,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Attachment extends TableImpl<AttachmentRecord> {
 
-    private static final long serialVersionUID = -1458580323;
+    private static final long serialVersionUID = 54230990;
 
     /**
      * The reference instance of <code>mallard_dev.attachment</code>
@@ -157,14 +156,6 @@ public class Attachment extends TableImpl<AttachmentRecord> {
     @Override
     public List<UniqueKey<AttachmentRecord>> getKeys() {
         return Arrays.<UniqueKey<AttachmentRecord>>asList(Keys.KEY_ATTACHMENT_PRIMARY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<AttachmentRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<AttachmentRecord, ?>>asList(Keys.ATTACHMENT_ARTICLE_ID_FK, Keys.ATTACHMENT_COMMENT_ID_FK, Keys.ATTACHMENT_USER_ID_FK);
     }
 
     /**
