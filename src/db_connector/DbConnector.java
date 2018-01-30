@@ -492,6 +492,7 @@ public class DbConnector {
                 //             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
                 //                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
                 //                     .execute();
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
