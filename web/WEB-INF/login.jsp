@@ -11,15 +11,8 @@
 <head>
     <%@include file="_head.jsp" %>
     <title>Login</title>
-    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
-    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    <style>
-        #g-recaptcha error{
-            border:solid 2px #c64848;
-            padding: .2em;
-            width:19em;
-        }
-    </style>
+    <script src="https://www.google.com/recaptcha/api.js"
+        async defer></script>
 </head>
 <body>
 <div class="container" style="height: 60%">
