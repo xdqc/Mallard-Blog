@@ -435,7 +435,7 @@ public class DbConnector {
     /**
      * Get attachment by article id
      **/
-    public static List<AttachmentRecord> getAttachmentByArticleId(String articleId) {
+    public static List<AttachmentRecord> getAttachmentByArticleId(String ownby,String attachType) {
         List<AttachmentRecord> attachments = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
@@ -443,7 +443,8 @@ public class DbConnector {
             attachments = create
                     .select(ATTACHMENT.fields())
                     .from(ATTACHMENT)
-                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(articleId)))
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(ownby)))
+                    .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
                     .fetch()
                     .into(AttachmentRecord.class);
 
@@ -452,7 +453,6 @@ public class DbConnector {
         }
         return attachments;
     }
-
     /**
      * Insert a article to db
      *
@@ -496,4 +496,16 @@ public class DbConnector {
 //
 //    }
 
+    public static boolean saveAttachmentRecord(AttachmentRecord attachment) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            create.insertInto(ATTACHMENT)
+                    .columns(ATTACHMENT.FILENAME,ATTACHMENT.PATH,ATTACHMENT.MIME,ATTACHMENT.ATTACH_TYPE,ATTACHMENT.OWNBY,ATTACHMENT.ISACTIVATE)
+                    .values(attachment.getFilename(),attachment.getPath(),attachment.getMime(),attachment.getAttachType(),attachment.getOwnby(),attachment.getIsactivate()).execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

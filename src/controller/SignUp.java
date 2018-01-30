@@ -45,17 +45,26 @@ public class SignUp extends Controller {
             user.setDescription(req.getParameter("description"));
 
             System.out.println(user);
-            // String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
+
+        /*
+
+             String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
-          //  resp.getWriter().write(msg);
+            resp.getWriter().write(msg);
+
+            String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(msg);
+
+        }*/
         }
-    }
 
 
 
 
-
+/*
     private void editProfile(UserRecord user, HttpServletRequest req, HttpServletResponse resp) {
 
 
@@ -64,5 +73,8 @@ public class SignUp extends Controller {
     private String hashingPassword(String rawPassword){
         //TODO impliment hashing
         return rawPassword;
+    }
+}
+*/
     }
 }

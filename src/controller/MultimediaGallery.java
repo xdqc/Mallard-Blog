@@ -17,9 +17,19 @@ public class MultimediaGallery  extends Controller {
         UserRecord user = getLoggedUserFromSession(req);
 
         String articleId = req.getParameter("articleId");
-
+        String commentId = req.getParameter("commentId");
+        String attachType = "";
+        String ownby = "";
+        if(articleId != null && !articleId.equals("")){
+            attachType = "A";
+            ownby = articleId;
+        }
+        if(commentId != null && !commentId.equals("")){
+            attachType = "C";
+            ownby = commentId;
+        }
         //get all articles sort by like number
-        List<AttachmentRecord> attachments = DbConnector.getAttachmentByArticleId(articleId);
+        List<AttachmentRecord> attachments = DbConnector.getAttachmentByArticleId(ownby,attachType);
         req.setAttribute("attachments", attachments);
 
         req.getRequestDispatcher("/WEB-INF/_multimedia_gallery.jsp").forward(req, resp);
