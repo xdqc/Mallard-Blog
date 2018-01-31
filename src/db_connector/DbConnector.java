@@ -583,6 +583,7 @@ public class DbConnector {
      * @param user
      * @return
      */
+
     public static boolean insertNewUser(UserRecord user) {
 
             try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
