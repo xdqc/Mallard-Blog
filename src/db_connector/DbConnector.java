@@ -504,6 +504,79 @@ public class DbConnector {
 
     }
 
+    /**
+     * Mark an article's show_hide as 0
+     * @param articleId article to be delete
+     */
+    public static void deleteArticleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte)0)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Mark a comment's show_hide as 0
+     * @param commentId
+     */
+    public static void deleteCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte)0)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add new comment
+     * @param comment new comment to be inserted
+     */
+    public static void insertNewComment(CommentRecord comment) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.insertInto(COMMENT, COMMENT.COMMENTER, COMMENT.CONTENT,
+                    COMMENT.CREATE_TIME, COMMENT.PARENT_ARTICLE, COMMENT.PARENT_COMMENT)
+                    .values(comment.getCommenter(), comment.getContent(),
+                            comment.getCreateTime(), comment.getParentArticle(), comment.getParentComment())
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Edit comment
+     * @param comment comment to be edit
+     */
+    public static void updateExistingComment(CommentRecord comment) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.CONTENT, comment.getContent())
+                    .set(COMMENT.EDIT_TIME, comment.getEditTime())
+                    .where(COMMENT.ID.eq(comment.getId()))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
@@ -539,6 +612,5 @@ public class DbConnector {
         }
         return true;
     }
-
 
 }
