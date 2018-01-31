@@ -504,6 +504,19 @@ public class DbConnector {
 
     }
 
+    public static void deleteArticleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte)0)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
@@ -539,6 +552,7 @@ public class DbConnector {
         }
         return true;
     }
+
 
 
 }

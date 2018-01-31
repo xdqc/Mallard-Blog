@@ -138,13 +138,19 @@ public class PersonalBlog extends Controller {
         }
 
         /*loading article edit area*/
-        String articleToBeEdit = req.getParameter("editArticle");
-        if (articleToBeEdit != null){
-            req.setAttribute("articleId", articleToBeEdit);
+        String articleToEdit = req.getParameter("editArticle");
+        if (articleToEdit != null){
+            req.setAttribute("articleId", articleToEdit);
             req.getRequestDispatcher("WEB-INF/_personal_blog_create.jsp").forward(req,resp);
             return;
         }
 
+        /*Delete article*/
+        String articleToDelete = req.getParameter("deleteArticle");
+        if (articleToDelete != null){
+            DbConnector.deleteArticleById(articleToDelete);
+        }
+        /*Delete comment*/
 
     }
 

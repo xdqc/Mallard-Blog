@@ -49,7 +49,7 @@ const showCascadingComments = (commentTree, $parent) => {
                             .attr("id", "edit-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
-                    const deleteBtn = $("<a class='delete-comment-btn fa fa-pencil-square-o'>")
+                    const deleteBtn = $("<a class='delete-comment-btn fa fa-trash-o'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
                         //.attr("href", "#popup-delete-" + cmtId)
                         .text(" delete");
@@ -192,7 +192,7 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                createOrEditArticleHandler($(".accordion-bar"));
+                articleActionsHandler($(".accordion-bar"));
             }
         })
     });
@@ -200,7 +200,7 @@ $(document).ready(function () {
     /**
      * Ajax create or edit article
      */
-    $(".edit-article-area").on("change", ".publish-mode", function (e) {
+    $(".article-panel").on("change", ".publish-mode", function () {
 
         const articleId = entityId($(this));
 
@@ -221,7 +221,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".edit-article-area").on("click", ".publish", function (e) {
+    $(".article-panel").on("click", ".publish", function (e) {
         e.preventDefault();
         const articleId = entityId($(this));
 
@@ -321,6 +321,46 @@ $(document).ready(function () {
         })
     });
 
+    $(".article-panel").on("click", ".delete-article-btn", function () {
+        const articleId = entityId($(this));
+        swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this article!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'personal-blog',
+                        data: {deleteArticle: articleId},
+                        cache: false,
+                        beforeSend: () => {
+                        },
+                        success: (resp) => {
+                            swal("Deleted!", "Your article has been deleted.", "success");
+                        },
+                        error: (msg, status) => {
+                            console.log("error of deleting article!!!");
+                            console.log(status);
+                            console.log(msg);
+                        },
+                        complete: () => {
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your article is safe :)", "error");
+                }
+            });
+
+
+    });
 
 
 
@@ -364,12 +404,17 @@ $(document).ready(function () {
                 },
                 function(){
                     //TODO delete the comment
+                    $.ajax({
+
+                    });
                     swal("Deleted!", "This comment has been deleted.", "success");
                 });
 
         });
 
         //TODO reply, edit comments ajax
+
+
 
     }
 
@@ -404,13 +449,17 @@ $(document).ready(function () {
 
 
     /**
-     * let article actions 'focus on' creating new article, or editing one existing article
+     * let article actions 'focus on' particular article (or none for creating new)
      */
-    const createOrEditArticleHandler = (trigger) => {trigger.on("click", function () {
+    const articleActionsHandler = (trigger) => {trigger.on("click", function () {
         const articleId = entityId($(this));
         $(".panel-collapse").collapse('hide');
         return articleActions(articleId);
     })};
-    createOrEditArticleHandler($(".accordion-bar"));
+    articleActionsHandler($(".accordion-bar"));
+
+    const commentActionHandler = (trigger) => {
+
+    }
 });
 
