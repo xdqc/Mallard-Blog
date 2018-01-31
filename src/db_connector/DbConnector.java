@@ -589,9 +589,9 @@ public class DbConnector {
             try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
                 DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-                //             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB)
-                //                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName())
-                //                     .execute();
+                             create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.ADDRESS,USER.CITY,USER.STATE,USER.COUNTRY,USER.DESCRIPTION)
+                                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getAddress(),user.getCity(),user.getState(),user.getCountry(),user.getDescription())
+                                     .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
