@@ -106,7 +106,7 @@ public class PersonalBlog extends Controller {
                 ArticleRecord articleRecord = new ArticleRecord();
                 articleRecord.setTitle((String) article.get("title"));
                 articleRecord.setContent((String) article.get("content"));
-                articleRecord.setAuthor(Integer.parseInt((String) article.get("authorId")));
+                articleRecord.setAuthor((Integer) article.get("authorId"));
                 articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
                 articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
 

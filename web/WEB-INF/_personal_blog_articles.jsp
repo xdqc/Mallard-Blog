@@ -36,7 +36,7 @@
                     </button>
                 </div>
 
-                <div id="edit-article-area-${blog.getArticle().getId()}"></div>
+                <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
 
                 <br>
                 <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
