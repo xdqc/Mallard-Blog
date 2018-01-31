@@ -34,7 +34,7 @@ public class Search extends Controller {
 
             req.setAttribute("userResults", userResults);
             req.setAttribute("articleResults", articleResults);
-
+            req.getRequestDispatcher("search_result.jsp").forward(req, resp);
             return;
         }
     }
