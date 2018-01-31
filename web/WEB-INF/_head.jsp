@@ -37,8 +37,10 @@
 
     <!-- For upload files page generate multiple row -->
     <script type="text/javascript" src="javascript/uploadFile.js"></script>
+    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
+    <script type="text/javascript" src="javascript/personal_blog.js"></script>
 
-    <link rel="stylesheet" href="css/personal_panel.css">
+        <link rel="stylesheet" href="css/personal_panel.css">
         <link rel="stylesheet" href="css/article.css">
     <link rel="stylesheet" href="css/homepage_menu.css">
 </head>
