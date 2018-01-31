@@ -88,7 +88,28 @@
 
 <script>
     $(function(){
-        $("#user-table").tablesorter();
+        $("#user-table").tablesorter(
+
+        );
         $("#article-table").tablesorter();
     });
 </script>
+<style>
+    th.tablesorter-headerAsc {
+        cursor: pointer;
+        background: url(pictures/small_asc.png) no-repeat center right;
+        background-size:10px;
+    }
+
+    th.tablesorter-headerDesc {
+        cursor: pointer;
+        background: url(pictures/small_desc.png) no-repeat center right;
+        background-size:10px;
+    }
+
+    th.tablesorter-headerUnSorted {
+        cursor: pointer;
+        background: url(pictures/small.png) no-repeat center right;
+        background-size:10px;
+    }
+</style>
