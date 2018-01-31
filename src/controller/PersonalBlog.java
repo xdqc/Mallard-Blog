@@ -112,8 +112,6 @@ public class PersonalBlog extends Controller {
                 articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
 
 
-                System.out.println(articleRecord);
-
                 String msg;
                 if (articleRecord.getId()>0){
                     //update existing article
@@ -125,6 +123,9 @@ public class PersonalBlog extends Controller {
                     articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
                     msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
                 }
+
+                System.out.println(articleRecord);
+
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write(msg);

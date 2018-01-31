@@ -256,12 +256,12 @@ $(document).ready(function () {
 
         let availableDate = new Date();
 
-        if (form["publishMode"].value==="draft"){
+        if (form["publishMode"][0].value==="draft"){
             if (form["datePicker"].val()==="" || form["datePicker"].val()===undefined){
                 alert("Available time is required.");
                 return;
             }
-            date = form["datePicker"].val();
+            let date = form["datePicker"].val();
             date = moment(date).format("YYYY-MM-DDTkk:mm");
             availableDate = new Date(date);
         }
