@@ -480,6 +480,32 @@ public class DbConnector {
 
 
     /**
+     * Edit article
+     * @param article existing article
+     * @return success or not
+     */
+    public static boolean updateExistingArticle(ArticleRecord article) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.TITLE, article.getTitle())
+                    .set(ARTICLE.CONTENT, article.getContent())
+                    .set(ARTICLE.EDIT_TIME, article.getEditTime())
+                    .set(ARTICLE.VALID_TIME, article.getValidTime())
+                    .where(ARTICLE.ID.eq(article.getId()))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
+
+    /**
      *
      * @param user
      * @return
@@ -513,4 +539,6 @@ public class DbConnector {
         }
         return true;
     }
+
+
 }

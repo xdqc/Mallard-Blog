@@ -200,25 +200,28 @@ $(document).ready(function () {
     /**
      * Ajax create or edit article
      */
-    $(".edit-article-area").on("change", $("select.publish-mode"), function (e) {
+    $(".edit-article-area").on("change", ".publish-mode", function (e) {
 
         const articleId = entityId($(this));
 
         const form = articleActions(articleId);
 
-        if (form["publishMode"].value === "publish") {
+        if (form["publishMode"][0].value === "publish") {
             form["datePicker"].hide();
             form["publishBtn"].empty();
             form["publishBtn"].append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
 
-        } else if (form["publishMode"].value === "draft") {
+        } else if (form["publishMode"][0].value === "draft") {
             form["datePicker"].show();
             form["publishBtn"].empty();
             form["publishBtn"].append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+            let date = new Date();
+            date = moment(date).format("YYYY-MM-DDTkk:mm");
+            form["datePicker"].val(date);
         }
     });
 
-    $(".edit-article-area").on("click", $("button.publish"), function (e) {
+    $(".edit-article-area").on("click", ".publish", function (e) {
         e.preventDefault();
         const articleId = entityId($(this));
 
@@ -240,23 +243,21 @@ $(document).ready(function () {
                     swal.showInputError("You need to write a title!");
                     return false;
                 }
+                swal("Nice!", "The title: " + inputValue, "success");
                 form["title"].val(inputValue);
             });
             return;
         }
 
-        if (form["content"].text()===""){
-            swal("Write something!", "You need to !", "warning");
+        if (form["content"].val()==="" || form["content"].val()===undefined){
+            swal("Write something!", "You need have some content!", "warning");
             return;
         }
 
         let availableDate = new Date();
-        let date = new Date();
-        date = moment(date).format("YYYY-MM-DDTkk:mm");
-        form["datePicker"].val(date);
 
         if (form["publishMode"].value==="draft"){
-            if (datePicker.val()===""){
+            if (form["datePicker"].val()==="" || form["datePicker"].val()===undefined){
                 alert("Available time is required.");
                 return;
             }
@@ -266,9 +267,9 @@ $(document).ready(function () {
         }
 
         const article = {};
-        article["articleId"] = articleId;
+        article["articleId"] = articleId>0?articleId:"0";
         article["title"] = form["title"].val();
-        article["content"] = form["content"].text();
+        article["content"] = form["content"].val();
         article["authorId"] = loggedInUser;
         article["createTime"] = new Date().getTime();
         article["validTime"] = availableDate.getTime();
@@ -288,19 +289,32 @@ $(document).ready(function () {
             success: resp => {
 
                 form["title"].val("");
-                form["content"].text("");
-                const msg = form["publishMode"].value==="publish" ? "Your article are published."
-                    : "Your article will be visible to public on " + availableDate.toLocaleString();
-                swal("Congratulations ",msg,"success");
+                form["content"].val("");
+
+                let msg;
+                if (resp==="inserted"){
+                    msg = form["publishMode"][0].value==="publish" ? "Your article are published."
+                        : "Your article will be visible to public on " + availableDate.toLocaleString();
+                    swal("Congratulations ",msg,"success");
+                } else if (resp==="updated") {
+                    msg = form["publishMode"][0].value==="publish" ? "Your article are updated."
+                        : "Your updated article will be visible to public on " + availableDate.toLocaleString();
+                    swal("Congratulations ",msg,"success");
+                } else {
+                    msg = "Server error";
+                    swal("Oops ", msg, "danger")
+                }
+
+
                 console.log(resp);
             },
             error: (msg, status) => {
                 console.log("error!!");
                 console.log(status);
                 console.log(msg);
+                swal("Oops ", msg, "danger")
             },
             complete: () => {
-                console.log("loaded");
                 uploadingImg.hide();
             }
 
@@ -368,12 +382,15 @@ $(document).ready(function () {
     const articleActions = (id) => {
         console.log(id + " is working on?");
 
-        const datePicker = $("input#publish-time-"+id);
-        const publishBtn = $("button#publish-"+id);
-        const publishMode = $("select#publish-mode-"+id);
+        const datePicker = $("#publish-time-"+id);
+        const publishBtn = $("#publish-"+id);
+        const publishMode = $("#publish-mode-"+id);
         const title = $("#input-article-title-"+id);
-        const content = $("input-article-content"+id);
+        const content = $("#input-article-content-"+id);
 
+        //WYSIWYG
+        title.attr("value", $("#article-title-"+id).text());    //don't val(), it will bind the value and wont change later
+        content.text($("#article-content-"+id).text());
 
         return {
             "datePicker" : datePicker,

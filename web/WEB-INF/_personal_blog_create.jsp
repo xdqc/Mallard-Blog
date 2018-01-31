@@ -4,12 +4,7 @@
             <h4 class="panel-title">
                 <a class="accordion-bar" id="accordion-bar-${articleId}" data-toggle="collapse" data-parent="#accordion"
                     href="#collapse-${articleId}"><span class="glyphicon glyphicon-file"></span>
-                    <c:if test="${not empty articleId}">
-                        Edit this article
-                    </c:if>
-                    <c:if test="${empty articleId}">
-                        POST NEW ARTICLE
-                    </c:if>
+                    ${articleId>0? "Edit this article":"POST NEW ARTICLE"}
                 </a>
             </h4>
         </div>

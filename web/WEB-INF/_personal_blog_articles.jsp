@@ -6,15 +6,18 @@
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info">
             <div class="panel-heading">
-                <h4 class="panel-title">${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</h4>
+                <h4 class="panel-title" id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
 
             </div>
             <div class="panel-body">
+
+                <div class="panel-text">
+                    <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
+                </div>
                 <div class="panel-text">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
                     <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span class="fa fa-thumbs-up"></span></span>
-
                 </div>
 
                 <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
@@ -35,9 +38,8 @@
                         Read more
                     </button>
                 </div>
-
+                <br>
                 <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
-
                 <br>
                 <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
                     multimedia</a>
