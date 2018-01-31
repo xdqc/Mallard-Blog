@@ -4,7 +4,7 @@
 
 <c:forEach var="blog" items="${blogs}">
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
-        <article class="panel panel-info">
+        <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
             <div class="panel-heading">
                 <h4 class="panel-title" id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
 
@@ -46,10 +46,14 @@
                 <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
                     Gallery</a>
 
-                    <%--edit article button--%>
+                    <%--edit and delete article button--%>
                 <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
-                        <span class="edit-article-btn btn btn-default"
-                              id="edit-article-btn-${blog.getArticle().getId()}"><span class="fa fa-pencil"></span> Edit</span>
+                        <span class="edit-article-btn btn btn-success"
+                              id="edit-article-btn-${blog.getArticle().getId()}">
+                            <span class="fa fa-pencil"></span> Edit</span>
+                        <span class="delete-article-btn btn btn-danger"
+                            id="delete-article-btn-${blog.getArticle().getId()}">
+                            <span class="fa fa-trash"></span> Delete</span>
                 </c:if>
 
                 <c:if test="${blog.getNumComments() > 0}">

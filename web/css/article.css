@@ -1,10 +1,16 @@
 dl.comment {
-    padding: 1em 0 0 2em;
+    padding: 1em .1em 0 0.5em;
     margin-bottom: 10px;
+    border: 1px dotted steelblue;
+    border-radius: 5px;
+    background-color: aliceblue;
 }
 
 dd.comment {
     position: relative;
+    /*     border: 1px dashed lightsteelblue; */
+    padding: 0 0 0 10px;
+    margin: 0 0 5px -5px;
 }
 
 a.reply-comment-btn {
