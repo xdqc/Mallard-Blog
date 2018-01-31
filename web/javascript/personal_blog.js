@@ -18,7 +18,7 @@ const showCascadingComments = (commentTree, $parent) => {
                 if (commentArr.hasOwnProperty(cmtId)) {
                     const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
-                    const $dl = $("<dl class='comment'>").appendTo($parent)
+                    var $dl = $("<dl class='comment'>").appendTo($parent)
                         .append($("<dt class='comment'>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
@@ -61,29 +61,29 @@ const showCascadingComments = (commentTree, $parent) => {
                      */
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
-                    var $pp = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
+                    const $dd = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
 
                     if (loggedInUser !== 0) {
-                        $pp.append(replyBtn);
+                        $dd.append(replyBtn);
                     }
                     if (loggedInUser === comment["commenterId"]) {
-                        $pp.append(editBtn);
+                        $dd.append(editBtn);
                     }
                     if (loggedInUser === comment["articleAuthorId"] || loggedInUser === comment["commenterId"]) {
-                        $pp.append(deleteBtn);
+                        $dd.append(deleteBtn);
                     }
                     if (loggedInUser !== 0) {
-                        $pp.append(replyForm);
+                        $dd.append(replyForm);
                     }
                     if (loggedInUser === comment["commenterId"]) {
-                        $pp.append(editForm);
+                        $dd.append(editForm);
                     }
 
                 }
             }
         } else {
-            //The first elem in commentArr will ALWAYS be a commentObj, so $pp will be initialized
-            showCascadingComments(commentArr, $pp);
+            //The first elem in commentArr will ALWAYS be a commentObj, so $dl will be initialized
+            showCascadingComments(commentArr, $dl);
         }
     }
 };
