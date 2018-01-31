@@ -100,19 +100,32 @@ public class PersonalBlog extends Controller {
         /*Create new article*/
         String articleStr = req.getParameter("newArticle");
         if (articleStr != null) {
-
             try {
                 JSONObject article = (JSONObject) new JSONParser().parse(articleStr);
                 ArticleRecord articleRecord = new ArticleRecord();
+
+                articleRecord.setId(Integer.valueOf((String) article.get("articleId")));
+
                 articleRecord.setTitle((String) article.get("title"));
                 articleRecord.setContent((String) article.get("content"));
-                articleRecord.setAuthor(Integer.parseInt((String) article.get("authorId")));
-                articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
+                articleRecord.setAuthor(((Long)article.get("authorId")).intValue());
                 articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
 
+
+                String msg;
+                if (articleRecord.getId()>0){
+                    //update existing article
+                    articleRecord.setEditTime(new Timestamp((Long) article.get("createTime")));
+                    msg = DbConnector.updateExistingArticle(articleRecord) ? "updated" : "error";
+
+                } else {
+                    //insert new article
+                    articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
+                    msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
+                }
+
                 System.out.println(articleRecord);
-                String msg = "success";
-                        //DbConnector.insertNewArticle(articleRecord) ? "success" : "error";
+
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write(msg);
@@ -124,12 +137,12 @@ public class PersonalBlog extends Controller {
             return;
         }
 
-        /*Edit existing article*/
+        /*loading article edit area*/
         String articleToBeEdit = req.getParameter("editArticle");
         if (articleToBeEdit != null){
-            if (redirectTo("editArticle="+articleToBeEdit, "WEB-INF/_personal_blog_create.jsp", req, resp)) {
-                return;
-            }
+            req.setAttribute("articleId", articleToBeEdit);
+            req.getRequestDispatcher("WEB-INF/_personal_blog_create.jsp").forward(req,resp);
+            return;
         }
 
 

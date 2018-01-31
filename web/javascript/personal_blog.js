@@ -1,16 +1,24 @@
+"use strict";
+
+/**
+ * get the id of the entity of which a html element represents
+ */
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
-//helper function recursively show comment tree
-function showCascadingComments(commentArr, $p) {
-    // To exploit var hijacking, do not use arrow functions, just use for loop.
-    for (let commentNode of commentArr) {
-        if (!$.isArray(commentNode)) {
-            for (let cmtId in commentNode) {
+
+/**
+ * helper function recursively show comment tree
+ */
+const showCascadingComments = (commentTree, $parent) => {
+    // To exploit var hijacking, use plain for loop rather than map, reduce, filter...
+    for (let commentArr of commentTree) {
+        if (!$.isArray(commentArr)) {
+            for (let cmtId in commentArr) {
                 // get a value of json without pre-knowing its key
-                if (commentNode.hasOwnProperty(cmtId)) {
-                    const comment = commentNode[cmtId];
+                if (commentArr.hasOwnProperty(cmtId)) {
+                    const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
-                    const $dl = $("<dl class='comment'>").appendTo($p)
+                    const $dl = $("<dl class='comment'>").appendTo($parent)
                         .append($("<dt class='comment'>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
@@ -74,17 +82,17 @@ function showCascadingComments(commentArr, $p) {
                 }
             }
         } else {
-            //The first elem in commentNode will ALWAYS be a commentObj, so $pp will SURELY be initialized
-            showCascadingComments(commentNode, $pp);
+            //The first elem in commentArr will ALWAYS be a commentObj, so $pp will be initialized
+            showCascadingComments(commentArr, $pp);
         }
     }
-}
+};
 
 
 $(document).ready(function () {
 
     /**
-     * AJAX comments of article
+     * AJAX load comments of article
      */
     $(".show-comment-btn").on("click", function () {
         const articleID = entityId($(this));
@@ -118,7 +126,6 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
-                    console.log(loggedInUser);
                     commentActions();
                 }
             });
@@ -131,7 +138,7 @@ $(document).ready(function () {
     });
 
     /**
-     * AJAX article content
+     * AJAX load article content
      */
     $(".read-more-btn").on("click", function () {
         const articleID = entityId($(this));
@@ -163,7 +170,7 @@ $(document).ready(function () {
     });
 
     /**
-     * Ajax edit article area
+     * Ajax load edit article area
      */
     $(".edit-article-btn").on("click", function () {
 
@@ -174,25 +181,151 @@ $(document).ready(function () {
             url: 'personal-blog',
             data: {editArticle: articleId},
             cache: false,
-            beforeSend: function () {
+            beforeSend: () => {
             },
-            success: function (resp) {
+            success: (resp) => {
                 editArea.html(resp);
-                //TODO make the edit area has own props, works for each article
             },
             error: (msg, status) => {
-                console.log("error!!!");
+                console.log("error of loading edit area!!!");
                 console.log(status);
                 console.log(msg);
             },
             complete: () => {
+                createOrEditArticleHandler($(".accordion-bar"));
             }
         })
     });
 
+    /**
+     * Ajax create or edit article
+     */
+    $(".edit-article-area").on("change", ".publish-mode", function (e) {
+
+        const articleId = entityId($(this));
+
+        const form = articleActions(articleId);
+
+        if (form["publishMode"][0].value === "publish") {
+            form["datePicker"].hide();
+            form["publishBtn"].empty();
+            form["publishBtn"].append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+
+        } else if (form["publishMode"][0].value === "draft") {
+            form["datePicker"].show();
+            form["publishBtn"].empty();
+            form["publishBtn"].append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+            let date = new Date();
+            date = moment(date).format("YYYY-MM-DDTkk:mm");
+            form["datePicker"].val(date);
+        }
+    });
+
+    $(".edit-article-area").on("click", ".publish", function (e) {
+        e.preventDefault();
+        const articleId = entityId($(this));
+
+        const form = articleActions(articleId);
+
+        const uploadingImg = $("img.uploading-img");
+
+        if (form["title"].val()===""){
+            swal({
+                title: "Need a title!",
+                text: "Write something interesting:",
+                type: "input",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputPlaceholder: "Write title"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("You need to write a title!");
+                    return false;
+                }
+                swal("Nice!", "The title: " + inputValue, "success");
+                form["title"].val(inputValue);
+            });
+            return;
+        }
+
+        if (form["content"].val()==="" || form["content"].val()===undefined){
+            swal("Write something!", "You need have some content!", "warning");
+            return;
+        }
+
+        let availableDate = new Date();
+
+        if (form["publishMode"][0].value==="draft"){
+            if (form["datePicker"].val()==="" || form["datePicker"].val()===undefined){
+                alert("Available time is required.");
+                return;
+            }
+            let date = form["datePicker"].val();
+            date = moment(date).format("YYYY-MM-DDTkk:mm");
+            availableDate = new Date(date);
+        }
+
+        const article = {};
+        article["articleId"] = articleId>0?articleId:"0";
+        article["title"] = form["title"].val();
+        article["content"] = form["content"].val();
+        article["authorId"] = loggedInUser;
+        article["createTime"] = new Date().getTime();
+        article["validTime"] = availableDate.getTime();
+
+        console.log(article);
+
+        //Ajax post to servlet
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {newArticle: JSON.stringify(article)},
+            cache: false,
+            beforeSend: () => {
+                uploadingImg.show();
+            },
+
+            success: resp => {
+
+                form["title"].val("");
+                form["content"].val("");
+
+                let msg;
+                if (resp==="inserted"){
+                    msg = form["publishMode"][0].value==="publish" ? "Your article are published."
+                        : "Your article will be visible to public on " + availableDate.toLocaleString();
+                    swal("Congratulations ",msg,"success");
+                } else if (resp==="updated") {
+                    msg = form["publishMode"][0].value==="publish" ? "Your article are updated."
+                        : "Your updated article will be visible to public on " + availableDate.toLocaleString();
+                    swal("Congratulations ",msg,"success");
+                } else {
+                    msg = "Server error";
+                    swal("Oops ", msg, "danger")
+                }
+
+
+                console.log(resp);
+            },
+            error: (msg, status) => {
+                console.log("error!!");
+                console.log(status);
+                console.log(msg);
+                swal("Oops ", msg, "danger")
+            },
+            complete: () => {
+                uploadingImg.hide();
+            }
+
+        })
+    });
+
+
+
 
     /**
-     * Functions to handle comment buttons clicks
+     * Functions to handle replying, editing and deleting comments
      */
     function commentActions() {
         $(".reply-comment-btn").on("click", function (e) {
@@ -242,105 +375,42 @@ $(document).ready(function () {
 
 
 
-    /*Creating article functions*/
-    const datePicker = $("input.publish-time");
-    const publishBtn = $("button.publish");
-    const publishMode = $("select.publish-mode");
-    const uploadingImg = $("img.uploading-img");
 
-    publishMode.on("change", function () {
-        if (this.value === "publish") {
-            datePicker.hide();
-            publishBtn.empty();
-            publishBtn.append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+    /**
+     * Functions to handle creating and editing articles
+     */
+    const articleActions = (id) => {
+        console.log(id + " is working on?");
 
-        } else if (this.value === "draft") {
-            datePicker.show();
-            publishBtn.empty();
-            publishBtn.append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+        const datePicker = $("#publish-time-"+id);
+        const publishBtn = $("#publish-"+id);
+        const publishMode = $("#publish-mode-"+id);
+        const title = $("#input-article-title-"+id);
+        const content = $("#input-article-content-"+id);
+
+        //WYSIWYG
+        title.attr("value", $("#article-title-"+id).text());    //don't val(), it will bind the value and wont change later
+        content.text($("#article-content-"+id).text());
+
+        return {
+            "datePicker" : datePicker,
+            "publishBtn" : publishBtn,
+            "publishMode" : publishMode,
+            "title" : title,
+            "content" : content
         }
-    });
+    };
 
-    let availableDate = new Date();
-    let date = new Date();
-    date = moment(date).format("YYYY-MM-DDTkk:mm");
-    datePicker.val(date);
 
-    publishBtn.on("click", function (e) {
-        e.preventDefault();
-        const title = $("input.title");
-        const content = $("textarea.content");
-        if (title.val()===""){
-            swal({
-                title: "Need a title!",
-                text: "Write something interesting:",
-                type: "input",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                inputPlaceholder: "Write title"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError("You need to write a title!");
-                    return false;
-                }
-                return title.val(inputValue);
-            });
-            return;
-        }
 
-        if (content.val()===""){
-            swal("Write something!", "You need to !", "warning");
-            return;
-        }
-
-        if (publishMode[0].value==="draft"){
-            if (datePicker.val()===""){
-                alert("Available time is required.");
-                return;
-            }
-            date = datePicker.val();
-            date = moment(date).format("YYYY-MM-DDTkk:mm");
-            availableDate = new Date(date);
-        }
-
-        const article = {};
-        article["title"] = title.val();
-        article["content"] = content.val();
-        article["authorId"] = entityId($(this));
-        article["createTime"] = new Date().getTime();
-        article["validTime"] = availableDate.getTime();
-
-        //Ajax post to servlet
-        $.ajax({
-            type: 'POST',
-            url: 'personal-blog',
-            data: {newArticle: JSON.stringify(article)},
-            cache: false,
-            beforeSend: () => {
-                uploadingImg.show();
-            },
-
-            success: resp => {
-                uploadingImg.hide();
-                $("input.title").val("");
-                $("textarea.content").val("");
-                const msg = publishMode[0].value==="publish" ? "Your article are published."
-                    : "Your article will be visible to public on " + availableDate.toLocaleString();
-                swal("Congratulations ",msg,"success");
-                console.log(resp);
-            },
-            error: (msg, status) => {
-                console.log("error!!");
-                console.log(status);
-                console.log(msg);
-            },
-            complete: () => {
-                console.log("loaded");
-            }
-
-        })
-    });
-
+    /**
+     * let article actions 'focus on' creating new article, or editing one existing article
+     */
+    const createOrEditArticleHandler = (trigger) => {trigger.on("click", function () {
+        const articleId = entityId($(this));
+        $(".panel-collapse").collapse('hide');
+        return articleActions(articleId);
+    })};
+    createOrEditArticleHandler($(".accordion-bar"));
 });
 
