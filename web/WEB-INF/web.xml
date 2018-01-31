@@ -97,4 +97,14 @@
         <url-pattern>/File-Upload</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>controller.Search</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -5,7 +5,6 @@
  */
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
-
 /**
  * helper function recursively show comment tree
  */
@@ -85,6 +84,31 @@ const showCascadingComments = (commentTree, $parent) => {
             //The first elem in commentArr will ALWAYS be a commentObj, so $dl will be initialized
             showCascadingComments(commentArr, $dl);
         }
+    }
+};
+
+/**
+ * Functions handle creating and editing articles
+ */
+const articleActions = (id) => {
+    console.log(id + " is working on?");
+
+    const datePicker = $("#publish-time-" + id);
+    const publishBtn = $("#publish-" + id);
+    const publishMode = $("#publish-mode-" + id);
+    const title = $("#input-article-title-" + id);
+    const content = $("#input-article-content-" + id);
+
+    //WYSIWYG
+    title.attr("value", $("#article-title-" + id).text());    //don't val(), it will bind the value and wont change later
+    content.text($("#article-content-" + id).text());
+
+    return {
+        "datePicker": datePicker,
+        "publishBtn": publishBtn,
+        "publishMode": publishMode,
+        "title": title,
+        "content": content
     }
 };
 
@@ -196,6 +220,7 @@ $(document).ready(function () {
             }
         })
     });
+
 
     /**
      * Ajax create or edit article
@@ -332,9 +357,9 @@ $(document).ready(function () {
                 confirmButtonText: "Yes, delete it!",
                 cancelButtonText: "No, cancel!",
                 closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function (isConfirm) {
+                closeOnCancel: false,
+                showLoaderOnConfirm: true
+        }, function (isConfirm) {
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
@@ -363,7 +388,7 @@ $(document).ready(function () {
 
 
     /**
-     * Ajax create or edit comment
+     * Functions handle replying, editing and deleting comments
      */
     $(".comment-area").on("click", ".reply-submit", function (e) {
         e.preventDefault();
@@ -381,6 +406,7 @@ $(document).ready(function () {
             },
             cache: false,
             beforeSend: function () {
+                $(e.target).val("posting...");
             },
             success: function (resp) {
                 swal("Congrats!", "Your comment is posted.", "success");
@@ -391,7 +417,7 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(".close").click();
+                $(this).parentNode.slideUp();
             }
 
         })
@@ -399,10 +425,7 @@ $(document).ready(function () {
 
     $(".comment-area").on("click", ".edit-submit", function (e) {
         e.preventDefault();
-        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(e.target));
-
-        console.log($("#edit-text-" + cmtId).val());
 
         $.ajax({
             type: 'POST',
@@ -413,8 +436,9 @@ $(document).ready(function () {
             },
             cache: false,
             beforeSend: function () {
+                $(e.target).val("posting...");
             },
-            success: function (resp) {
+            success: function () {
                 swal("Congrats!", "Your comment is updated.", "success");
             },
             error: (msg, status) => {
@@ -423,100 +447,69 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(".close").click();
+                $(this).parentNode.slideUp();
             }
 
         })
     });
 
+    $(".comment-area").on("click", ".reply-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
+        const replyForm = $("#popup-reply-" + cmtId);
+        replyForm.slideDown();
+        $(".close").on("click", function () {
+            replyForm.slideUp();
+        })
+    });
 
-    /**
-     * Functions to handle replying, editing and deleting comments
-     */
-    function commentActions() {
-        $(".reply-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
-            const replyForm = $("#popup-reply-" + cmtId);
-            replyForm.slideDown();
-            $(".close").on("click", function () {
-                replyForm.slideUp();
-            })
-        });
+    $(".comment-area").on("click", ".edit-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
+        const editForm = $("#popup-edit-" + cmtId);
+        editForm.slideDown();
+        $(".close").on("click", function () {
+            editForm.slideUp();
+        })
+    });
 
-        $(".edit-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
-            const editForm = $("#popup-edit-" + cmtId);
-            editForm.slideDown();
-            $(".close").on("click", function () {
-                editForm.slideUp();
-            })
-        });
+    $(".comment-area").on("click", ".delete-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
 
-        $(".delete-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
+        swal({
+                title: "Are you sure?",
+                text: "Your will not be able to recover this comment!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            },
+            function () {
 
-            swal({
-                    title: "Are you sure?",
-                    text: "Your will not be able to recover this comment!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'personal-blog',
-                        data: {deleteComment: cmtId},
-                        cache: false,
-                        beforeSend: () => {
-                        },
-                        success: (resp) => {
-                            swal("Deleted!", "This comment has been deleted.", "success");
-                        },
-                        error: (msg, status) => {
-                            console.log("error of deleting comment!!!");
-                            console.log(status);
-                            console.log(msg);
-                        },
-                        complete: () => {
-                        }
-                    });
+                $.ajax({
+                    type: 'POST',
+                    url: 'personal-blog',
+                    data: {deleteComment: cmtId},
+                    cache: false,
+                    beforeSend: () => {
+                    },
+                    success: () => {
+                        swal("Deleted!", "This comment has been deleted.", "success");
+                    },
+                    error: (msg, status) => {
+                        console.log("error of deleting comment!!!");
+                        console.log(status);
+                        console.log(msg);
+                    },
+                    complete: () => {
+                    }
                 });
+            });
 
-        });
-
-    }
-
-
-    /**
-     * Functions to handle creating and editing articles
-     */
-    const articleActions = (id) => {
-        console.log(id + " is working on?");
-
-        const datePicker = $("#publish-time-" + id);
-        const publishBtn = $("#publish-" + id);
-        const publishMode = $("#publish-mode-" + id);
-        const title = $("#input-article-title-" + id);
-        const content = $("#input-article-content-" + id);
-
-        //WYSIWYG
-        title.attr("value", $("#article-title-" + id).text());    //don't val(), it will bind the value and wont change later
-        content.text($("#article-content-" + id).text());
-
-        return {
-            "datePicker": datePicker,
-            "publishBtn": publishBtn,
-            "publishMode": publishMode,
-            "title": title,
-            "content": content
-        }
-    };
+    });
 
 
     /**
