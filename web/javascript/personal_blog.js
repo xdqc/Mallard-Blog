@@ -25,7 +25,7 @@ const showCascadingComments = (commentTree, $parent) => {
                 if (commentArr.hasOwnProperty(cmtId)) {
                     const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
-                    var $dl = $("<dl class='comment'>").appendTo($parent)
+                    var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
                         .append($("<dt class='comment'>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
@@ -35,7 +35,7 @@ const showCascadingComments = (commentTree, $parent) => {
                         //.attr("href", "#popup-reply-" + cmtId)
                         .text(" reply");
 
-                    const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
+                    const replyForm = $("<form class='popup status-upload'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
                             .attr("placeholder", "Reply to " + comment["commenter"]))
@@ -130,6 +130,16 @@ $(document).ready(function () {
      --  ██║  ██║██║  ██║   ██║   ██║╚██████╗███████╗███████╗
      --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
+
+    /*let article actions 'focus on' particular article (or none for creating new)*/
+    const articleActionsHandler = (trigger) => {
+        trigger.on("click", function () {
+            const articleId = entityId($(this));
+            $(".panel-collapse").collapse('hide');
+            return articleActions(articleId);
+        })
+    };
+    articleActionsHandler($(".accordion-bar"));
     /**
      * AJAX load article content
      */
@@ -350,15 +360,6 @@ $(document).ready(function () {
 
     });
 
-    /*let article actions 'focus on' particular article (or none for creating new)*/
-    const articleActionsHandler = (trigger) => {
-        trigger.on("click", function () {
-            const articleId = entityId($(this));
-            $(".panel-collapse").collapse('hide');
-            return articleActions(articleId);
-        })
-    };
-    articleActionsHandler($(".accordion-bar"));
 
 
     /**
@@ -392,7 +393,7 @@ $(document).ready(function () {
                 },
                 success: function (resp) {
                     loadingImg.css("display", "none");
-                    commentArea.empty();
+                    // commentArea.empty();
                     resp.forEach(comments => showCascadingComments(comments, commentArea));
                     commentArea.slideDown();
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
@@ -444,7 +445,6 @@ $(document).ready(function () {
             complete: () => {
                 $(this).parentNode.slideUp();
             }
-
         })
     });
 

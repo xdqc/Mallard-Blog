@@ -6,7 +6,8 @@
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
             <div class="panel-heading">
-                <h4 class="panel-title" id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
+                <h4 class="panel-title"
+                    id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
 
             </div>
             <div class="panel-body">
@@ -17,7 +18,8 @@
                 <div class="panel-text">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
-                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span class="fa fa-thumbs-up"></span></span>
+                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span
+                            class="fa fa-thumbs-up"></span></span>
                 </div>
 
                 <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
@@ -51,8 +53,8 @@
                         <span class="edit-article-btn btn btn-success"
                               id="edit-article-btn-${blog.getArticle().getId()}">
                             <span class="fa fa-pencil"></span> Edit</span>
-                        <span class="delete-article-btn btn btn-danger"
-                            id="delete-article-btn-${blog.getArticle().getId()}">
+                    <span class="delete-article-btn btn btn-danger"
+                          id="delete-article-btn-${blog.getArticle().getId()}">
                             <span class="fa fa-trash"></span> Delete</span>
                 </c:if>
 
@@ -71,10 +73,48 @@
                     </button>
                 </c:if>
 
+                <c:if test="${not empty sessionScope.get('loggedInUser')}">
+
+
+                    <div class="container leave-comment" id="leave-comment-${blog.getArticle().getId()}">
+                        <div class="row">
+                            <h4>Leave a comment</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="widget-area no-padding blank">
+                                    <div class="status-upload">
+                                        <form>
+                                            <textarea
+                                                    placeholder="What are you thinking about this article?"></textarea>
+                                            <ul class="list-unstyled list-inline">
+                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                                       data-original-title="Audio"><i class="fa fa-music"></i></a></li>
+                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                                       data-original-title="Video"><i
+                                                        class="fa fa-video-camera"></i></a></li>
+                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                                       data-original-title="Sound Record"><i
+                                                        class="fa fa-microphone"></i></a></li>
+                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                                       data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
+                                            </ul>
+                                            <button type="submit" class="btn btn-success green"><i
+                                                    class="fa fa-share"></i> Share
+                                            </button>
+                                        </form>
+                                    </div><!-- Status Upload  -->
+                                </div><!-- Widget Area -->
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
+
                 <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
                      width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
-                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default comment-area"
+                <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
                      style="display: none">
+
                 </div>
             </div>
         </article>
@@ -82,3 +122,8 @@
     </c:if>
 </c:forEach>
 
+<style>
+
+
+
+</style>
