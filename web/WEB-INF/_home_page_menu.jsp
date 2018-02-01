@@ -4,7 +4,7 @@
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <li><img src="/pictures/Logo.png" alt="Logo" width="120"  height="50" style="float: left; margin-top: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li><img src="/pictures/Logo.png" alt="Logo" width="80"  height="50" style="float: left; margin-top: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                                 data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="float: right">
                             <span class="sr-only">Toggle navigation</span>

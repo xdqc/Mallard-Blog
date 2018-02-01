@@ -25,7 +25,8 @@ public class HomePage extends Controller {
         UserRecord user = getLoggedUserFromSession(req);
 
         //get all articles sort by like number
-        List<Blog> blogList = DbConnector.getHotBlogsSort();
+        //List<Blog> blogList = DbConnector.getHotBlogsSort();
+        List<Blog> blogList = null;
         req.setAttribute("blogs", blogList);
 
 
@@ -36,21 +37,7 @@ public class HomePage extends Controller {
             req.getRequestDispatcher("/home_page.jsp").forward(req, resp);
             return;
         }
-        //set the user information
-        Date dob = user.getDob();
-        long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
-        long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
 
-        req.setAttribute("post_number", DbConnector.getPostNumber(String.valueOf(user.getId())));
-        req.setAttribute("follower_number", DbConnector.getFollowerNumber(String.valueOf(user.getId())));
-        req.setAttribute("current_username", user.getUserName());
-        req.setAttribute("fname", user.getFName());
-        req.setAttribute("lname", user.getLName());
-        req.setAttribute("email", user.getEmail());
-        req.setAttribute("gender", user.getGender());
-        req.setAttribute("country", user.getCountry());
-        req.setAttribute("description", user.getDescription());
-        req.setAttribute("age", age);
 
         // user will not edit article on homepage
         req.setAttribute("browsingUser", null);
@@ -59,6 +46,29 @@ public class HomePage extends Controller {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter("loadHomepageProfile")!=null){
+            //set the user information
+            UserRecord user = getLoggedUserFromSession(req);
+            Date dob = user.getDob();
+            long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
+            long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
+
+            req.setAttribute("post_number", DbConnector.getPostNumber(String.valueOf(user.getId())));
+            req.setAttribute("follower_number", DbConnector.getFollowerNumber(String.valueOf(user.getId())));
+            req.setAttribute("current_username", user.getUserName());
+            req.setAttribute("fname", user.getFName());
+            req.setAttribute("lname", user.getLName());
+            req.setAttribute("email", user.getEmail());
+            req.setAttribute("gender", user.getGender());
+            req.setAttribute("country", user.getCountry());
+            req.setAttribute("description", user.getDescription());
+            req.setAttribute("age", age);
+
+            req.getRequestDispatcher("WEB-INF/_home_page_profile.jsp").forward(req, resp);
+            cleanAllParameters(req);
+            return;
+        }
+
         doGet(req, resp);
     }
 

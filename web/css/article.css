@@ -1,28 +1,52 @@
+
+
 dl.comment {
-    padding: 1em .1em 0 0.5em;
+    padding: 1em .1em 0 1em;
     margin-bottom: 10px;
-    border: 1px dotted steelblue;
-    border-radius: 5px;
-    background-color: aliceblue;
+    border: 2px dashed seashell;
+    border-radius: 10px;
+    background-color: #F4F4F9;
 }
 
 dd.comment {
+    background-color: #F7F7F4;
+    border-radius: 5px;
     position: relative;
-    /*     border: 1px dashed lightsteelblue; */
-    padding: 0 0 0 10px;
-    margin: 0 0 5px -5px;
+    padding: 10px 0 10px 20px;
+    margin: 5px 5px 5px 0;
+    
+}
+
+@media (max-width: 991px){
+    div.comment-action-btn{
+        position: relative;
+        left: 60%;
+        width: 40%;
+    }
+}
+@media (min-width: 992px){
+    div.comment-action-btn{
+        position: relative;
+        left: 80%;
+        width: 20%;
+    }
 }
 
 a.reply-comment-btn {
-    padding-left: 2em;
+    padding-left: 1em;
 }
 
 a.edit-comment-btn {
-    padding-left: 2em;
+    padding-left: 1em;
 }
 
 a.delete-comment-btn {
-    padding-left: 2em;
+    padding-left: 1em;
+}
+
+a.disabled {
+    color: gray;
+    pointer-events: none;
 }
 
 .comment-area {
@@ -31,7 +55,7 @@ a.delete-comment-btn {
 }
 
 .reply-text {
-    margin: 0 20px 10px 0;
+    margin: 10px 20px 10px 0;
 }
 
 .edit-text {
@@ -39,9 +63,9 @@ a.delete-comment-btn {
 }
 
 .popup {
-    margin: -15px 0 20px 0;
+    margin: -35px 0 20px 0;
     padding: 10px;
-    background: lightgrey;
+    background: none repeat scroll 0 0 #f5f5f5;
     border-radius: 5px;
     width: 80%;
     position: relative;
@@ -51,8 +75,8 @@ a.delete-comment-btn {
 
 .popup .close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 15px;
     transition: all 200ms;
     font-size: 30px;
     font-weight: bold;
@@ -71,6 +95,100 @@ img.uploading-img {
     opacity: 0.618;
     display: none;
 }
+div.loading-comment-img {
+    display: none;
+    padding: 10px 0px 0px 20px;
+    position: relative;
+    right: 500px;
+    top: 200px;
+}
 button.publish{
     width: 100px;
+}
+
+
+.widget-area.blank {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    box-shadow: none;
+}
+
+.widget-area {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+    float: left;
+    margin-top: 10px;
+    padding: 20px 20px;
+    position: relative;
+    min-width: 90%;
+}
+.status-upload {
+    background: none repeat scroll 0 0 #f5f5f5;
+    border-radius: 4px;
+    float: left;
+    width: 100%;
+}
+.status-upload form {
+    float: left;
+    width: 100%;
+}
+.status-upload form textarea {
+    background: none repeat scroll 0 0 #fff;
+    border: medium none;
+    border-radius: 4px 4px 0 0;
+    color: #777777;
+    float: left;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    padding: 20px;
+    width: 100%;
+    resize:vertical;
+    outline:none;
+    border: 1px solid #F2F2F2;
+}
+
+.status-upload ul {
+    float: left;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0 0 0 15px;
+    width: auto;
+}
+.status-upload ul > li {
+    float: left;
+}
+.status-upload ul > li > a {
+    border-radius: 4px;
+    color: #777777;
+    float: left;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin: 10px 0 10px 10px;
+    text-align: center;
+    transition: all 0.4s ease 0s;
+    width: 30px;
+    cursor: pointer;
+}
+.status-upload ul > li > a:hover {
+    background: none repeat scroll 0 0 #606060;
+    color: #fff;
+}
+.status-upload form button {
+    border: medium none;
+    border-radius: 4px;
+    color: #fff;
+    float: right;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    margin-right: 9px;
+    margin-top: 9px;
+    padding: 6px 15px;
+}
+.dropdown > a > span.green:before {
+    border-left-color: #2dcb73;
+}
+.status-upload form button > i {
+    margin-right: 7px;
 }

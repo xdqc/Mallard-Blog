@@ -41,7 +41,7 @@
 
             <%--logged user create new article in his own page--%>
             <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
-                <div class="edit-article-area" id="edit-article-area-">
+                <div class="edit-article-area article-panel" id="edit-article-area-">
                     <%@include file="WEB-INF/_personal_blog_create.jsp"%>
                 </div>
             </c:if>
@@ -49,6 +49,8 @@
             <c:if test="${blogs.size()!=0}">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
             </c:if>
+
+
         </div>
     </div>
 

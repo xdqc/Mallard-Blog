@@ -6,18 +6,27 @@
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
             <div class="panel-heading">
-                <h4 class="panel-title" id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
+                <h4 class="panel-title"
+                    id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
 
             </div>
             <div class="panel-body">
 
-                <div class="panel-text">
+                <div class="panel-text article-author">
                     <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
                 </div>
-                <div class="panel-text">
+                <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
-                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span class="fa fa-thumbs-up"></span></span>
+                    <c:if test="${not empty blog.getArticle().getEditTime()}">
+                        <span class="h5 text-muted"> Edited on <span class="fa fa-clock-o"></span>
+                                ${blog.getArticle().getEditTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
+                    </c:if>
+
+                </div>
+                <div class="panel-text article-likes">
+                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
+                                class="fa fa-thumbs-up"></span></span>
                 </div>
 
                 <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
@@ -51,29 +60,24 @@
                         <span class="edit-article-btn btn btn-success"
                               id="edit-article-btn-${blog.getArticle().getId()}">
                             <span class="fa fa-pencil"></span> Edit</span>
-                        <span class="delete-article-btn btn btn-danger"
-                            id="delete-article-btn-${blog.getArticle().getId()}">
+                    <span class="delete-article-btn btn btn-danger"
+                          id="delete-article-btn-${blog.getArticle().getId()}">
                             <span class="fa fa-trash"></span> Delete</span>
                 </c:if>
 
-                <c:if test="${blog.getNumComments() > 0}">
-                    <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                            class="btn btn-info show-comment-btn">
-                        <span class="badge">${blog.getNumComments()}</span>
-                        Comments
-                        <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
-                    </button>
-                </c:if>
-                <c:if test="${blog.getNumComments() == 0}">
-                    <button type="button" id="show-comment-btn-${blog.getArticle().getId()}"
-                            class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span>
-                        Comments
-                    </button>
+                    <%--<c:if test="${blog.getNumComments() > 0}">--%>
+                <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
+                        class="btn btn-info show-comment-btn">
+                    <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
+                    Comments
+                    <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
+                </button>
+
+                <c:if test="${not empty sessionScope.get('loggedInUser')}">
+                    <%@include file="_personal_blog_leave_comment.jsp"%>
                 </c:if>
 
-                <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
-                     width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
-                <div id="comment-area-${blog.getArticle().getId()}" class="panel panel-default comment-area"
+                <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
                      style="display: none">
                 </div>
             </div>
@@ -81,4 +85,3 @@
         <br>
     </c:if>
 </c:forEach>
-
