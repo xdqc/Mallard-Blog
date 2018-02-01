@@ -49,6 +49,7 @@ public class PersonalBlog extends Controller {
         }
 
 
+        /*request for user profile*/
         Date dob = user.getDob();
         long diff = Calendar.getInstance().getTime().getTime() - dob.getTime();
         long age = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
@@ -61,6 +62,8 @@ public class PersonalBlog extends Controller {
         req.setAttribute("description", user.getDescription());
         req.setAttribute("age", age);
         req.setAttribute("current_username", user.getUserName());
+        req.setAttribute("user", user);
+
 
         userId = String.valueOf(user.getId());
 
@@ -76,6 +79,25 @@ public class PersonalBlog extends Controller {
 
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        /*load more articles*/
+        if (req.getParameter("loadMoreArticles")!=null){
+            int loadedNum = Integer.parseInt(req.getParameter("loadMoreArticles"));
+            String loadAuthorId = req.getParameter("loadArticleAuthoredBy");
+
+            //Query only valid article by valid user
+            Blog loadBlog = DbConnector.getNextHotBlog(loadedNum);
+            if (loadBlog != null){
+                req.setAttribute("blog", loadBlog);
+                req.getRequestDispatcher("WEB-INF/_personal_blog_single_article.jsp").forward(req,resp);
+            } else {
+                resp.setContentType("text/html");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write("<h3>no more articles</h3>");
+            }
+            cleanAllParameters(req);
+            return;
+        }
 
         /*Load comments tree*/
         if (loadCommentTreeController(req, resp)) return;

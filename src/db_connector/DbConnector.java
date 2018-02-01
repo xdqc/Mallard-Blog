@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -332,6 +333,20 @@ public class DbConnector {
         return blogs;
     }
 
+
+    /**
+     * For ajax load next article of user
+     */
+    public static Blog getNextBlogsByUserId(int loadedNum, String loadAuthorId) {
+        List<Blog> blogs = getBlogsByUserId(loadAuthorId);
+        if (blogs.size()<= loadedNum){
+            return null;
+        } else {
+            return blogs.subList(loadedNum, blogs.size()).get(0);
+        }
+    }
+
+
     /**
      * Get an article's comments with commenter
      *
@@ -387,6 +402,9 @@ public class DbConnector {
                     .select(COMMENT.fields())
                     .from((USER).join(ARTICLE).onKey())
                     .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                    .where(USER.ISVALID.eq((byte)1))
+//                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
+                    .and(ARTICLE.VALID_TIME.lt(new Timestamp(System.currentTimeMillis())))
                     .orderBy(ARTICLE.LIKE_NUM.desc(),
                             COMMENT.CREATE_TIME.asc())
                     .fetch(
@@ -404,6 +422,20 @@ public class DbConnector {
             e.printStackTrace();
         }
         return blogs;
+    }
+
+    /**
+     * For ajax load next hot article on homepage
+     * @param loadedNum
+     * @return
+     */
+    public static Blog getNextHotBlog(int loadedNum) {
+        List<Blog> blogs = getHotBlogsSort();
+        if (blogs.size()<= loadedNum){
+            return null;
+        } else {
+            return blogs.subList(loadedNum, blogs.size()).get(0);
+        }
     }
 
     /*Helper function*/
@@ -653,6 +685,7 @@ public class DbConnector {
         }
         return records;
     }
+
 
 
 }

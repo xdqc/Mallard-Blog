@@ -1,5 +1,5 @@
 <%--personal information panel--%>
-<div class="panel" data-spy="affix" data-offset-top="200">
+<div class="panel user-panel" id="user-panel-${user.getId()}" data-spy="affix" data-offset-top="200">
     <img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300" alt="panel image cap">
     <div class="panel-body">
         <h5 class="panel-title">${fname} ${lname}

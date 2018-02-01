@@ -32,6 +32,13 @@
             </div>
         </c:if>
 
-</div>
+        <div id="more-article-area">
+            <%--For ajax loading articles--%>
+        </div>
+        <button class="btn btn-info" id="load-more-articles">Load more articles</button>
+
+        <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
+             width="45" style="display: none;" aria-hidden="true">
+    </div>
 </body>
 </html>

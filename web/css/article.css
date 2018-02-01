@@ -1,5 +1,5 @@
 dl.comment {
-    padding: 0em .1em 0 0.5em;
+    padding: 1em .1em 0 1em;
     margin-bottom: 10px;
     border: 1px dotted steelblue;
     border-radius: 5px;
@@ -16,17 +16,16 @@ dd.comment {
     div.comment-action-btn{
         position: absolute;
         left: 60%;
-        width: 100%;
+        width: 40%;
     }
 }
 @media (min-width: 992px){
     div.comment-action-btn{
         position: absolute;
         left: 80%;
-        width: 100%;
+        width: 20%;
     }
 }
-
 
 a.reply-comment-btn {
     padding-left: 1em;
@@ -91,6 +90,13 @@ img.uploading-img {
     opacity: 0.618;
     display: none;
 }
+div.loading-comment-img {
+    display: none;
+    padding: 10px 0px 0px 20px;
+    position: relative;
+    right: 500px;
+    top: 200px;
+}
 button.publish{
     width: 100px;
 }
@@ -100,9 +106,7 @@ button.publish{
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     box-shadow: none;
 }
-body .no-padding {
-    padding: 0;
-}
+
 .widget-area {
     background-color: #fff;
     border-radius: 4px;

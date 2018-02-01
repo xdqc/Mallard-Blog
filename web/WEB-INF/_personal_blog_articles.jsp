@@ -12,14 +12,21 @@
             </div>
             <div class="panel-body">
 
-                <div class="panel-text">
+                <div class="panel-text article-author">
                     <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
                 </div>
-                <div class="panel-text">
+                <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
-                    <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span
-                            class="fa fa-thumbs-up"></span></span>
+                    <c:if test="${not empty blog.getArticle().getEditTime()}">
+                        <span class="h5 text-muted"> Edited on <span class="fa fa-clock-o"></span>
+                                ${blog.getArticle().getEditTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
+                    </c:if>
+
+                </div>
+                <div class="panel-text article-likes">
+                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
+                                class="fa fa-thumbs-up"></span></span>
                 </div>
 
                 <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
@@ -58,59 +65,44 @@
                             <span class="fa fa-trash"></span> Delete</span>
                 </c:if>
 
-                <%--<c:if test="${blog.getNumComments() > 0}">--%>
-                    <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                            class="btn btn-info show-comment-btn">
-                        <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
-                        Comments
-                        <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
-                    </button>
-                <%--</c:if>--%>
-                <%--<c:if test="${blog.getNumComments() == 0}">--%>
-                    <%--<button type="button" id="show-comment-btn-${blog.getArticle().getId()}"--%>
-                            <%--class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span>--%>
-                        <%--Comments--%>
-                    <%--</button>--%>
-                <%--</c:if>--%>
+                    <%--<c:if test="${blog.getNumComments() > 0}">--%>
+                <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
+                        class="btn btn-info show-comment-btn">
+                    <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
+                    Comments
+                    <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
+                </button>
 
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
-                    <div class="container leave-comment" id="leave-comment-${blog.getArticle().getId()}">
-                        <div class="row">
-                            <h4>Leave a comment</h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="widget-area no-padding blank">
-                                    <div class="status-upload">
-                                        <form>
-                                            <textarea id="leave-comment-text-${blog.getArticle().getId()}"
-                                                      placeholder="What are you thinking about this article?"></textarea>
-                                            <ul class="list-unstyled list-inline">
-                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
-                                                       data-original-title="Audio"><i class="fa fa-music"></i></a></li>
-                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
-                                                       data-original-title="Video"><i
-                                                        class="fa fa-video-camera"></i></a></li>
-                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
-                                                       data-original-title="Sound Record"><i
-                                                        class="fa fa-microphone"></i></a></li>
-                                                <li><a title="" data-toggle="tooltip" data-placement="bottom"
-                                                       data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
-                                            </ul>
-                                            <button type="submit" class="btn btn-success leave-comment-submit"
-                                                    id="leave-comment-submit-${blog.getArticle().getId()}"><i
-                                                    class="fa fa-share"></i> Comment
-                                            </button>
-                                        </form>
-                                    </div><!-- Status Upload  -->
-                                </div><!-- Widget Area -->
-                            </div>
-                        </div>
+                    <div class="leave-comment" id="leave-comment-${blog.getArticle().getId()}">
+                        <h4>Leave a comment</h4>
+                        <div class="widget-area no-padding blank">
+                            <div class="status-upload">
+                                <form>
+                                    <textarea id="leave-comment-text-${blog.getArticle().getId()}"
+                                              placeholder="What are you thinking about this article?"></textarea>
+                                    <ul class="list-unstyled list-inline">
+                                        <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Audio"><i class="fa fa-music"></i></a></li>
+                                        <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Video"><i
+                                                class="fa fa-video-camera"></i></a></li>
+                                        <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Sound Record"><i
+                                                class="fa fa-microphone"></i></a></li>
+                                        <li><a title="" data-toggle="tooltip" data-placement="bottom"
+                                               data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
+                                    </ul>
+                                    <button type="submit" class="btn btn-success leave-comment-submit"
+                                            id="leave-comment-submit-${blog.getArticle().getId()}"><i
+                                            class="fa fa-share"></i> Comment
+                                    </button>
+                                </form>
+                            </div><!-- Status Upload  -->
+                        </div><!-- Widget Area -->
                     </div>
                 </c:if>
 
-                <img id="load-comment-img-${blog.getArticle().getId()}" src="pictures/loading.gif" alt="loading..."
-                     width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
                 <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
                      style="display: none">
                 </div>
@@ -119,9 +111,3 @@
         <br>
     </c:if>
 </c:forEach>
-
-<style>
-
-
-
-</style>

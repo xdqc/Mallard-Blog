@@ -44,6 +44,8 @@
             <c:if test="${blogs.size()!=0}">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
             </c:if>
+
+
         </div>
     </div>
 
