@@ -11,8 +11,6 @@
 <html>
 <head>
     <%@include file="WEB-INF/_head.jsp" %>
-    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
-    <script type="text/javascript" src="javascript/personal_blog.js"></script>
     <title>${requestScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
 <style>

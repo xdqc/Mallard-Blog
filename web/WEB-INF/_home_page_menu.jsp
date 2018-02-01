@@ -51,9 +51,9 @@
                 <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
                     Us</a></li>
             </ul>
-            <form class="navbar-form navbar-right">
+            <form class="navbar-form navbar-right" action="search" method="get">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search" name="search">
                 </div>
                 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-zoom-in"
                                                                     aria-hidden="true"></span></button>
