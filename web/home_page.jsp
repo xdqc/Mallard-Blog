@@ -22,7 +22,9 @@
         <%--Logged User information panel--%>
         <c:if test="${not empty sessionScope.get('loggedInUser')}">
             <div class="col-sm-12 col-md-3 col-lg-3">
-                <%@ include file="WEB-INF/_home_page_profile.jsp" %>
+                <button id="load-homepage-user-profile" style="display: none"></button>
+                <div id="profile-area"></div>
+                <%--<%@ include file="WEB-INF/_home_page_profile.jsp" %>--%>
             </div>
             <%--list of blogs--%>
             <div class="col-sm-12 col-md-9 col-lg-9">
@@ -34,9 +36,6 @@
 
                 <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
                      width="45" style="display: none;" aria-hidden="true">
-            </div>
-            <div class="col-sm-12">
-                <%@ include file="WEB-INF/_foot.jsp" %>
             </div>
         </c:if>
 
@@ -58,12 +57,11 @@
             </div>
         </c:if>
 
-        <div class="col-sm-12">
-            <%@ include file="WEB-INF/_foot.jsp" %>
-        </div>
     </div>
+</div>
 
-
+<div class="col-sm-12">
+    <%@ include file="WEB-INF/_foot.jsp" %>
 </div>
 </body>
 </html>

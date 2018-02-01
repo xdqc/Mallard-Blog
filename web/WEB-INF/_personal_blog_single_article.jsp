@@ -48,7 +48,7 @@
 
         <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                 class="btn btn-info show-comment-btn">
-            <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
+            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumComments()}</span>
             Comments
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>
