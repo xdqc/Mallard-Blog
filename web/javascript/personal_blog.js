@@ -27,7 +27,10 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                     const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
                     var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
-                        .append($("<dt class='comment'>").html(comment["commenter"] + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                        .append($("<dt class='comment'>")
+                            .append($("<a>").attr("href", "personal-blog?userId="+comment["commenterId"])
+                                .html(comment["commenter"]))
+                            .append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"))
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
 
@@ -156,7 +159,7 @@ $(document).ready(function () {
             beforeSend: () => {
                 loadedArticles.num++;
                 //$(this).attr('disabled','disabled');
-                $("#load-article-img").show();
+                $("#load-article-img").css("display","block");
             },
             success: (resp) => {
                 let html = articleArea.html();
@@ -170,7 +173,7 @@ $(document).ready(function () {
             },
             complete: () => {
                 //$(this).removeAttr('disabled');
-                $("#load-article-img").hide();
+                $("#load-article-img").css("display", "none");
                 articleActions();
             }
         })
@@ -204,7 +207,7 @@ $(document).ready(function () {
 
             success: resp => {
                 loadingImg.hide();
-                articleContent.text(resp[articleID]);
+                articleContent.html(resp[articleID]);
             },
             error: (msg, status) => {
                 console.log("error!!");
@@ -316,7 +319,7 @@ $(document).ready(function () {
             const article = {};
             article["articleId"] = articleId > 0 ? articleId : "0";
             article["title"] = form["title"].val();
-            article["content"] = form["content"].val();
+            article["content"] = form["content"].val().replace(/\r?\n/g, '<br />');
             article["authorId"] = loggedInUser;
             article["createTime"] = new Date().getTime();
             article["validTime"] = availableDate.getTime();

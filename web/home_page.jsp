@@ -33,8 +33,6 @@
                         <%--For ajax loading articles--%>
                 </div>
 
-                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
-                     width="45" style="display: none;" aria-hidden="true">
             </div>
         </c:if>
 
@@ -48,13 +46,14 @@
                         <%--For ajax loading articles--%>
                 </div>
 
-                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
-                     width="45" style="display: none;" aria-hidden="true">
+
             </div>
             <div class="col-sm-12 col-md-1 col-lg-1">
             </div>
         </c:if>
 
+            <img id="load-article-img" src="pictures/big_loading.gif" alt="loading..."
+                 width="100" style="display: none;margin: 0 auto;" aria-hidden="true">
             <button class="btn btn-info" id="load-more-articles" style="display: none; margin: 0 auto;">Load more articles</button>
 
 
