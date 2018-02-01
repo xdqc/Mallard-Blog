@@ -13,6 +13,11 @@
     <%@include file="WEB-INF/_head.jsp" %>
     <title>${requestScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
+<style>
+    body{
+        background-image: url("/pictures/background.png");
+    }
+</style>
 <body>
 <%@include file="WEB-INF/_home_page_menu.jsp" %>
 

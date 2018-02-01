@@ -136,15 +136,12 @@ $(document).ready(function () {
      */
     //Create new article area works on load.
     articleActions();
-    //preload 5 articles
 
     /**
      * Ajax load articles on homepage
      */
     const loadedArticles = {num: $(".article-panel").length};
-    console.log(loadedArticles);
     $("#load-more-articles").on("click", function () {
-
         const currentArticleNum = $(".article-panel").length;
         console.log("loaded articles: "+currentArticleNum);
         const articleArea = $("#more-article-area");
@@ -652,15 +649,15 @@ $(document).ready(function () {
 
     //load some articles when page ready
 
-    for(let i=0; i<5; i++){
+    for(let i=0; i<10; i++){
         (function() {
             setTimeout(function() {
-                $("#load-more-articles").click()
-            }, i * 1000);
+                $("#load-more-articles").click();
+            }, i * 2000);
         })(i);
     }
+    $(".show-comment-btn").click();
 
-    //$(".show-comment-btn").click();
 
 });
 
