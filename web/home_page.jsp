@@ -32,7 +32,6 @@
                 <div id="more-article-area">
                         <%--For ajax loading articles--%>
                 </div>
-                <button class="btn btn-info" id="load-more-articles">Load more articles</button>
 
                 <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
                      width="45" style="display: none;" aria-hidden="true">
@@ -48,7 +47,6 @@
                 <div id="more-article-area">
                         <%--For ajax loading articles--%>
                 </div>
-                <button class="btn btn-info" id="load-more-articles">Load more articles</button>
 
                 <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
                      width="45" style="display: none;" aria-hidden="true">
@@ -56,6 +54,9 @@
             <div class="col-sm-12 col-md-1 col-lg-1">
             </div>
         </c:if>
+
+            <button class="btn btn-info" id="load-more-articles" style="display: none; margin: 0 auto;">Load more articles</button>
+
 
     </div>
 </div>

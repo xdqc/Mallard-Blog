@@ -1,13 +1,16 @@
 <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
     <div class="panel-heading">
         <h4 class="panel-title"
-            id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
+            id="article-title-${blog.getArticle().getId()}">
+            <a href="personal-blog?userId=${blog.getAuthor().getId()}#article-title-${blog.getArticle().getId()}">
+                ${blog.getArticle().getTitle()}
+            </a></h4>
 
     </div>
     <div class="panel-body">
 
-        <div class="panel-text article-author">
-            <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
+        <div class="panel-text article-author"><a href="personal-blog?userId=${blog.getAuthor().getId()}">
+            <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</a>
         </div>
         <div class="panel-text article-time">
             <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
@@ -55,7 +58,7 @@
 
 
         ${sessionScope.get("loggedInUser")==null? "" :
-                '<div class="leave-comment" id="leave-comment-'.concat(id).concat('"><h4>Leave a comment</h4><div class="widget-area no-padding blank"><div class="status-upload"><form><textarea id="leave-comment-text-').concat(id).concat('"placeholder="What are you thinking about this article?"></textarea><ul class="list-unstyled list-inline"><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Audio"><i class="fa fa-music"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Video"><iclass="fa fa-video-camera"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Sound Record"><iclass="fa fa-microphone"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li></ul><button type="submit" class="btn btn-success leave-comment-submit"id="leave-comment-submit-').concat(id).concat('"><iclass="fa fa-share"></i> Comment</button></form></div></div></div>')
+                '<div class="leave-comment" id="leave-comment-'.concat(id).concat('"><h4>Leave a comment</h4><div class="widget-area no-padding blank"><div class="status-upload"><form><textarea id="leave-comment-text-').concat(id).concat('"placeholder="What are you thinking about this article?"></textarea><ul class="list-unstyled list-inline"><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Audio"><i class="fa fa-music"></i></a><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li></ul><button type="submit" class="btn btn-success leave-comment-submit"id="leave-comment-submit-').concat(id).concat('"><iclass="fa fa-share"></i> Comment</button></form></div></div></div>')
         }
 
         <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"

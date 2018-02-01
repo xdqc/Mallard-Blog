@@ -44,10 +44,12 @@
 
     <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
+    <script type="text/javascript" src="javascript/homepage.js"></script>
+    <script type="text/javascript" src="javascript/login.js"></script>
 
 
         <!-- PUT CSS HERE -->
-    <link rel="stylesheet" href="css/personal_panel.css">
-    <link rel="stylesheet" href="css/article.css">
-    <link rel="stylesheet" href="css/homepage_menu.css">
+    <link rel="stylesheet" href="css/personal_panel.css"/>
+    <link rel="stylesheet" href="css/article.css"/>
+    <link rel="stylesheet" href="css/homepage_menu.css"/>
 </head>
