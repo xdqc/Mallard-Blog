@@ -14,7 +14,6 @@ import utililties.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -81,6 +80,32 @@ public class PersonalBlog extends Controller {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         /*Load comments tree*/
+        if (loadCommentTreeController(req, resp)) return;
+
+        /*Read more content*/
+        if (loadArticleContentController(req, resp)) return;
+
+        /*loading article edit area*/
+        if (loadEditArticleController(req, resp)) return;
+
+        /*Create new article*/
+        if (createArticleController(req, resp)) return;
+
+        /*Delete article*/
+        if (deleteArticleController(req, resp)) return;
+
+        /*Delete comment*/
+        if (deleteCommentController(req, resp)) return;
+
+        /*create comment*/
+        if (createCommentController(req, resp)) return;
+
+        /*edit comment*/
+        if (editCommentController(req, resp)) return;
+
+    }
+
+    private boolean loadCommentTreeController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String articleId = req.getParameter("showCommentsOfArticle");
         if (articleId != null) {
             //Blog blog = DbConnector.getBlogByArticleId(articleId);
@@ -88,27 +113,105 @@ public class PersonalBlog extends Controller {
             Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = comments.getCommentTree();
             ajaxCommentsHandler(commentTree, req, resp);
             cleanAllParameters(req);
-            return;
+            return true;
         }
+        return false;
+    }
 
-        /*Read more content*/
+    private boolean loadArticleContentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String articleId;
         articleId = req.getParameter("loadContentOfArticle");
         if (articleId != null) {
             Blog blog = DbConnector.getBlogByArticleId(articleId);
             ajaxArticleContentHandler(blog, req, resp);
             cleanAllParameters(req);
-            return;
+            return true;
         }
+        return false;
+    }
 
-        /*loading article edit area*/
+    private boolean loadEditArticleController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String articleToEdit = req.getParameter("editArticle");
         if (articleToEdit != null){
             req.setAttribute("articleId", articleToEdit);
             req.getRequestDispatcher("WEB-INF/_personal_blog_create.jsp").forward(req,resp);
             cleanAllParameters(req);
-            return;
+            return true;
         }
-        /*Create new article*/
+        return false;
+    }
+
+    private boolean deleteCommentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String commentToDelete = req.getParameter("deleteComment");
+        if (commentToDelete != null){
+            DbConnector.deleteCommentById(commentToDelete);
+            cleanAllParameters(req);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("deleted");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean editCommentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String commentToEdit = req.getParameter("editComment");
+        if (commentToEdit != null){
+            CommentRecord comment = new CommentRecord();
+
+            comment.setId(Integer.parseInt(commentToEdit));
+            comment.setContent(req.getParameter("content"));
+            comment.setEditTime(new Timestamp(System.currentTimeMillis()));
+
+            DbConnector.updateExistingComment(comment);
+            cleanAllParameters(req);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("updated");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean createCommentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String parentArticle = req.getParameter("replyArticle");
+        if (parentArticle != null){
+            CommentRecord comment = new CommentRecord();
+
+            comment.setCommenter(Integer.parseInt(req.getParameter("commenter")));
+            comment.setContent(req.getParameter("content"));
+            comment.setParentArticle(Integer.parseInt(req.getParameter("replyArticle")));
+            comment.setParentComment(Integer.parseInt(req.getParameter("replyComment")));
+            comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
+            DbConnector.insertNewComment(comment);
+            cleanAllParameters(req);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("inserted");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean deleteArticleController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String articleToDelete = req.getParameter("deleteArticle");
+        if (articleToDelete != null){
+            DbConnector.deleteArticleById(articleToDelete);
+            cleanAllParameters(req);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("deleted");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean createArticleController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String articleStr = req.getParameter("newArticle");
         if (articleStr != null) {
             try {
@@ -145,74 +248,19 @@ public class PersonalBlog extends Controller {
                 e.printStackTrace();
             }
             cleanAllParameters(req);
-            return;
+            return true;
         }
-
-
-        /*Delete article*/
-        String articleToDelete = req.getParameter("deleteArticle");
-        if (articleToDelete != null){
-            DbConnector.deleteArticleById(articleToDelete);
-            cleanAllParameters(req);
-
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write("deleted");
-            return;
-        }
-
-        /*Delete comment*/
-        String commentToDelete = req.getParameter("deleteComment");
-        if (commentToDelete != null){
-            DbConnector.deleteCommentById(commentToDelete);
-            cleanAllParameters(req);
-
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write("deleted");
-            return;
-        }
-
-        /*create comment*/
-        String parentArticle = req.getParameter("replyArticle");
-        if (parentArticle != null){
-            CommentRecord comment = new CommentRecord();
-
-            comment.setCommenter(Integer.parseInt(req.getParameter("commenter")));
-            comment.setContent(req.getParameter("content"));
-            comment.setParentArticle(Integer.parseInt(req.getParameter("replyArticle")));
-            comment.setParentComment(Integer.parseInt(req.getParameter("replyComment")));
-            comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
-
-            DbConnector.insertNewComment(comment);
-            cleanAllParameters(req);
-
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write("inserted");
-            return;
-        }
-
-        /*edit comment*/
-        String commentToEdit = req.getParameter("editComment");
-        if (commentToEdit != null){
-            CommentRecord comment = new CommentRecord();
-
-            comment.setId(Integer.parseInt(commentToEdit));
-            comment.setContent(req.getParameter("content"));
-            comment.setEditTime(new Timestamp(System.currentTimeMillis()));
-
-            DbConnector.updateExistingComment(comment);
-            cleanAllParameters(req);
-
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write("updated");
-            return;
-        }
-
+        return false;
     }
 
+    /**
+     --  ██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗     ███████╗██╗   ██╗███╗   ██╗ ██████╗
+     --  ██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗    ██╔════╝██║   ██║████╗  ██║██╔════╝
+     --  ███████║█████╗  ██║     ██████╔╝█████╗  ██████╔╝    █████╗  ██║   ██║██╔██╗ ██║██║
+     --  ██╔══██║██╔══╝  ██║     ██╔═══╝ ██╔══╝  ██╔══██╗    ██╔══╝  ██║   ██║██║╚██╗██║██║
+     --  ██║  ██║███████╗███████╗██║     ███████╗██║  ██║    ██║     ╚██████╔╝██║ ╚████║╚██████╗
+     --  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝
+     */
 
     private void ajaxArticleContentHandler(Blog blog, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<Integer, String> contentMap = new HashMap<>();

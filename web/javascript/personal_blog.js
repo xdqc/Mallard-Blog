@@ -1,6 +1,14 @@
 "use strict";
 
 /**
+ --  ██╗   ██╗████████╗██╗██╗     ███████╗
+ --  ██║   ██║╚══██╔══╝██║██║     ██╔════╝
+ --  ██║   ██║   ██║   ██║██║     ███████╗
+ --  ██║   ██║   ██║   ██║██║     ╚════██║
+ --  ╚██████╔╝   ██║   ██║███████╗███████║
+ --   ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
+ */
+/**
  * get the id of the entity of which a html element represents
  */
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
@@ -114,53 +122,14 @@ const articleActions = (id) => {
 
 
 $(document).ready(function () {
-
     /**
-     * AJAX load comments of article
+     --   █████╗ ██████╗ ████████╗██╗ ██████╗██╗     ███████╗
+     --  ██╔══██╗██╔══██╗╚══██╔══╝██║██╔════╝██║     ██╔════╝
+     --  ███████║██████╔╝   ██║   ██║██║     ██║     █████╗
+     --  ██╔══██║██╔══██╗   ██║   ██║██║     ██║     ██╔══╝
+     --  ██║  ██║██║  ██║   ██║   ██║╚██████╗███████╗███████╗
+     --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
-    $(".show-comment-btn").on("click", function () {
-        const articleID = entityId($(this));
-        const commentArea = $("#comment-area-" + articleID);
-        const loadingImg = $("#load-comment-img-" + articleID);
-        const arrow = $("#comment-arrow-" + articleID);
-        // Toggle comment-area display by click this button
-        $(this).toggleClass('active');
-        if ($(this).hasClass('active')) {
-            $.ajax({
-                type: 'POST',
-                url: 'personal-blog',
-                data: {showCommentsOfArticle: articleID},
-                cache: false,
-                beforeSend: function () {
-                    loadingImg.css("display", "block");
-                    arrow.removeClass("fa-chevron-down");
-                    arrow.addClass("fa-spinner fa-pulse fa-fw");
-                },
-                success: function (resp) {
-                    loadingImg.css("display", "none");
-                    commentArea.empty();
-                    resp.forEach(comments => showCascadingComments(comments, commentArea));
-                    commentArea.slideDown();
-                    arrow.removeClass("fa-spinner fa-pulse fa-fw");
-                    arrow.addClass("fa-chevron-up");
-                },
-                error: (msg, status) => {
-                    console.log("error!!!");
-                    console.log(status);
-                    console.log(msg);
-                },
-                complete: () => {
-                    commentActions();
-                }
-            });
-
-        } else {
-            commentArea.slideUp();
-            arrow.removeClass("fa-chevron-up");
-            arrow.addClass("fa-chevron-down");
-        }
-    });
-
     /**
      * AJAX load article content
      */
@@ -192,7 +161,6 @@ $(document).ready(function () {
             }
         });
     });
-
     /**
      * Ajax load edit article area
      */
@@ -221,10 +189,6 @@ $(document).ready(function () {
         })
     });
 
-
-    /**
-     * Ajax create or edit article
-     */
     $(".article-panel").on("change", ".publish-mode", function () {
 
         const articleId = entityId($(this));
@@ -349,47 +313,108 @@ $(document).ready(function () {
     $(".article-panel").on("click", ".delete-article-btn", function () {
         const articleId = entityId($(this));
         swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this article!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
-                closeOnConfirm: false,
-                closeOnCancel: false,
-                showLoaderOnConfirm: true
+            title: "Are you sure?",
+            text: "You will not be able to recover this article!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            closeOnConfirm: false,
+            closeOnCancel: false,
+            showLoaderOnConfirm: true
         }, function (isConfirm) {
-                if (isConfirm) {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'personal-blog',
-                        data: {deleteArticle: articleId},
-                        cache: false,
-                        beforeSend: () => {
-                        },
-                        success: (resp) => {
-                            swal("Deleted!", "Your article has been deleted.", "success");
-                        },
-                        error: (msg, status) => {
-                            console.log("error of deleting article!!!");
-                            console.log(status);
-                            console.log(msg);
-                        },
-                        complete: () => {
-                        }
-                    });
-                } else {
-                    swal("Cancelled", "Your article is safe :)", "error");
-                }
-            });
+            if (isConfirm) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'personal-blog',
+                    data: {deleteArticle: articleId},
+                    cache: false,
+                    beforeSend: () => {
+                    },
+                    success: (resp) => {
+                        swal("Deleted!", "Your article has been deleted.", "success");
+                    },
+                    error: (msg, status) => {
+                        console.log("error of deleting article!!!");
+                        console.log(status);
+                        console.log(msg);
+                    },
+                    complete: () => {
+                    }
+                });
+            } else {
+                swal("Cancelled", "Your article is safe :)", "error");
+            }
+        });
 
     });
 
+    /*let article actions 'focus on' particular article (or none for creating new)*/
+    const articleActionsHandler = (trigger) => {
+        trigger.on("click", function () {
+            const articleId = entityId($(this));
+            $(".panel-collapse").collapse('hide');
+            return articleActions(articleId);
+        })
+    };
+    articleActionsHandler($(".accordion-bar"));
+
 
     /**
-     * Functions handle replying, editing and deleting comments
+     --   ██████╗ ██████╗ ███╗   ███╗███╗   ███╗███████╗███╗   ██╗████████╗
+     --  ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
+     --  ██║     ██║   ██║██╔████╔██║██╔████╔██║█████╗  ██╔██╗ ██║   ██║
+     --  ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║
+     --  ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║███████╗██║ ╚████║   ██║
+     --   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝
      */
+    /**
+     * AJAX load comments of article
+     */
+    $(".show-comment-btn").on("click", function () {
+        const articleID = entityId($(this));
+        const commentArea = $("#comment-area-" + articleID);
+        const loadingImg = $("#load-comment-img-" + articleID);
+        const arrow = $("#comment-arrow-" + articleID);
+        // Toggle comment-area display by click this button
+        $(this).toggleClass('active');
+        if ($(this).hasClass('active')) {
+            $.ajax({
+                type: 'POST',
+                url: 'personal-blog',
+                data: {showCommentsOfArticle: articleID},
+                cache: false,
+                beforeSend: function () {
+                    loadingImg.css("display", "block");
+                    arrow.removeClass("fa-chevron-down");
+                    arrow.addClass("fa-spinner fa-pulse fa-fw");
+                },
+                success: function (resp) {
+                    loadingImg.css("display", "none");
+                    commentArea.empty();
+                    resp.forEach(comments => showCascadingComments(comments, commentArea));
+                    commentArea.slideDown();
+                    arrow.removeClass("fa-spinner fa-pulse fa-fw");
+                    arrow.addClass("fa-chevron-up");
+                },
+                error: (msg, status) => {
+                    console.log("error!!!");
+                    console.log(status);
+                    console.log(msg);
+                },
+                complete: () => {
+                    commentActions();
+                }
+            });
+
+        } else {
+            commentArea.slideUp();
+            arrow.removeClass("fa-chevron-up");
+            arrow.addClass("fa-chevron-down");
+        }
+    });
+
     $(".comment-area").on("click", ".reply-submit", function (e) {
         e.preventDefault();
         const articleId = entityId($(e.delegateTarget));
@@ -402,7 +427,7 @@ $(document).ready(function () {
                 replyArticle: articleId,
                 replyComment: cmtId,
                 commenter: loggedInUser,
-                content: $("#reply-text-"+cmtId).val(),
+                content: $("#reply-text-" + cmtId).val(),
             },
             cache: false,
             beforeSend: function () {
@@ -432,7 +457,7 @@ $(document).ready(function () {
             url: 'personal-blog',
             data: {
                 editComment: cmtId,
-                content: $("#edit-text-"+cmtId).val()
+                content: $("#edit-text-" + cmtId).val()
             },
             cache: false,
             beforeSend: function () {
@@ -510,19 +535,6 @@ $(document).ready(function () {
             });
 
     });
-
-
-    /**
-     * let article actions 'focus on' particular article (or none for creating new)
-     */
-    const articleActionsHandler = (trigger) => {
-        trigger.on("click", function () {
-            const articleId = entityId($(this));
-            $(".panel-collapse").collapse('hide');
-            return articleActions(articleId);
-        })
-    };
-    articleActionsHandler($(".accordion-bar"));
 
 });
 
