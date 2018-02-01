@@ -7,7 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class SignUp extends Controller {
 
@@ -30,12 +31,17 @@ public class SignUp extends Controller {
         boolean isSignedIn = req.getParameter("signUp") != null && req.getParameter("signUp").equals("1");
         if (isSignedIn) {
             UserRecord user = new UserRecord();
-            String dob = req.getParameter("dob");
+            String systemRole = "1";
+            Timestamp currentTimes= new Timestamp(Calendar.getInstance().getTime().getTime());
+            String isValid =  "1";
 
             user.setFName(req.getParameter("fname"));
             user.setLName(req.getParameter("lname"));
             user.setGender(Integer.valueOf(req.getParameter("gender")));
             user.setDob(java.sql.Date.valueOf(req.getParameter("dob")));
+            user.setSystemRole(Integer.valueOf(systemRole));
+            user.setCreateTime(currentTimes);
+            user.setEmail(req.getParameter("email"));
             user.setUserName(req.getParameter("userName"));
             user.setPassword(req.getParameter("password"));
             user.setAddress(req.getParameter("address"));
@@ -43,6 +49,7 @@ public class SignUp extends Controller {
             user.setState(req.getParameter("state"));
             user.setCountry(req.getParameter("country"));
             user.setDescription(req.getParameter("description"));
+            user.setIsvalid(Byte.valueOf(isValid));
 
             System.out.println(user);
 
