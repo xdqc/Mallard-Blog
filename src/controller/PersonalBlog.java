@@ -89,6 +89,7 @@ public class PersonalBlog extends Controller {
             Blog loadBlog = DbConnector.getNextHotBlog(loadedNum);
             if (loadBlog != null){
                 req.setAttribute("blog", loadBlog);
+                req.setAttribute("id", String.valueOf(loadBlog.getArticle().getId()));
                 req.getRequestDispatcher("WEB-INF/_personal_blog_single_article.jsp").forward(req,resp);
             } else {
                 resp.setContentType("text/html");

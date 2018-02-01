@@ -22,6 +22,6 @@
                         class="fa fa-share"></i> Comment
                 </button>
             </form>
-        </div><!-- Status Upload  -->
-    </div><!-- Widget Area -->
+        </div>
+    </div>
 </div>

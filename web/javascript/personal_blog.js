@@ -633,6 +633,7 @@ $(document).ready(function () {
                 $("#showCommentBtn-"+articleId).click();
             },
             success: function (resp) {
+                $("#leave-comment-text-" + articleId).val("");
                 swal("Congrats!", "Your comment is posted.", "success");
             },
             error: (msg, status) => {
@@ -649,14 +650,14 @@ $(document).ready(function () {
 
     //load some articles when page ready
 
-    for(let i=0; i<10; i++){
+    for(let i=0; i<5; i++){
         (function() {
             setTimeout(function() {
                 $("#load-more-articles").click();
-            }, i * 2000);
+            }, i * 1000);
         })(i);
     }
-    $(".show-comment-btn").click();
+    //$(".show-comment-btn").click();
 
 
 });

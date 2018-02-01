@@ -10,7 +10,7 @@
             <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
         </div>
         <div class="panel-text article-time">
-                                <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
+            <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
             ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
 
         </div>
@@ -46,7 +46,6 @@
             Gallery</a>
 
 
-        <%--<c:if test="${blog.getNumComments() > 0}">--%>
         <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                 class="btn btn-info show-comment-btn">
             <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
@@ -54,6 +53,10 @@
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>
 
+
+        ${sessionScope.get("loggedInUser")==null? "" :
+                '<div class="leave-comment" id="leave-comment-'.concat(id).concat('"><h4>Leave a comment</h4><div class="widget-area no-padding blank"><div class="status-upload"><form><textarea id="leave-comment-text-').concat(id).concat('"placeholder="What are you thinking about this article?"></textarea><ul class="list-unstyled list-inline"><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Audio"><i class="fa fa-music"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Video"><iclass="fa fa-video-camera"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Sound Record"><iclass="fa fa-microphone"></i></a></li><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li></ul><button type="submit" class="btn btn-success leave-comment-submit"id="leave-comment-submit-').concat(id).concat('"><iclass="fa fa-share"></i> Comment</button></form></div></div></div>')
+        }
 
         <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
              style="display: none">
