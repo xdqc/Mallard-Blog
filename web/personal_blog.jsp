@@ -15,6 +15,11 @@
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
     <title>${requestScope.get("browsingUser").getUserName()}'s Blog</title>
 </head>
+<style>
+    body{
+        background-image: url("/pictures/background.png");
+    }
+</style>
 <body>
 <%@include file="WEB-INF/_home_page_menu.jsp" %>
 

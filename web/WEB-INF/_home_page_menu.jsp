@@ -14,14 +14,19 @@
                         </button>
                     </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active">
+            <ul class="nav navbar-nav" id="set">
+                <li>
                     <a class="navbar-brand" href="home-page">
                         <span class="glyphicon glyphicon-home"
-                              aria-hidden="true"></span>&nbsp;Home</a>
+                              aria-hidden="true"></span>&nbsp;Home</a>&nbsp;&nbsp;&nbsp;
                 </li>
-                <li><a class="fa fa-user-o" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">&nbsp;Personal Blog</a></li>
             </ul>
+
+              <ul class="nav navbar-nav" id="set1">
+                  <li><a class="navbar-brand" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
+                      <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
+              </ul>
+
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
                     <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}
@@ -33,18 +38,18 @@
                     <div class="btn-group" role="group" aria-label="...">
                         <c:if test="${empty sessionScope.get('loggedInUser')}">
                             <form action="login?login=0" method="post" style="margin-bottom: 0px; margin-top: 8px;">
-                                <button type="submit" class="btn btn-default">Login/SignUp</button>
+                                <button type="submit" class="btn btn-default">Login/SignUp</button>&nbsp;&nbsp;
                             </form>
                         </c:if>
                         <c:if test="${not empty sessionScope.get('loggedInUser')}">
                             <form action="login?logout=1" method="post" style="margin-bottom: 0px; margin-top: 8px;">
-                                <button type="submit" class="btn btn-default" role="button">Logout</button>
+                                <button type="submit" class="btn btn-default" role="button">Logout</button>&nbsp;&nbsp;
                             </form>
                         </c:if>
                     </div>
                 </li>
-                <li><a href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
-                    us</a></li>
+                <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
+                    Us</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <div class="form-group">
