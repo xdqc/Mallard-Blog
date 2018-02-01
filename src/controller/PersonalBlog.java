@@ -46,8 +46,6 @@ public class PersonalBlog extends Controller {
                 user = loggedUser;
             }
             req.setAttribute("browsingUser", user);
-//            HttpSession session = req.getSession(false);
-//            session.setAttribute("browsingUser", user);
         }
 
 

@@ -12,17 +12,22 @@
  * get the id of the entity of which a html element represents
  */
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
-
+/**
+ * for passing by reference
+ * @type {{num: number}}
+ */
+const numComments = {num: 0};
 /**
  * helper function recursively show comment tree
  */
-const showCascadingComments = (commentTree, $parent) => {
+const showCascadingComments = (commentTree, $parent, numComments) => {
     // To exploit var hijacking, use plain for loop rather than map, reduce, filter...
     for (let commentArr of commentTree) {
         if (!$.isArray(commentArr)) {
             for (let cmtId in commentArr) {
                 // get a value of json without pre-knowing its key
                 if (commentArr.hasOwnProperty(cmtId)) {
+                    numComments.num++;
                     const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
                     var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
@@ -92,7 +97,7 @@ const showCascadingComments = (commentTree, $parent) => {
             }
         } else {
             //The first elem in commentArr will ALWAYS be a commentObj, so $dl will be initialized
-            showCascadingComments(commentArr, $dl);
+            showCascadingComments(commentArr, $dl, numComments);
         }
     }
 };
@@ -396,8 +401,9 @@ $(document).ready(function () {
                 success: function (resp) {
                     loadingImg.css("display", "none");
                     commentArea.empty();
-                    resp.forEach(comments => showCascadingComments(comments, commentArea));
-                    commentArea.slideDown();
+                    numComments.num = 0;
+                    resp.forEach(comments => showCascadingComments(comments, commentArea, numComments));
+                    $("#num-comments-"+articleID).html(numComments.num);
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
                     arrow.addClass("fa-chevron-up");
                 },
@@ -407,6 +413,7 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
+                    commentArea.slideDown();
                 }
             });
 
@@ -438,7 +445,8 @@ $(document).ready(function () {
                     text: "Ajax request running",
                     type: "info",
                     showLoaderOnConfirm: true
-                })
+                });
+                $("#showCommentBtn-"+articleId).click();
             },
             success: function (resp) {
                 swal("Congrats!", "Your comment is posted.", "success");
@@ -449,13 +457,15 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(this).parentNode.slideUp();
+                // $(this).parentNode.slideUp();
+                $("#showCommentBtn-"+articleId).click();
             }
         })
     });
 
     $(".comment-area").on("click", ".edit-submit", function (e) {
         e.preventDefault();
+        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(e.target));
 
         $.ajax({
@@ -472,7 +482,8 @@ $(document).ready(function () {
                     text: "Ajax request running",
                     type: "info",
                     showLoaderOnConfirm: true
-                })
+                });
+                $("#showCommentBtn-"+articleId).click();
             },
             success: function () {
                 swal("Congrats!", "Your comment is updated.", "success");
@@ -483,7 +494,8 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(this).parentNode.slideUp();
+                // $(this).parentNode.slideUp();
+                $("#showCommentBtn-"+articleId).click();
             }
 
         })
@@ -491,6 +503,7 @@ $(document).ready(function () {
 
     $(".comment-area").on("click", ".reply-comment-btn", function (e) {
         e.preventDefault();
+        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(this));
         const replyForm = $("#popup-reply-" + cmtId);
         replyForm.slideDown();
@@ -501,6 +514,7 @@ $(document).ready(function () {
 
     $(".comment-area").on("click", ".edit-comment-btn", function (e) {
         e.preventDefault();
+        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(this));
         const editForm = $("#popup-edit-" + cmtId);
         editForm.slideDown();
@@ -511,6 +525,7 @@ $(document).ready(function () {
 
     $(".comment-area").on("click", ".delete-comment-btn", function (e) {
         e.preventDefault();
+        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(this));
 
         swal({
@@ -531,6 +546,7 @@ $(document).ready(function () {
                     data: {deleteComment: cmtId},
                     cache: false,
                     beforeSend: () => {
+                        $("#showCommentBtn-"+articleId).click();
                     },
                     success: () => {
                         swal("Deleted!", "This comment has been deleted.", "success");
@@ -541,6 +557,7 @@ $(document).ready(function () {
                         console.log(msg);
                     },
                     complete: () => {
+                        $("#showCommentBtn-"+articleId).click();
                     }
                 });
             });
@@ -565,6 +582,7 @@ $(document).ready(function () {
                     type: "info",
                     showLoaderOnConfirm: true
                 })
+                $("#showCommentBtn-"+articleId).click();
             },
             success: function (resp) {
                 swal("Congrats!", "Your comment is posted.", "success");
@@ -575,10 +593,12 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-
+                $("#showCommentBtn-"+articleId).click();
             }
         })
     });
+
+    $(".show-comment-btn").click();
 
 });
 

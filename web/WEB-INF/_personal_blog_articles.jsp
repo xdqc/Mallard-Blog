@@ -58,24 +58,22 @@
                             <span class="fa fa-trash"></span> Delete</span>
                 </c:if>
 
-                <c:if test="${blog.getNumComments() > 0}">
+                <%--<c:if test="${blog.getNumComments() > 0}">--%>
                     <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                             class="btn btn-info show-comment-btn">
-                        <span class="badge">${blog.getNumComments()}</span>
+                        <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
                         Comments
                         <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
                     </button>
-                </c:if>
-                <c:if test="${blog.getNumComments() == 0}">
-                    <button type="button" id="show-comment-btn-${blog.getArticle().getId()}"
-                            class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span>
-                        Comments
-                    </button>
-                </c:if>
+                <%--</c:if>--%>
+                <%--<c:if test="${blog.getNumComments() == 0}">--%>
+                    <%--<button type="button" id="show-comment-btn-${blog.getArticle().getId()}"--%>
+                            <%--class="btn btn-info show-comment-btn" disabled="disabled"><span class="badge">0</span>--%>
+                        <%--Comments--%>
+                    <%--</button>--%>
+                <%--</c:if>--%>
 
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
-
-
                     <div class="container leave-comment" id="leave-comment-${blog.getArticle().getId()}">
                         <div class="row">
                             <h4>Leave a comment</h4>
@@ -86,7 +84,7 @@
                                     <div class="status-upload">
                                         <form>
                                             <textarea id="leave-comment-text-${blog.getArticle().getId()}"
-                                                    placeholder="What are you thinking about this article?"></textarea>
+                                                      placeholder="What are you thinking about this article?"></textarea>
                                             <ul class="list-unstyled list-inline">
                                                 <li><a title="" data-toggle="tooltip" data-placement="bottom"
                                                        data-original-title="Audio"><i class="fa fa-music"></i></a></li>
@@ -115,7 +113,6 @@
                      width="60" style="display: none; padding:10px 0 0 20px" aria-hidden="true">
                 <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
                      style="display: none">
-
                 </div>
             </div>
         </article>
