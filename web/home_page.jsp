@@ -10,6 +10,11 @@
 <html>
 <%@ include file="WEB-INF/_head.jsp" %>
 <title>Mallard Blog</title>
+<style>
+    body{
+        background-image: url("/pictures/background.png");
+    }
+</style>
 <body>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div class="container">
@@ -23,15 +28,28 @@
             <div class="col-sm-12 col-md-9 col-lg-9">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
             </div>
+            <div class="col-sm-12">
+                <%@ include file="WEB-INF/_foot.jsp" %>
+            </div>
         </c:if>
 
         <c:if test="${empty sessionScope.get('loggedInUser')}">
             <%--list of blogs--%>
-            <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-1 col-lg-1">
+            </div>
+            <div class="col-sm-12 col-md-10 col-lg-10">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
+            </div>
+            <div class="col-sm-12 col-md-1 col-lg-1">
+            </div>
+            <div class="col-sm-12">
+                <%@ include file="WEB-INF/_foot.jsp" %>
             </div>
         </c:if>
 
+
+
+</div>
 </div>
 </body>
 </html>

@@ -3,3 +3,22 @@
     padding: 14px 16px;
     text-decoration: none;
 }
+
+#set li a:hover{
+    background-color: green;
+}
+
+#set1 li a:hover{
+    background-color: green;
+}
+
+#set li a:active{
+    background-color: aqua;
+    color:#ffffff;
+}
+
+.navbar{
+    position: fixed;
+    z-index: 99999;
+    width: 100%;
+}
