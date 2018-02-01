@@ -11,15 +11,12 @@
         </div>
         <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
-                                        ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
-            ${blog.getArticle().getEditTime()!=null?("<span class='h5 text-muted'>  Edited on  <span class='fa fa-clock-o'></span> "
-                    +blog.getArticle().getEditTime().toLocalDateTime()+"&nbsp;&nbsp;&nbsp;</span>"):""}
-
+            ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
 
         </div>
         <div class="panel-text article-likes">
-                        <span class="h5 text-muted"> Edited ${blog.getArticle().getLikeNum()}&nbsp;<span
-                                class="fa fa-thumbs-up"></span></span>
+            <span class="h5 text-muted"> Edited ${blog.getArticle().getLikeNum()}&nbsp;<span
+                    class="fa fa-thumbs-up"></span></span>
         </div>
 
         <img class="panel-img-top img-responsive" src="https://picsum.photos/1000/400"
@@ -57,18 +54,7 @@
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>
 
-        ${not empty sessionScope.get('loggedInUser')?
-                '<div class="leave-comment" id="leave-comment-'+blog.getArticle().getId()+'">' +
-                        '<h4>Leave a comment</h4>' +
-                        '<div class="widget-area no-padding blank">' +
-                        '<div class="status-upload">'+
-                        '<form>' +
-                        '<textarea id="leave-comment-text-'+blog.getArticle().getId()+'"' +
-                        'placeholder="What are you thinking about this article?"></textarea>' +
 
-                        ' <button type="submit" class="btn btn-success leave-comment-submit"' +
-                        'id="leave-comment-submit-'+blog.getArticle().getId()+'"><i class="fa fa-share"></i> Comment</button>' +
-                        '</form></div></div></div>':""}
         <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
              style="display: none">
         </div>

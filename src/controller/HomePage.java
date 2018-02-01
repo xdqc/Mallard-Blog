@@ -25,7 +25,8 @@ public class HomePage extends Controller {
         UserRecord user = getLoggedUserFromSession(req);
 
         //get all articles sort by like number
-        List<Blog> blogList = DbConnector.getHotBlogsSort();
+        //List<Blog> blogList = DbConnector.getHotBlogsSort();
+        List<Blog> blogList = null;
         req.setAttribute("blogs", blogList);
 
 

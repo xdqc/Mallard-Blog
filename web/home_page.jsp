@@ -22,6 +22,13 @@
             <%--list of blogs--%>
             <div class="col-sm-12 col-md-9 col-lg-9">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
+                <div id="more-article-area">
+                        <%--For ajax loading articles--%>
+                </div>
+                <button class="btn btn-info" id="load-more-articles">Load more articles</button>
+
+                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
+                     width="45" style="display: none;" aria-hidden="true">
             </div>
         </c:if>
 
@@ -29,16 +36,18 @@
             <%--list of blogs--%>
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
+                <div id="more-article-area">
+                        <%--For ajax loading articles--%>
+                </div>
+                <button class="btn btn-info" id="load-more-articles">Load more articles</button>
+
+                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
+                     width="45" style="display: none;" aria-hidden="true">
             </div>
         </c:if>
 
-        <div id="more-article-area">
-            <%--For ajax loading articles--%>
-        </div>
-        <button class="btn btn-info" id="load-more-articles">Load more articles</button>
 
-        <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
-             width="45" style="display: none;" aria-hidden="true">
     </div>
+</div>
 </body>
 </html>

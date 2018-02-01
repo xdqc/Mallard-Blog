@@ -124,6 +124,7 @@ const articleFocusOn = (id) => {
 };
 
 
+
 $(document).ready(function () {
     /**
      --   █████╗ ██████╗ ████████╗██╗ ██████╗██╗     ███████╗
@@ -133,31 +134,37 @@ $(document).ready(function () {
      --  ██║  ██║██║  ██║   ██║   ██║╚██████╗███████╗███████╗
      --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
+    //Create new article area works on load.
     articleActions();
+    //preload 5 articles
+
     /**
      * Ajax load articles on homepage
      */
+    const loadedArticles = {num: $(".article-panel").length};
+    console.log(loadedArticles);
     $("#load-more-articles").on("click", function () {
 
         const currentArticleNum = $(".article-panel").length;
-        console.log(currentArticleNum);
+        console.log("loaded articles: "+currentArticleNum);
         const articleArea = $("#more-article-area");
         $.ajax({
             type: 'post',
             url: 'personal-blog',
             data: {
-                loadMoreArticles: currentArticleNum,
+                loadMoreArticles: loadedArticles.num,
                 //loadArticleAuthoredBy: entityId($(".user-panel")),
             },
             cache: false,
             beforeSend: () => {
+                loadedArticles.num++;
+                //$(this).attr('disabled','disabled');
                 $("#load-article-img").show();
             },
             success: (resp) => {
                 let html = articleArea.html();
                 html += resp;
                 articleArea.html(html);
-                console.log(resp);
             },
             error: (msg, status) => {
                 console.log("error of loading more article!!!");
@@ -165,6 +172,7 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
+                //$(this).removeAttr('disabled');
                 $("#load-article-img").hide();
                 articleActions();
             }
@@ -640,6 +648,17 @@ $(document).ready(function () {
             }
         })
     });
+
+
+    //load some articles when page ready
+
+    for(let i=0; i<5; i++){
+        (function() {
+            setTimeout(function() {
+                $("#load-more-articles").click()
+            }, i * 1000);
+        })(i);
+    }
 
     //$(".show-comment-btn").click();
 
