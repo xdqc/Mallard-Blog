@@ -192,3 +192,19 @@ button.publish{
 .status-upload form button > i {
     margin-right: 7px;
 }
+h3.article-title{
+    font-family: Lato, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 30px;
+}
+div.article-content{
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 18px;
+}
+.panel-body{
+    padding: 40px;
+    background-color: #F6F9FB;
+    
+}

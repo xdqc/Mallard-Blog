@@ -6,8 +6,8 @@
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
             <div class="panel-heading">
-                <h4 class="panel-title"
-                    id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h4>
+                <h3 class="article-title"
+                    id="article-title-${blog.getArticle().getId()}">${blog.getArticle().getTitle()}</h3>
 
             </div>
             <div class="panel-body">
@@ -36,7 +36,7 @@
                 <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
 
                 <br>
-                <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
+                <div id="article-content-${blog.getArticle().getId()}" class="panel-text article-content">
                         ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
 
                     <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif"

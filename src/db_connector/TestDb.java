@@ -18,8 +18,6 @@ public class TestDb {
         new DbConnector("conf/dev/mysql.properties");
 
         String[] strings = new String[]{"test", "first",};
-        List<Record> res = DbConnector.findSearchItems(strings);
 
-        res.forEach(System.out::println);
     }
 }

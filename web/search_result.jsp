@@ -68,13 +68,13 @@
                 <tbody>
                 <c:forEach var="article" items="${articleResults}">
                     <tr>
-                        <td>${article.getTitle()}</td>
-                        <td>${article.getAuthor()}</td>
-                        <td>${article.getAuthor()}</td>
-                        <td>${article.getCreateTime()}</td>
-                        <td>${article.getEditTime()}</td>
-                        <td>${article.getValidTime()}</td>
-                        <td>${article.getLikeNum()}</td>
+                        <td>${article.getVal1().getTitle()}</td>
+                        <td>${article.getVal2().getLName()}</td>
+                        <td>${article.getVal2().getFName()}</td>
+                        <td class="time create-time">${article.getVal1().getCreateTime().getTime()}</td>
+                        <td class="time edit-time">${article.getVal1().getEditTime().getTime()}</td>
+                        <td class="time valid-time">${article.getVal1().getValidTime().getTime()}</td>
+                        <td>${article.getVal1().getLikeNum()}</td>
                     </tr>
                 </c:forEach>
 

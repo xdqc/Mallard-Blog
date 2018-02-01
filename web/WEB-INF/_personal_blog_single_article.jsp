@@ -1,10 +1,10 @@
 <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
     <div class="panel-heading">
-        <h4 class="panel-title"
+        <h3 class="article-title"
             id="article-title-${blog.getArticle().getId()}">
             <a href="personal-blog?userId=${blog.getAuthor().getId()}#article-title-${blog.getArticle().getId()}">
                 ${blog.getArticle().getTitle()}
-            </a></h4>
+            </a></h3>
 
     </div>
     <div class="panel-body">
@@ -18,7 +18,7 @@
 
         </div>
         <div class="panel-text article-likes">
-            <span class="h5 text-muted"> Edited ${blog.getArticle().getLikeNum()}&nbsp;<span
+            <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span
                     class="fa fa-thumbs-up"></span></span>
         </div>
 
@@ -29,7 +29,7 @@
         <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
 
         <br>
-        <div id="article-content-${blog.getArticle().getId()}" class="panel-text">
+        <div id="article-content-${blog.getArticle().getId()}" class="panel-text article-content">
             ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
 
             <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif"

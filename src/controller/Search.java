@@ -1,9 +1,11 @@
 package controller;
 
+import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import org.jooq.Record;
+import utililties.Tuple;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +22,19 @@ public class Search extends Controller {
         String searchStr = req.getParameter("search");
         if (searchStr != null){
             String[] searchItems = searchStr.split(" ");
-            List<Record> searchResults = DbConnector.findSearchItems(searchItems);
+            List<Tuple<?,?>> searchResults = DbConnector.findSearchItems(searchItems);
 
             List<UserRecord> userResults = searchResults.stream()
-                    .filter(r -> r instanceof UserRecord)
-                    .map(r -> (UserRecord)r)
+                    .filter(r -> r.Val1 instanceof UserRecord)
+                    .map(r -> (UserRecord)r.Val1)
                     .collect(Collectors.toList());
 
-            List<ArticleRecord> articleResults = searchResults.stream()
-                    .filter(r -> r instanceof ArticleRecord)
-                    .map(r -> (ArticleRecord)r)
+            List<Tuple<ArticleRecord, UserRecord>> articleResults = searchResults.stream()
+                    .filter(r -> r.Val1 instanceof ArticleRecord)
+                    .map(r -> (Tuple<ArticleRecord, UserRecord>)r)
                     .collect(Collectors.toList());
+
+//            articleResults.get(0).Val1.getValidTime().getTime();
 
             req.setAttribute("userResults", userResults);
             req.setAttribute("articleResults", articleResults);

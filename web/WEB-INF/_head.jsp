@@ -33,6 +33,7 @@
         <%--table-sorter--%>
     <script type="text/javascript" src="javascript/jquery.tablesorter.js"></script>
 
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 
     <script type="text/javascript">
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
@@ -49,6 +50,7 @@
 
 
         <!-- PUT CSS HERE -->
+
     <link rel="stylesheet" href="css/personal_panel.css"/>
     <link rel="stylesheet" href="css/article.css"/>
     <link rel="stylesheet" href="css/homepage_menu.css"/>
