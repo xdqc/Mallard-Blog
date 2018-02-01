@@ -33,33 +33,33 @@ const showCascadingComments = (commentTree, $parent) => {
                     const replyBtn = $("<a class='reply-comment-btn fa fa-comments-o'>")
                         .attr("id", "reply-comment-btn-" + cmtId)
                         //.attr("href", "#popup-reply-" + cmtId)
-                        .text(" reply");
+                        //.text(" reply");
 
-                    const replyForm = $("<form class='popup status-upload'>").attr("id", "popup-reply-" + cmtId)
+                    const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
                             .attr("placeholder", "Reply to " + comment["commenter"]))
-                        .append(($("<input type='submit' class='reply-submit btn btn-success' value='Reply'>")
+                        .append(($("<button type='submit' class='reply-submit btn btn-success'>Reply</button>")
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
                     const editBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
                         //.attr("href", "#popup-edit-" + cmtId)
-                        .text(" edit");
+                        //.text(" edit");
 
                     const editForm = $("<form class='popup'>").attr("id", "popup-edit-" + cmtId)
                         .append(($("<textarea class='edit-text form-control' rows='1' required>")
                             .attr("id", "edit-text-" + cmtId))
                             .val(comment["content"]))
-                        .append(($("<input type='submit' class='edit-submit btn btn-success' value='Edit'>")
+                        .append(($("<button type='submit' class='edit-submit btn btn-success'>Edit</button>")
                             .attr("id", "edit-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
                     const deleteBtn = $("<a class='delete-comment-btn fa fa-trash-o'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
                         //.attr("href", "#popup-delete-" + cmtId)
-                        .text(" delete");
+                        //.text(" delete");
 
 
                     /*
@@ -68,16 +68,18 @@ const showCascadingComments = (commentTree, $parent) => {
                      */
 
                     //This is a special use case of exploiting of var hijacking to access it outside loop
-                    const $dd = ($("<dd class='comment'>").text(comment.content)).appendTo($dl);
+                    const $dd = ($("<dd class='comment status-upload'>").text(comment.content)).appendTo($dl);
+                    const $ddd = ($("<div class='comment-action-btn'>")).appendTo($dd)
+                        .append(replyBtn).append(editBtn).append(deleteBtn);
 
-                    if (loggedInUser !== 0) {
-                        $dd.append(replyBtn);
+                    if (loggedInUser !== comment["articleAuthorId"] && loggedInUser !== comment["commenterId"]) {
+                        deleteBtn.off("click").addClass("disabled");
                     }
-                    if (loggedInUser === comment["commenterId"]) {
-                        $dd.append(editBtn);
+                    if (loggedInUser !== comment["commenterId"]) {
+                        editBtn.off("click").addClass("disabled");
                     }
-                    if (loggedInUser === comment["articleAuthorId"] || loggedInUser === comment["commenterId"]) {
-                        $dd.append(deleteBtn);
+                    if (loggedInUser === 0) {
+                        replyBtn.off("click").addClass("disabled");
                     }
                     if (loggedInUser !== 0) {
                         $dd.append(replyForm);
@@ -393,7 +395,7 @@ $(document).ready(function () {
                 },
                 success: function (resp) {
                     loadingImg.css("display", "none");
-                    // commentArea.empty();
+                    commentArea.empty();
                     resp.forEach(comments => showCascadingComments(comments, commentArea));
                     commentArea.slideDown();
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
@@ -405,7 +407,6 @@ $(document).ready(function () {
                     console.log(msg);
                 },
                 complete: () => {
-                    commentActions();
                 }
             });
 
@@ -432,7 +433,12 @@ $(document).ready(function () {
             },
             cache: false,
             beforeSend: function () {
-                $(e.target).val("posting...");
+                swal({
+                    title: "Wait a second...",
+                    text: "Ajax request running",
+                    type: "info",
+                    showLoaderOnConfirm: true
+                })
             },
             success: function (resp) {
                 swal("Congrats!", "Your comment is posted.", "success");
@@ -461,7 +467,12 @@ $(document).ready(function () {
             },
             cache: false,
             beforeSend: function () {
-                $(e.target).val("posting...");
+                swal({
+                    title: "Wait a second...",
+                    text: "Ajax request running",
+                    type: "info",
+                    showLoaderOnConfirm: true
+                })
             },
             success: function () {
                 swal("Congrats!", "Your comment is updated.", "success");
@@ -533,7 +544,40 @@ $(document).ready(function () {
                     }
                 });
             });
+    });
 
+    $(".leave-comment").on("click", ".leave-comment-submit", function (e) {
+        e.preventDefault();
+        const articleId = entityId($(e.target));
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {
+                replyArticle: articleId,
+                commenter: loggedInUser,
+                content: $("#leave-comment-text-" + articleId).val(),
+            },
+            cache: false,
+            beforeSend: function () {
+                swal({
+                    title: "Wait a second...",
+                    text: "Ajax request running",
+                    type: "info",
+                    showLoaderOnConfirm: true
+                })
+            },
+            success: function (resp) {
+                swal("Congrats!", "Your comment is posted.", "success");
+            },
+            error: (msg, status) => {
+                console.log("error!!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+
+            }
+        })
     });
 
 });

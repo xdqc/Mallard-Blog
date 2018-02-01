@@ -183,8 +183,10 @@ public class PersonalBlog extends Controller {
             comment.setCommenter(Integer.parseInt(req.getParameter("commenter")));
             comment.setContent(req.getParameter("content"));
             comment.setParentArticle(Integer.parseInt(req.getParameter("replyArticle")));
-            comment.setParentComment(Integer.parseInt(req.getParameter("replyComment")));
             comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            if (req.getParameter("replyComment")!=null){
+                comment.setParentComment(Integer.parseInt(req.getParameter("replyComment")));
+            }
 
             DbConnector.insertNewComment(comment);
             cleanAllParameters(req);
