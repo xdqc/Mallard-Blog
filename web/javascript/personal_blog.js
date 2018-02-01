@@ -1,10 +1,17 @@
 "use strict";
 
 /**
+ --  ██╗   ██╗████████╗██╗██╗     ███████╗
+ --  ██║   ██║╚══██╔══╝██║██║     ██╔════╝
+ --  ██║   ██║   ██║   ██║██║     ███████╗
+ --  ██║   ██║   ██║   ██║██║     ╚════██║
+ --  ╚██████╔╝   ██║   ██║███████╗███████║
+ --   ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
+ */
+/**
  * get the id of the entity of which a html element represents
  */
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
-
 
 /**
  * helper function recursively show comment tree
@@ -88,55 +95,41 @@ const showCascadingComments = (commentTree, $parent) => {
     }
 };
 
+/**
+ * Functions handle creating and editing articles
+ */
+const articleActions = (id) => {
+    console.log(id + " is working on?");
+
+    const datePicker = $("#publish-time-" + id);
+    const publishBtn = $("#publish-" + id);
+    const publishMode = $("#publish-mode-" + id);
+    const title = $("#input-article-title-" + id);
+    const content = $("#input-article-content-" + id);
+
+    //WYSIWYG
+    title.attr("value", $("#article-title-" + id).text());    //don't val(), it will bind the value and wont change later
+    content.text($("#article-content-" + id).text());
+
+    return {
+        "datePicker": datePicker,
+        "publishBtn": publishBtn,
+        "publishMode": publishMode,
+        "title": title,
+        "content": content
+    }
+};
+
 
 $(document).ready(function () {
-
     /**
-     * AJAX load comments of article
+     --   █████╗ ██████╗ ████████╗██╗ ██████╗██╗     ███████╗
+     --  ██╔══██╗██╔══██╗╚══██╔══╝██║██╔════╝██║     ██╔════╝
+     --  ███████║██████╔╝   ██║   ██║██║     ██║     █████╗
+     --  ██╔══██║██╔══██╗   ██║   ██║██║     ██║     ██╔══╝
+     --  ██║  ██║██║  ██║   ██║   ██║╚██████╗███████╗███████╗
+     --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
-    $(".show-comment-btn").on("click", function () {
-        const articleID = entityId($(this));
-        const commentArea = $("#comment-area-" + articleID);
-        const loadingImg = $("#load-comment-img-" + articleID);
-        const arrow = $("#comment-arrow-" + articleID);
-        // Toggle comment-area display by click this button
-        $(this).toggleClass('active');
-        if ($(this).hasClass('active')) {
-            $.ajax({
-                type: 'POST',
-                url: 'personal-blog',
-                data: {showCommentsOfArticle: articleID},
-                cache: false,
-                beforeSend: function () {
-                    loadingImg.css("display", "block");
-                    arrow.removeClass("fa-chevron-down");
-                    arrow.addClass("fa-spinner fa-pulse fa-fw");
-                },
-                success: function (resp) {
-                    loadingImg.css("display", "none");
-                    commentArea.empty();
-                    resp.forEach(comments => showCascadingComments(comments, commentArea));
-                    commentArea.slideDown();
-                    arrow.removeClass("fa-spinner fa-pulse fa-fw");
-                    arrow.addClass("fa-chevron-up");
-                },
-                error: (msg, status) => {
-                    console.log("error!!!");
-                    console.log(status);
-                    console.log(msg);
-                },
-                complete: () => {
-                    commentActions();
-                }
-            });
-
-        } else {
-            commentArea.slideUp();
-            arrow.removeClass("fa-chevron-up");
-            arrow.addClass("fa-chevron-down");
-        }
-    });
-
     /**
      * AJAX load article content
      */
@@ -168,7 +161,6 @@ $(document).ready(function () {
             }
         });
     });
-
     /**
      * Ajax load edit article area
      */
@@ -197,9 +189,6 @@ $(document).ready(function () {
         })
     });
 
-    /**
-     * Ajax create or edit article
-     */
     $(".article-panel").on("change", ".publish-mode", function () {
 
         const articleId = entityId($(this));
@@ -324,47 +313,108 @@ $(document).ready(function () {
     $(".article-panel").on("click", ".delete-article-btn", function () {
         const articleId = entityId($(this));
         swal({
-                title: "Are you sure?",
-                text: "You will not be able to recover this article!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-danger",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'personal-blog',
-                        data: {deleteArticle: articleId},
-                        cache: false,
-                        beforeSend: () => {
-                        },
-                        success: (resp) => {
-                            swal("Deleted!", "Your article has been deleted.", "success");
-                        },
-                        error: (msg, status) => {
-                            console.log("error of deleting article!!!");
-                            console.log(status);
-                            console.log(msg);
-                        },
-                        complete: () => {
-                        }
-                    });
-                } else {
-                    swal("Cancelled", "Your article is safe :)", "error");
-                }
-            });
+            title: "Are you sure?",
+            text: "You will not be able to recover this article!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            closeOnConfirm: false,
+            closeOnCancel: false,
+            showLoaderOnConfirm: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'personal-blog',
+                    data: {deleteArticle: articleId},
+                    cache: false,
+                    beforeSend: () => {
+                    },
+                    success: (resp) => {
+                        swal("Deleted!", "Your article has been deleted.", "success");
+                    },
+                    error: (msg, status) => {
+                        console.log("error of deleting article!!!");
+                        console.log(status);
+                        console.log(msg);
+                    },
+                    complete: () => {
+                    }
+                });
+            } else {
+                swal("Cancelled", "Your article is safe :)", "error");
+            }
+        });
 
     });
 
+    /*let article actions 'focus on' particular article (or none for creating new)*/
+    const articleActionsHandler = (trigger) => {
+        trigger.on("click", function () {
+            const articleId = entityId($(this));
+            $(".panel-collapse").collapse('hide');
+            return articleActions(articleId);
+        })
+    };
+    articleActionsHandler($(".accordion-bar"));
+
 
     /**
-     * Ajax create or edit comment
+     --   ██████╗ ██████╗ ███╗   ███╗███╗   ███╗███████╗███╗   ██╗████████╗
+     --  ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
+     --  ██║     ██║   ██║██╔████╔██║██╔████╔██║█████╗  ██╔██╗ ██║   ██║
+     --  ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║
+     --  ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║███████╗██║ ╚████║   ██║
+     --   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝
      */
+    /**
+     * AJAX load comments of article
+     */
+    $(".show-comment-btn").on("click", function () {
+        const articleID = entityId($(this));
+        const commentArea = $("#comment-area-" + articleID);
+        const loadingImg = $("#load-comment-img-" + articleID);
+        const arrow = $("#comment-arrow-" + articleID);
+        // Toggle comment-area display by click this button
+        $(this).toggleClass('active');
+        if ($(this).hasClass('active')) {
+            $.ajax({
+                type: 'POST',
+                url: 'personal-blog',
+                data: {showCommentsOfArticle: articleID},
+                cache: false,
+                beforeSend: function () {
+                    loadingImg.css("display", "block");
+                    arrow.removeClass("fa-chevron-down");
+                    arrow.addClass("fa-spinner fa-pulse fa-fw");
+                },
+                success: function (resp) {
+                    loadingImg.css("display", "none");
+                    commentArea.empty();
+                    resp.forEach(comments => showCascadingComments(comments, commentArea));
+                    commentArea.slideDown();
+                    arrow.removeClass("fa-spinner fa-pulse fa-fw");
+                    arrow.addClass("fa-chevron-up");
+                },
+                error: (msg, status) => {
+                    console.log("error!!!");
+                    console.log(status);
+                    console.log(msg);
+                },
+                complete: () => {
+                    commentActions();
+                }
+            });
+
+        } else {
+            commentArea.slideUp();
+            arrow.removeClass("fa-chevron-up");
+            arrow.addClass("fa-chevron-down");
+        }
+    });
+
     $(".comment-area").on("click", ".reply-submit", function (e) {
         e.preventDefault();
         const articleId = entityId($(e.delegateTarget));
@@ -377,10 +427,11 @@ $(document).ready(function () {
                 replyArticle: articleId,
                 replyComment: cmtId,
                 commenter: loggedInUser,
-                content: $("#reply-text-"+cmtId).val(),
+                content: $("#reply-text-" + cmtId).val(),
             },
             cache: false,
             beforeSend: function () {
+                $(e.target).val("posting...");
             },
             success: function (resp) {
                 swal("Congrats!", "Your comment is posted.", "success");
@@ -391,7 +442,7 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(".close").click();
+                $(this).parentNode.slideUp();
             }
 
         })
@@ -399,22 +450,20 @@ $(document).ready(function () {
 
     $(".comment-area").on("click", ".edit-submit", function (e) {
         e.preventDefault();
-        const articleId = entityId($(e.delegateTarget));
         const cmtId = entityId($(e.target));
-
-        console.log($("#edit-text-" + cmtId).val());
 
         $.ajax({
             type: 'POST',
             url: 'personal-blog',
             data: {
                 editComment: cmtId,
-                content: $("#edit-text-"+cmtId).val()
+                content: $("#edit-text-" + cmtId).val()
             },
             cache: false,
             beforeSend: function () {
+                $(e.target).val("posting...");
             },
-            success: function (resp) {
+            success: function () {
                 swal("Congrats!", "Your comment is updated.", "success");
             },
             error: (msg, status) => {
@@ -423,113 +472,69 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $(".close").click();
+                $(this).parentNode.slideUp();
             }
 
         })
     });
 
-
-    /**
-     * Functions to handle replying, editing and deleting comments
-     */
-    function commentActions() {
-        $(".reply-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
-            const replyForm = $("#popup-reply-" + cmtId);
-            replyForm.slideDown();
-            $(".close").on("click", function () {
-                replyForm.slideUp();
-            })
-        });
-
-        $(".edit-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
-            const editForm = $("#popup-edit-" + cmtId);
-            editForm.slideDown();
-            $(".close").on("click", function () {
-                editForm.slideUp();
-            })
-        });
-
-        $(".delete-comment-btn").on("click", function (e) {
-            e.preventDefault();
-            const cmtId = entityId($(this));
-
-            swal({
-                    title: "Are you sure?",
-                    text: "Your will not be able to recover this comment!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'personal-blog',
-                        data: {deleteComment: cmtId},
-                        cache: false,
-                        beforeSend: () => {
-                        },
-                        success: (resp) => {
-                            swal("Deleted!", "This comment has been deleted.", "success");
-                        },
-                        error: (msg, status) => {
-                            console.log("error of deleting comment!!!");
-                            console.log(status);
-                            console.log(msg);
-                        },
-                        complete: () => {
-                        }
-                    });
-                });
-
-        });
-
-    }
-
-
-    /**
-     * Functions to handle creating and editing articles
-     */
-    const articleActions = (id) => {
-        console.log(id + " is working on?");
-
-        const datePicker = $("#publish-time-" + id);
-        const publishBtn = $("#publish-" + id);
-        const publishMode = $("#publish-mode-" + id);
-        const title = $("#input-article-title-" + id);
-        const content = $("#input-article-content-" + id);
-
-        //WYSIWYG
-        title.attr("value", $("#article-title-" + id).text());    //don't val(), it will bind the value and wont change later
-        content.text($("#article-content-" + id).text());
-
-        return {
-            "datePicker": datePicker,
-            "publishBtn": publishBtn,
-            "publishMode": publishMode,
-            "title": title,
-            "content": content
-        }
-    };
-
-
-    /**
-     * let article actions 'focus on' particular article (or none for creating new)
-     */
-    const articleActionsHandler = (trigger) => {
-        trigger.on("click", function () {
-            const articleId = entityId($(this));
-            $(".panel-collapse").collapse('hide');
-            return articleActions(articleId);
+    $(".comment-area").on("click", ".reply-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
+        const replyForm = $("#popup-reply-" + cmtId);
+        replyForm.slideDown();
+        $(".close").on("click", function () {
+            replyForm.slideUp();
         })
-    };
-    articleActionsHandler($(".accordion-bar"));
+    });
+
+    $(".comment-area").on("click", ".edit-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
+        const editForm = $("#popup-edit-" + cmtId);
+        editForm.slideDown();
+        $(".close").on("click", function () {
+            editForm.slideUp();
+        })
+    });
+
+    $(".comment-area").on("click", ".delete-comment-btn", function (e) {
+        e.preventDefault();
+        const cmtId = entityId($(this));
+
+        swal({
+                title: "Are you sure?",
+                text: "Your will not be able to recover this comment!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            },
+            function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'personal-blog',
+                    data: {deleteComment: cmtId},
+                    cache: false,
+                    beforeSend: () => {
+                    },
+                    success: () => {
+                        swal("Deleted!", "This comment has been deleted.", "success");
+                    },
+                    error: (msg, status) => {
+                        console.log("error of deleting comment!!!");
+                        console.log(status);
+                        console.log(msg);
+                    },
+                    complete: () => {
+                    }
+                });
+            });
+
+    });
 
 });
 
