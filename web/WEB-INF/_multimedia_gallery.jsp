@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../javascript/html5gallery.js"></script>
 </head>
 <body>
-<div style="display:none;" class="html5gallery" data-skin="horizontal" data-width="800" data-height="600">
+<div id="imagesShowing" style="display:none;" class="html5gallery" data-skin="horizontal" data-width="400" data-height="300">
 
 <c:forEach var="attachment" items="${attachments}">
     <!-- Add images to Gallery -->

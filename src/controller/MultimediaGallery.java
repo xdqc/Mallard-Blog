@@ -1,6 +1,5 @@
 package controller;
 
-import ORM.tables.Attachment;
 import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
@@ -16,29 +15,44 @@ public class MultimediaGallery  extends Controller {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserRecord user = getLoggedUserFromSession(req);
 
-        String articleId = req.getParameter("articleId");
-        String commentId = req.getParameter("commentId");
+        String attachmentId = req.getParameter("attachmentId");
+        String parameterName = req.getParameter("parameterName");
         String attachType = "";
         String ownby = "";
-        if(articleId != null && !articleId.equals("")){
+        if(parameterName.equals("article")){
             attachType = "A";
-            ownby = articleId;
         }
-        if(commentId != null && !commentId.equals("")){
+        if(parameterName.equals("comment")){
             attachType = "C";
-            ownby = commentId;
         }
+        ownby = attachmentId;
         //get all articles sort by like number
         List<AttachmentRecord> attachments = DbConnector.getAttachmentByArticleId(ownby,attachType);
         req.setAttribute("attachments", attachments);
 
-        req.getRequestDispatcher("/WEB-INF/_multimedia_gallery.jsp").forward(req, resp);
+        String result = "";
+        for (AttachmentRecord attachment : attachments) {
+            result += "<a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.png\" alt=\"" + attachment.getFilename() + "\"></a>";
+        }
+        resp.setContentType("text/html");
+        if(result.equals("")) {
+            resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
+        }else{
+            resp.getWriter().write(getShowString(result));
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         doGet(req, resp);
     }
 
+
+    private String getShowString(String insertContent){
+        String result =
+                "    <script type=\"text/javascript\" src=\"../javascript/jquery.js\"></script>\n" +
+                "    <script type=\"text/javascript\" src=\"../javascript/html5gallery.js\"></script>\n" +
+                "<div id=\"imagesShowing\" style=\"display:none;\" class=\"html5gallery\" data-skin=\"horizontal\" data-width=\"800\" data-height=\"600\">\n" + insertContent + "</div>\n" ;
+        return result;
+    }
 }

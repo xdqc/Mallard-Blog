@@ -1,6 +1,5 @@
 package controller;
 
-import ORM.tables.Attachment;
 import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
@@ -8,9 +7,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import utililties.Blog;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.*;
 import java.util.List;
 
@@ -46,7 +44,6 @@ public class FileUpload extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, java.io.IOException {
         //initial the fullPath
-        this.fullPath = getServletContext().getInitParameter("file-upload");
         this.fullPath = getServletContext().getRealPath("/UploadedFile/");
         createDirection(new File(this.fullPath));
         // Check that we have a file upload request
@@ -94,6 +91,7 @@ public class FileUpload extends HttpServlet {
             // Process the uploaded file items
             Iterator i = fileItems.iterator();
             String fileUploadResultString =  "<p>You have uploaded multimedia as follow:</p><br>" +
+                    "<script>setTimeout(function () { history.back()}, 1500);</script>" +
                                              "<table><tr><td>title</td><td>thumbnail</td><tr>";
             while ( i.hasNext () ) {
                 FileItem fi = (FileItem)i.next();
@@ -159,18 +157,28 @@ public class FileUpload extends HttpServlet {
                         this.respondPath = fi.getString();
                     }else{
                         this.parameter.put(fi.getFieldName(),fi.getString());
+                        System.out.println("fi.getFieldName() = [" + fi.getFieldName() + "], fi.getFieldName() = [" + fi.getFieldName() + "]");
                     }
                 }
             }
-            fileUploadResultString += "</table>";
-            request.setAttribute("uploadedFiles",fileUploadResultString);
+            fileUploadResultString += "</table><input type='button' value='Go back' onclick='goBack()'>";
+            //request.setAttribute("uploadedFiles",fileUploadResultString);
+
+            response.getWriter().write(getShowingString(fileUploadResultString));
+            //System.out.println("getShowingString(fileUploadResultString) = [" + getShowingString(fileUploadResultString) + "]");
+            return;
+            /*
+
             Set s = this.parameter.keySet();
             for (Object o : s) {
                 System.out.println("o = [" + o.toString() + "], parameter = [" + this.parameter.get((String) o ) + "]");
                 request.setAttribute(o.toString(),this.parameter.get((String) o ));
             }
+            List<Blog> blogs = DbConnector.getBlogsByUserId(this.user.getId().toString());
+            request.setAttribute("blogs", blogs);
             request.getRequestDispatcher(this.respondPath).forward(request, response);
             return;
+             */
         }catch(FileUploadException ex) {
             System.out.println(ex);
         }catch(Exception ex) {
@@ -185,14 +193,21 @@ public class FileUpload extends HttpServlet {
     private void createThumbnail(String uploadFileName)throws java.io.IOException{
         BufferedImage img = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
 
-        img.createGraphics().drawImage(ImageIO.read(new File( this.fullPath + uploadFileName)).getScaledInstance(50, 50, Image.SCALE_SMOOTH),0,0,null);
-
         String[] fileNames = uploadFileName.split("\\.");
+        String fileTypeFlag = "";
         String theFileName = "";
         if(fileNames.length == 2) {
             theFileName = fileNames[0];
+            fileTypeFlag = fileNames[1];
         }else{
             theFileName = uploadFileName.substring(0,uploadFileName.lastIndexOf("."));
+            fileTypeFlag = uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1);
+        }
+        if(fileTypeFlag.equals("mp4")||fileTypeFlag.equals("mpg")||fileTypeFlag.equals("avi")||fileTypeFlag.equals("mpeg")) {
+            System.out.println("getServletContext = [" + getServletContext().getRealPath("") + "]");
+            img.createGraphics().drawImage(ImageIO.read(new File(getServletContext().getRealPath("/pictures/") + "mp4.png")).getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
+        }else {
+            img.createGraphics().drawImage(ImageIO.read(new File(this.fullPath + uploadFileName)).getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
         }
         System.out.println(this.fullPath + theFileName + "_thumbnail.png");
 
@@ -202,10 +217,13 @@ public class FileUpload extends HttpServlet {
     private boolean checkMultimediaType(String extend){
         if(extend.equals("jpg") || extend.equals("png") || extend.equals("mp4")
                 || extend.equals("mpg")|| extend.equals("mpeg")|| extend.equals("avi")
+                /*
                 || extend.equals("wmv")|| extend.equals("mov")|| extend.equals("rm")
                 || extend.equals("ram")|| extend.equals("swf")|| extend.equals("flv")
                 || extend.equals("ogg")|| extend.equals("webm")|| extend.equals("mp3")
-                || extend.equals("wav")|| extend.equals("wma")|| extend.equals("wav")){
+                || extend.equals("wav")|| extend.equals("wma")|| extend.equals("wav")
+                */
+                ){
             return true;
         }
         return false;
@@ -255,5 +273,16 @@ public class FileUpload extends HttpServlet {
             user = (UserRecord) session.getAttribute("loggedInUser");
         }
         return user;
+    }
+
+    //return the show content
+    private String getShowingString(String insertString){
+        String result = "<form id=\"resultForm\">\n" +
+                "    <fieldset>\n" +
+                "        <legend>Your uploaded file</legend>\n" +
+                insertString +
+                "    </fieldset>\n" +
+                "</form>";
+        return result;
     }
 }
