@@ -40,7 +40,5 @@ $(document).ready(function () {
         $("#load-more-articles").css("display","block");
     }, 5000);
 
-    //only works for personal blog page (non-ajax loaded)
-    $(".show-comment-btn").click();
 });
 

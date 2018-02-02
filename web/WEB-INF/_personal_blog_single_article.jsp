@@ -25,8 +25,16 @@
         <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
              alt="random picture"/>
 
-        <%--display multimedia gallery here by ajax--%>
-        <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
+        <%--&lt;%&ndash;display multimedia gallery here by ajax&ndash;%&gt;--%>
+        <%--<div id="multimedia-gallery-${blog.getArticle().getId()}"></div>--%>
+
+        <!-- collapse style multimedia gallery begin-->
+        <div>
+            <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                <span class="glyphicon glyphicon-file"></span>Show more multimedia</a>
+            <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
+        </div>
+        <!-- collapse style multimedia gallery end-->
 
         <br>
         <div id="article-content-${blog.getArticle().getId()}" class="panel-text article-content">
@@ -43,15 +51,10 @@
         <br>
         <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
         <br>
-        <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
-            multimedia</a>
-        <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
-            Gallery</a>
-
 
         <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                 class="btn btn-info show-comment-btn">
-            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumComments()}</span>
+            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
             Comments
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>

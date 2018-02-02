@@ -142,7 +142,7 @@ $(document).ready(function () {
      --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
     //Create new article area works on load.
-    articleActions();
+    articleActions(0);
 
     /**
      * Ajax load articles on homepage
@@ -162,7 +162,6 @@ $(document).ready(function () {
             cache: false,
             beforeSend: () => {
                 loadedArticles.num++;
-                //$(this).attr('disabled','disabled');
                 $("#load-article-img").css("display","block");
             },
             success: (resp) => {
@@ -170,20 +169,25 @@ $(document).ready(function () {
                 html += resp;
                 articleArea.html(html);
                 console.log(resp);
+
+
+
                 //no more articles
                 if (resp.startsWith("<h3")){
                     $(this).css("display","none");
                 }
             },
             error: (msg, status) => {
+                loadedArticles.num--;
                 console.log("error of loading more article!!!");
                 console.log(status);
                 console.log(msg);
             },
             complete: () => {
-                //$(this).removeAttr('disabled');
                 $("#load-article-img").css("display", "none");
+
                 articleActions();
+
             }
         })
     });
@@ -435,6 +439,25 @@ $(document).ready(function () {
             });
 
         });
+
+        /**
+         * deal with the multimedia gallery show content
+         */
+        $articlePanel.on("click", ".show-media", function (){
+            const attachmentId = entityId($(this));
+            const parameterName = entityParameterName($(this));
+            $.ajax({
+                url : 'multimedia-gallery',
+                data : {
+                    attachmentId : attachmentId,
+                    parameterName : parameterName
+                },
+                success : function(responseText) {
+                    $('#multimediaShowArea-' + parameterName + '-'+attachmentId).html(responseText);
+                }
+            })
+        });
+
 
     }
 

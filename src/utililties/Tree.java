@@ -38,6 +38,11 @@ public class Tree<T> {
         return this.children;
     }
 
+    /**
+     * Recursively flat a tree to list
+     * @param node root
+     * @param result a list to hold the flatten tree
+     */
     public void traverse(Tree<T> node, List<T> result){       // pre order traversal
         if (node.data!=null)
             result.add(node.data);
@@ -46,6 +51,12 @@ public class Tree<T> {
         }
     }
 
+    /**
+     * Recursively find node of tree
+     * @param n tree
+     * @param s target node
+     * @return found node or null
+     */
     public Tree<T> findNode(Tree<T> n, T s) {
         if (n.data == s) {
             return n;
@@ -60,6 +71,12 @@ public class Tree<T> {
         return null;
     }
 
+    /**
+     * Recursively find a comment in comment tree with the same id
+     * @param n comment tree
+     * @param s target comment
+     * @return found comment or null
+     */
     public Tree<CommentRecord> findParentComment(Tree<CommentRecord> n, CommentRecord s) {
         if (Objects.equals(n.data.getId(), s.getParentComment())) {
             return n;
@@ -74,6 +91,12 @@ public class Tree<T> {
         return null;
     }
 
+    /**
+     * Recursively find a comment's parent comment
+     * @param n comment tree
+     * @param s target comment's child
+     * @return the parent or null
+     */
     public Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> findParentComment(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> n, Tuple3<UserRecord, CommentRecord, UserRecord> s) {
         if (Objects.equals(n.getData().Val2.getId(), s.Val2.getParentComment())) {
             return n;

@@ -48,30 +48,10 @@ public class DbConnector {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static Properties dbProps = new Properties();
 
-
-    static void fetchAllUserFromDb() {
-        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-            Result<Record2<Integer, String>> result = create.select(USER.GENDER, USER.F_NAME)
-                    .from(USER)
-                    .fetch();
-
-            for (Record2<Integer, String> record : result) {
-                int id = record.component1();
-                String username = record.component2();
-                System.out.println(id + " " + username);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static UserRecord getAuthorByArticleId(String articleId) {
         List<UserRecord> user = new ArrayList<>();
@@ -109,45 +89,6 @@ public class DbConnector {
         }
         return user.isEmpty() ? null : user.get(0);
     }
-
-    public static List<ArticleRecord> getArticlesByUserId(String userId) {
-        List<ArticleRecord> articles = new ArrayList<>();
-
-        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-            articles = create.select()
-                    .from(ARTICLE)
-                    .join(USER).onKey()
-                    .where(USER.ID.equalIgnoreCase(userId))
-                    .orderBy(ARTICLE.CREATE_TIME.desc())
-                    .fetch()
-                    .into(ArticleRecord.class);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return articles;
-    }
-
-
-//    public static List<CommentRecord> getCommentsByParentCommentId(String commentId) {
-//        List<CommentRecord> comments = new ArrayList<>();
-//
-//        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
-//            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-//
-//            comments = create.select()
-//                    .from(COMMENT)
-//                    .where(COMMENT.PARENT_COMMENT.equalIgnoreCase(commentId))
-//                    .fetch()
-//                    .into(CommentRecord.class);
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return comments;
-//    }
 
     //get articles sort by hot degree(like_num)
     public static List<ArticleRecord> getHotArticlesSort() {
@@ -448,7 +389,7 @@ public class DbConnector {
 
                     // Because of leftJoin, don't add null comment to article with on comments
                     if (t.Val3.getId() != null) {
-                        blog.getCommentList().add(t.Val3);
+                        blog.addComment(t.Val3);
                     }
 
                     // find if result already contains the article
@@ -459,7 +400,7 @@ public class DbConnector {
                     // if there the blog with same Author/Article has been added to result,
                     if (thatBlog != null) {
                         // then, old article,  add comment to that blog
-                        thatBlog.getCommentList().add(t.Val3);
+                        thatBlog.addComment(t.Val3);
                     } else {
                         // else, new article, just add blog into result
                         blogs.add(blog);
@@ -513,6 +454,29 @@ public class DbConnector {
         return true;
     }
 
+    /**
+     * Get newly created article id (for updating attachment db)
+     * @param articleRecord the article record passed to insertNewArticle()
+     * @return
+     */
+    public static int getNewlyCreatedArticleId(ArticleRecord articleRecord) {
+        int articleId=0;
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            articleId = create.select(ARTICLE.ID)
+                    .from(ARTICLE)
+                    .where(ARTICLE.TITLE.eq(articleRecord.getTitle()))
+                    .and(ARTICLE.AUTHOR.eq(articleRecord.getAuthor()))
+                    .and(ARTICLE.CREATE_TIME.eq(articleRecord.getCreateTime()))
+                    .fetchOne(0, int.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articleId;
+    }
+
 
     /**
      * Edit article
@@ -560,9 +524,9 @@ public class DbConnector {
     }
 
     /**
-     * Mark a comment's show_hide as 0
+     * Mark a comment as hidden
      *
-     * @param commentId
+     * @param commentId comment to be hidden
      */
     public static void deleteCommentById(String commentId) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -693,7 +657,5 @@ public class DbConnector {
         }
         return records;
     }
-
-
 
 }

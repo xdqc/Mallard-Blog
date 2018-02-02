@@ -26,6 +26,7 @@ a.reply-comment-btn {
     color: #582;
     font-family: Lato, Helvetica, sans-serif;
     font-size: 14px;
+    cursor: pointer;
 }
 
 a.edit-comment-btn {
@@ -33,6 +34,7 @@ a.edit-comment-btn {
     color: #288;
     font-family: Lato, Helvetica, sans-serif;
     font-size: 14px;
+    cursor: pointer;
 }
 
 a.delete-comment-btn {
@@ -40,6 +42,7 @@ a.delete-comment-btn {
     color: salmon;
     font-family: Lato, Helvetica, sans-serif;
     font-size: 14px;
+    cursor: pointer;
 }
 
 a.disabled {
