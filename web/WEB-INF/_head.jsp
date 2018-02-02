@@ -43,6 +43,11 @@
     </script>
 
 
+
+
+        <!-- Form validator -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
     <!-- For upload files page generate multiple row -->
     <script type="text/javascript" src="javascript/uploadFile.js"></script>
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
@@ -55,4 +60,5 @@
     <link rel="stylesheet" href="css/article.css"/>
     <link rel="stylesheet" href="css/homepage_menu.css"/>
     <link rel="stylesheet" href="css/personal_panel.css">
+
 </head>
