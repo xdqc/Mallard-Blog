@@ -10,14 +10,18 @@
 <html>
 <head>
     <%@include file="WEB-INF/_head.jsp" %>
-    <title>Title</title>
+    <title>Search Results</title>
 </head>
 <body>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
+        <h3>You are searching : <span class="mark" id="searchStr">${searchStr}</span></h3>
+
+        <div class="col-sm-12 col-md-8 col-lg-8">
+
+
             <table id="user-table" class="tablesorter table table-striped table-hover  table-responsive">
                 <caption>List of found users</caption>
                 <thead>
@@ -32,17 +36,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="user" items="${userResults}">
-                        <tr>
-                            <td>${user.getUserName()}</td>
-                            <td>${user.getLName()}</td>
-                            <td>${user.getFName()}</td>
-                            <td>${user.getEmail()}</td>
-                            <td>${user.getGender()==0?"Femail":"Male"}</td>
-                            <td>${user.getDob()}</td>
-                            <td>${user.getCountry()}</td>
-                        </tr>
-                    </c:forEach>
+                <c:forEach var="user" items="${userResults}">
+                    <tr>
+                        <td class="mark">${user.getUserName()}</td>
+                        <td>${user.getLName()}</td>
+                        <td>${user.getFName()}</td>
+                        <td>${user.getEmail()}</td>
+                        <td>${user.getGender()==0?"Female":"Male"}</td>
+                        <td>${user.getDob()}</td>
+                        <td>${user.getCountry()}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
         </div>
@@ -50,15 +54,15 @@
     <br>
     <br>
     <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
+        <div class="col-sm-12 col-md-8 col-lg-8">
 
-            <table id="article-table" class="tablesorter table table-striped table-hover  table-responsive">
+            <table id="article-table" class="tablesorter table table-striped table-hover table-bordered table-responsive">
                 <caption>List of found articles</caption>
                 <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
+                    <th>Author Last Name</th>
+                    <th>Author First Name</th>
                     <th>Create Time</th>
                     <th>Edit Time</th>
                     <th>Valid Time</th>
@@ -68,13 +72,13 @@
                 <tbody>
                 <c:forEach var="article" items="${articleResults}">
                     <tr>
-                        <td>${article.getTitle()}</td>
-                        <td>${article.getAuthor()}</td>
-                        <td>${article.getAuthor()}</td>
-                        <td>${article.getCreateTime()}</td>
-                        <td>${article.getEditTime()}</td>
-                        <td>${article.getValidTime()}</td>
-                        <td>${article.getLikeNum()}</td>
+                        <td class="mark">${article.getVal1().getTitle()}</td>
+                        <td>${article.getVal2().getLName()}</td>
+                        <td>${article.getVal2().getFName()}</td>
+                        <td class="time create-time">${article.getVal1().getCreateTime()}</td>
+                        <td class="time edit-time">${article.getVal1().getEditTime()}</td>
+                        <td class="time valid-time">${article.getVal1().getValidTime()}</td>
+                        <td>${article.getVal1().getLikeNum()}</td>
                     </tr>
                 </c:forEach>
 
@@ -87,29 +91,49 @@
 </html>
 
 <script>
-    $(function(){
-        $("#user-table").tablesorter(
+    $(function () {
+        $("#user-table").tablesorter({
 
-        );
-        $("#article-table").tablesorter();
+        });
+        $("#article-table").tablesorter({
+            headers: {
+                3: {sorter: 'text'},
+                4: {sorter: 'text'},
+                5: {sorter: 'text'}
+            }
+        });
     });
+
+    $(document).ready(function () {
+//        let times = $(".time");
+//
+//        for (let time of times) {
+//            console.log(time);
+//            let date = moment($(time).html()).format("YYYY/MM/DD hh:mm:ss");
+//            $(time).html(date);
+//        }
+
+        $ctx = $(".mark");
+        const str = $("#searchStr").html()
+        $ctx.mark(str);
+    })
 </script>
 <style>
     th.tablesorter-headerAsc {
         cursor: pointer;
         background: url(pictures/small_asc.png) no-repeat center right;
-        background-size:10px;
+        background-size: 10px;
     }
 
     th.tablesorter-headerDesc {
         cursor: pointer;
         background: url(pictures/small_desc.png) no-repeat center right;
-        background-size:10px;
+        background-size: 10px;
     }
 
     th.tablesorter-headerUnSorted {
         cursor: pointer;
         background: url(pictures/small.png) no-repeat center right;
-        background-size:10px;
+        background-size: 10px;
     }
 </style>

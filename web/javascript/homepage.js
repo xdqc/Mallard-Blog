@@ -29,16 +29,16 @@ $(document).ready(function () {
 
     $("#load-homepage-user-profile").click();
     //load some articles when page ready
-    for(let i=0; i<5; i++){
+    for(let i=0; i<10; i++){
         (function() {
             setTimeout(function() {
                 $("#load-more-articles").click();
-            }, i * 1500);
+            }, i * 1200);
         })(i);
     }
     setTimeout(function () {
         $("#load-more-articles").css("display","block");
-    }, 6000);
+    }, 8000);
 
     //only works for personal blog page (non-ajax loaded)
     $(".show-comment-btn").click();

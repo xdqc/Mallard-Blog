@@ -4,10 +4,10 @@
     <div class="panel-body">
         <h5 class="panel-title">${fname} ${lname}
             <c:if test="${gender==0}">
-                <span class="fa fa-venus"></span>
+                <span class="fa fa-venus" style="color: hotpink"></span>
             </c:if>
             <c:if test="${gender==1}">
-                <span class="fa fa-mars"></span>
+                <span class="fa fa-mars" style="color: deepskyblue"></span>
             </c:if>
         </h5>
         <p class="panel-text">${description}</p>

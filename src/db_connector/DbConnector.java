@@ -18,6 +18,7 @@ import utililties.Tuple3;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -403,7 +404,7 @@ public class DbConnector {
                     .from((USER).join(ARTICLE).onKey())
                     .leftJoin(COMMENT).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
                     .where(USER.ISVALID.eq((byte)1))
-//                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
                     .and(ARTICLE.VALID_TIME.lt(new Timestamp(System.currentTimeMillis())))
                     .orderBy(ARTICLE.LIKE_NUM.desc(),
                             COMMENT.CREATE_TIME.asc())
@@ -657,26 +658,33 @@ public class DbConnector {
     /**
      * Find records match search items
      */
-    public static List<Record> findSearchItems(String[] searchItems) {
-        List<Record> records = new ArrayList<>();
+    public static List<Tuple<?,?>> findSearchItems(String[] searchItems) {
+        List<Tuple<?,?>> records = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
             records.addAll(Arrays.stream(searchItems)
                     .map(s -> create
                             .select(USER.fields())
+                            .select(USER.fields())
                             .from(USER)
                             .where(USER.USER_NAME.containsIgnoreCase(s))
-                            .fetch(r -> r.into(USER).into(UserRecord.class)))
+                            .fetch(r -> new Tuple<>(
+                                    r.into(USER).into(UserRecord.class),
+                                    r.into(USER).into(UserRecord.class))))
                     .flatMap(List::stream)
                     .collect(Collectors.toList()));
 
             records.addAll(Arrays.stream(searchItems)
                     .map(s -> create
                             .select(ARTICLE.fields())
+                            .select(USER.fields())
                             .from(ARTICLE)
+                            .join(USER).onKey()
                             .where(ARTICLE.TITLE.containsIgnoreCase(s))
-                            .fetch(r -> r.into(ARTICLE).into(ArticleRecord.class)))
+                            .fetch(r -> new Tuple<>(
+                                    r.into(ARTICLE).into(ArticleRecord.class),
+                                    r.into(USER).into(UserRecord.class))))
                     .flatMap(List::stream)
                     .collect(Collectors.toList()));
 
