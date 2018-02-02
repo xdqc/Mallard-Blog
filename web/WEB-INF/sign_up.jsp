@@ -12,6 +12,35 @@
 <head>
     <%@include file="_head.jsp"%>
     <title>Create Account</title>
+    <style type="text/css">
+        div.thumb-holder {
+            padding: 10px 5px;
+            height: 100%;
+            width: 100px;
+            float: left;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        div#thumbview {
+            margin: auto;
+            width: 1120px;
+            min-width: 1120px;
+            height: 130px;
+            margin-top: 40px;
+            padding: 0px 5px;
+            box-sizing: border-box;
+        }
+        div#thumbview img {
+            position: relative;
+            left: auto;
+            top: auto;
+            margin: auto;
+            height: 100px;
+            width: 90px;
+            box-sizing: inherit;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,12 +51,12 @@
 <div class="container">
     <div class="row">
     <div class="col-6 ">
+        <%--showing login option after successfully signing up--%>
+        <div  id="login-page" style="display: none; "></div>
+
         <div id="box" class="panel panel-default" style= "border-color: lightgray; box-shadow: 1px 3px 4px 5px floralwhite ;" >
             <div style="margin-left: 3%">
-                <%--showing login option after successfully signing up--%>
-                <div  id="login-page" style="display: none; "></div>
-
-                <form action="sign-up?signUp=1" method="post" class="form-horizontal" id="user-profile">
+                <form action="sign-up?signUp=1" method="post" class="form-horizontal" role="form" data-toggle="validator" id="user-profile">
 
 
                     <h3>Personal Information:</h3>
@@ -36,17 +65,19 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="firstN">First Name:</label>
-                            <input class="form-control" type="text" id="firstN" name="fname" placeholder="First Name" required>
+                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="firstN" name="fname" data-error="Invalid value" placeholder="First Name" required>
                             <br>
                         </div>
+                        <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="lastN">Last Name:</label>
-                            <input class="form-control" type="text" id="lastN" name="lname"  placeholder="Last Name" required>
+                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="lastN" name="lname" data-error="Invalid value" placeholder="Last Name" required>
                             <br>
                         </div>
+                        <div class="help-block with-errors"></div>
                     </div><br><br>
 
                     <div class="form-group">
@@ -66,7 +97,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="DOB">Date Of Birth</label>
-                            <input class="form-control" type="date" name="dob" id="DOB" value="1990-01-01" required>
+                            <input class="form-control" type="date" name="dob" id="DOB" required>
                             <br><br>
                         </div>
                     </div>
@@ -80,16 +111,30 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="usr">User Name:  </label>
-                            <input class="form-control" type="text" id="usr" name="userName"  placeholder="User Name" required >
+                            <script src="/javascript/jquery.js"></script>
+                            <input class="form-control" type="text" id="usr" name="userName"  placeholder="User Name" required><div id="status"></div>
+                            <script type="text/javascript" src="/javascript/user_validator.js"> </script>
                             <br><br>
                         </div>
+
                     </div>
 
 
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="emil">Email:   </label>
-                            <input class="form-control" type="email" id="emil" name="email"  placeholder="Email" required>
+                            <input class="form-control" type="email" id="emil" name="email"  placeholder="Email" data-error="Sorry, this email address is invalid" required>
+                            <br><br>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div style="width: 50%">
+                            <label for="password">Password:  </label>
+                            <input class="form-control" data-minlength="4" type="password" id="password" name="password"  placeholder="Password" required>
+                            <div class="help-block">Minimum of 4 characters</div>
                             <br><br>
                         </div>
                     </div>
@@ -97,17 +142,9 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="passrd">Password:  </label>
-                            <input class="form-control" type="password" id="passrd" name="password"  placeholder="Password" required>
-                            <br><br>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <div style="width: 50%">
-                            <label for="passrd2">Re-Enter Password:  </label>
-                            <input class="form-control" type="password" id="passrd2" name="password"  placeholder="Re-Enter" required>
+                            <label for="confirm_password">Confirm Password:  </label>
+                            <input class="form-control"  data-match="#password" type="password" id="confirm_password" name="password" data-match-error="Whoops, the password you have entered is wrong !!"  placeholder="Confirm" required>
+                            <div class="help-block with-errors"></div>
                             <br><br>
                         </div>
                     </div>
@@ -338,22 +375,37 @@
                                 <option> Zambia</option>
                                 <option> Zimbabwe</option>
                             </select>
-                            <br><br>
+                            <br><br><br>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div style="width: 50%">
                             <p><strong>Description:</strong></p>
-                            <textarea style="overflow: auto; resize: none" name="description" cols="60"  placeholder="Describe Your Self" rows="8"></textarea>
+                            <textarea style="overflow: auto; resize: none" name="description" cols="60"  placeholder="Describe Your Self" rows="8" required></textarea>
                             <br><br>
                         </div>
                     </div>
                     </div>
 
-                    <div class="form-inline">
-                        <input style="width: 10em; align-content: space-around" class="form-control" type="submit" value="Sign Up!" id="submit-btn">
-                        <input style="width: 10em" class="form-control" type="reset" value="Cancel">
+                    <div class="form-group">
+                        <div id="thumbview">
+                        <h3>Choose Your profile Image:</h3>
+                        <br><br>
+                            <div class="thumb-holder"><img id="defaultimg" src="../pictures/avatars/default.jpg" alt="default" width="100"/></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/1.jpg" alt="1" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/2.png" alt="2" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/3.png" alt="3" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/4.png" alt="4" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/5.png" alt="5" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/6.png" alt="6" width="100"></div>
+                            <div class="thumb-holder"><img src="/pictures/avatars/7.png" alt="7" width="100"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
+                        <button type="reset" class="btn btn-default">Cancel</button>
                         <br><br><br><br><br>
                     </div>
                 </form>
@@ -378,16 +430,16 @@
             success: function(resp, status) {
                 // if success, HTML response is expected, so replace current
                 if(resp === "success"){
-                    alert("congratulations you have signed up !");
+                    swal("congratulations, you have signed up !" , "success");
                     redirectToLogin();
 
                 }
                 else if (resp === "error"){
-                    alert("SQL error");
+                    swal("SQL error");
                 }
             },
             error: function (data, status) {
-                alert(status);
+                swal(status);
             }
 
         });
@@ -399,16 +451,17 @@
             type: 'post',
             data: 'login=newSignUp',
             success: function(resp, status) {
-                $('form#user-profile').hide();
+                $('#box').hide();
                 loginPage.html(resp);
-                loginPage.slideDown();
+                loginPage.slideDown(2200);
             },
             error: function (resp, status) {
-                alert(status);
+                swal(status);
                 console.log(resp);
             }
 
         });
     }
+
 </script>
 </html>

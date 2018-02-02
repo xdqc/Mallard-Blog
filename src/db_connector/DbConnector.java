@@ -595,7 +595,7 @@ public class DbConnector {
 
                 create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
                                     .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                                      .execute();
+                                    .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -603,7 +603,6 @@ public class DbConnector {
             }
 
         return true;
-
     }
 
     public static boolean saveAttachmentRecord(AttachmentRecord attachment) {

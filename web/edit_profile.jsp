@@ -41,7 +41,7 @@
                                 <div style="width: 50%">
                                     <label for="gnd"><strong>Gender:</strong></label>
                                     <select  class="radio-inline" id="gnd" name="gender" >
-                                        <option name="gender" value="${user.getGender()}"></option>
+                                        <option>${user.getGender()}</option>
                                         <option value="0" name="gender">Female</option>
                                         <option value="1" name="gender">Male</option>
                                         <option value="2" name="gender">Other</option>
@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="addr">Address:  </label>
-                                    <input class="form-control" type="text" id="addr" name="address">
+                                    <input class="form-control" type="text" id="addr" value="${user.getAddress()}" name="address">
                                     <br><br>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="cty">City:  </label>
-                                    <input class="form-control" type="text" id="cty" name="city">
+                                    <input class="form-control" type="text" id="cty" value="${user.getCity()}" name="city">
                                     <br><br>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="ste" >State:  </label>
-                                    <input class="form-control" type="text" id="ste" name="state">
+                                    <input class="form-control" type="text" id="ste" value="${user.getState()}" name="state">
                                     <br><br>
                                 </div>
                             </div>
@@ -294,7 +294,9 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <p><strong>Description:</strong></p>
-                                    <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8" placeholder="${user.getDescription()}"></textarea>
+                                    <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8">
+                                        ${user.getDescription()}
+                                    </textarea>
                                     <br><br>
                                 </div>
                             </div>
