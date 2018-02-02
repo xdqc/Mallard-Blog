@@ -13,8 +13,6 @@
     <%@include file="_head.jsp"%>
     <title>Create Account</title>
     <style type="text/css">
-        #login-page  {
-        }
         div.thumb-holder {
             padding: 10px 5px;
             height: 100%;
@@ -455,7 +453,7 @@
             success: function(resp, status) {
                 $('#box').hide();
                 loginPage.html(resp);
-                loginPage.slideDown(1000);
+                loginPage.slideDown(2200);
             },
             error: function (resp, status) {
                 swal(status);
