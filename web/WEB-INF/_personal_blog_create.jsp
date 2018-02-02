@@ -28,7 +28,9 @@
                     <div class="col-md-6">
                         <div class="well well-sm well-primary">
                             <div class="input-group image-preview">
-                                <%@include file="_upload_file.jsp" %>
+
+
+
                             </div><!-- /input-group image-preview [TO HERE]-->
                         </div>
                     </div>

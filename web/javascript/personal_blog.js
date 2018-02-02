@@ -645,8 +645,5 @@ $(document).ready(function () {
             }
         })
     });
-
-
-
 });
 
