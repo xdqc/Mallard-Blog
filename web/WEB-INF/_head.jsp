@@ -35,26 +35,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date.min.js" integrity="sha256-tKA6ehiote08tAMlvjaz2u2xKRjMmtA9tnZ0hE4/MMU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date-range.min.js" integrity="sha256-HsOOagtQtwyP0U5GuuHMR0KF8W2bfU/CMg5zsAGE/60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js" integrity="sha256-m4GLhtBF1Ue31vdmii9AEzvSYnBTJFzYkVToaD047Z4=" crossorigin="anonymous"></script>
-
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    
+    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
 
     <script type="text/javascript">
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
     </script>
 
+
     <!-- For upload files page generate multiple row -->
     <script type="text/javascript" src="javascript/uploadFile.js"></script>
-
-
-    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
     <script type="text/javascript" src="javascript/homepage.js"></script>
     <script type="text/javascript" src="javascript/login.js"></script>
 
 
         <!-- PUT CSS HERE -->
-
-    <link rel="stylesheet" href="css/personal_panel.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="stylesheet" href="css/article.css"/>
     <link rel="stylesheet" href="css/homepage_menu.css"/>
+    <link rel="stylesheet" href="css/personal_panel.css">
 </head>

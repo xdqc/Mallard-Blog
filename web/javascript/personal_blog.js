@@ -648,8 +648,5 @@ $(document).ready(function () {
             }
         })
     });
-
-
-
 });
 

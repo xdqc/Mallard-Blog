@@ -1,7 +1,3 @@
-<%--getServletPath : <%= request.getServletPath() %><br>--%>
-<%--getQueryString : <%= request.getQueryString() %><br>--%>
-<%--getQueryString : <%= request.getSession().getAttributeNames() %><br>--%>
-
 <c:forEach var="blog" items="${blogs}">
     <c:if test="${blog.getArticle().getShowHideStatus()>0 && blog.getAuthor().getIsvalid()>0}">
         <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
@@ -32,6 +28,14 @@
                 <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
                      alt="random picture"/>
 
+                <!-- collapse style multimedia gallery begin-->
+                <div>
+                <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                    <span class="glyphicon glyphicon-file"></span>Show more multimedia</a>
+                <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
+                </div>
+                <!-- collapse style multimedia gallery end-->
+
                     <%--display multimedia gallery here by ajax--%>
                 <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
 
@@ -50,10 +54,24 @@
                 <br>
                 <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
                 <br>
-                <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
-                    multimedia</a>
-                <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
-                    Gallery</a>
+
+                <!-- collapse style upload file begin-->
+                <div>
+                    <script type="text/javascript" src="../javascript/uploadFile.js"></script>
+                    <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${blog.getArticle().getId()}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
+                    <div id="uploadArea-${blog.getArticle().getId()}" class="collapse">
+                        <form id="uploadForm" action="/File-Upload?articleId=${blog.getArticle().getId()}" method="post" enctype="multipart/form-data">
+                            <fieldset id="files-article-${blog.getArticle().getId()}">
+                                <legend>Select your file</legend>
+                                <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${blog.getArticle().getId()}','article')"><br>
+                            </fieldset>
+                            <input id="uploadButton-article-${blog.getArticle().getId()}" class="upload-buttons" type = "submit" value = "Upload">
+                        </form>
+                        <div id="uploadedFilesArea"></div>
+                    </div>
+                </div>
+                <!-- collapse style upload file end-->
 
                     <%--edit and delete article button--%>
                 <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
