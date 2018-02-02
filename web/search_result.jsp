@@ -18,8 +18,8 @@
 <div class="container">
     <div class="row">
         <h3>You are searching : <span class="mark" id="searchStr">${searchStr}</span></h3>
-
-        <div class="col-sm-12 col-md-8 col-lg-8">
+        <div class="col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-sm-12 col-md-10 col-lg-10">
 
 
             <table id="user-table" class="tablesorter table table-striped table-hover  table-responsive">
@@ -38,7 +38,7 @@
                 <tbody>
                 <c:forEach var="user" items="${userResults}">
                     <tr>
-                        <td class="mark">${user.getUserName()}</td>
+                        <td class="markCol">${user.getUserName()}</span></td>
                         <td>${user.getLName()}</td>
                         <td>${user.getFName()}</td>
                         <td>${user.getEmail()}</td>
@@ -54,7 +54,8 @@
     <br>
     <br>
     <div class="row">
-        <div class="col-sm-12 col-md-8 col-lg-8">
+        <div class="col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-sm-12 col-md-10 col-lg-10">
 
             <table id="article-table" class="tablesorter table table-striped table-hover table-bordered table-responsive">
                 <caption>List of found articles</caption>
@@ -72,7 +73,7 @@
                 <tbody>
                 <c:forEach var="article" items="${articleResults}">
                     <tr>
-                        <td class="mark">${article.getVal1().getTitle()}</td>
+                        <td class="markCol">${article.getVal1().getTitle()}</span></td>
                         <td>${article.getVal2().getLName()}</td>
                         <td>${article.getVal2().getFName()}</td>
                         <td class="time create-time">${article.getVal1().getCreateTime()}</td>
@@ -105,17 +106,12 @@
     });
 
     $(document).ready(function () {
-//        let times = $(".time");
-//
-//        for (let time of times) {
-//            console.log(time);
-//            let date = moment($(time).html()).format("YYYY/MM/DD hh:mm:ss");
-//            $(time).html(date);
-//        }
 
-        $ctx = $(".mark");
+
         const str = $("#searchStr").html()
-        $ctx.mark(str);
+        $(".markCol").mark(str);
+
+
     })
 </script>
 <style>
@@ -135,5 +131,9 @@
         cursor: pointer;
         background: url(pictures/small.png) no-repeat center right;
         background-size: 10px;
+    }
+    mark {
+        background: orange;
+        color: black;
     }
 </style>

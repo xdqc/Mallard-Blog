@@ -1,48 +1,45 @@
 
 
 dl.comment {
-    padding: 1em .1em 0 1em;
-    margin-bottom: 10px;
+    padding: 10px 10px 0 10px;
+    margin: 10px -10px 10px 10px;
     border: 2px dashed seashell;
     border-radius: 10px;
     background-color: #F4F4F9;
 }
 
 dd.comment {
-    background-color: #F7F7F4;
-    border-radius: 5px;
+    background-color: #F4F4F4;
+    border-radius: 100px;
     position: relative;
     padding: 10px 0 10px 20px;
     margin: 5px 5px 5px 0;
-    
+   
 }
 
-@media (max-width: 991px){
-    div.comment-action-btn{
-        position: relative;
-        left: 60%;
-        width: 40%;
-    }
-}
-@media (min-width: 992px){
-    div.comment-action-btn{
-        position: relative;
-        left: 80%;
-        width: 20%;
-    }
+div.comment-action-btn{
+    margin: 10px 0 0 -15px;    
 }
 
 a.reply-comment-btn {
     padding-left: 1em;
-
+    color: #582;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 a.edit-comment-btn {
     padding-left: 1em;
+    color: #288;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 a.delete-comment-btn {
     padding-left: 1em;
+    color: salmon;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 a.disabled {
@@ -64,7 +61,7 @@ a.disabled {
 }
 
 .popup {
-    margin: -35px 0 20px 0;
+    margin: -36px 0 20px -5px;
     padding: 10px;
     background: none repeat scroll 0 0 #f5f5f5;
     border-radius: 5px;
@@ -163,12 +160,12 @@ button.publish{
     color: #777777;
     float: left;
     font-size: 14px;
-    height: 30px;
+    height: 20px;
     line-height: 30px;
-    margin: 10px 0 10px 10px;
+    margin: 10px 0 0px 10px;
     text-align: center;
     transition: all 0.4s ease 0s;
-    width: 30px;
+    width: 20px;
     cursor: pointer;
 }
 .status-upload ul > li > a:hover {

@@ -94,7 +94,7 @@ public class PersonalBlog extends Controller {
             } else {
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write("<h3>no more articles</h3>");
+                resp.getWriter().write("<h3 class='no-articles'>no more articles</h3>");
             }
             cleanAllParameters(req);
             return;
@@ -315,6 +315,7 @@ public class PersonalBlog extends Controller {
             CommentRecord comment = commentTree.getData().Val2;
             UserRecord commenter = commentTree.getData().Val1;
             UserRecord articleAuthor = commentTree.getData().Val3;
+            // create json obj for valid comment to show
             if (comment.getShowHideStatus()==1 && commenter.getIsvalid()==1){
 
                 JSONObject commentJson = new JSONObject();
