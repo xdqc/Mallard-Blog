@@ -29,6 +29,23 @@
                         <div class="well well-sm well-primary">
                             <div class="input-group image-preview">
 
+                                <!-- collapse style upload file begin-->
+                                <div>
+                                    <script type="text/javascript" src="../javascript/uploadFile.js"></script>
+                                    <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${articleId}" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
+                                    <div id="uploadArea-${articleId}" class="collapse">
+                                        <form id="uploadForm" action="/File-Upload?articleId=${articleId}" method="post" enctype="multipart/form-data">
+                                            <fieldset id="files-article-${articleId}">
+                                                <legend>Select your file</legend>
+                                                <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${articleId}','article')"><br>
+                                            </fieldset>
+                                            <input id="uploadButton-article-${articleId}" class="upload-buttons" type = "submit" value = "Upload">
+                                        </form>
+                                        <div id="uploadedFilesArea"></div>
+                                    </div>
+                                </div>
+                                <!-- collapse style upload file end-->
 
 
                             </div><!-- /input-group image-preview [TO HERE]-->

@@ -14,7 +14,7 @@
 const entityId = e => e.attr("id").slice(e.attr("id").lastIndexOf("-") + 1);
 
 /**
- * helper function recursively show comment tree
+ * Recursive function show comment tree
  */
 const showCascadingComments = (commentTree, $parent, numComments) => {
     // To exploit var hijacking, use plain for loop rather than map, reduce, filter...
@@ -23,9 +23,12 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
             for (let cmtId in commentArr) {
                 // get a value of json without pre-knowing its key
                 if (commentArr.hasOwnProperty(cmtId)) {
+                    // increment comment number for commentTree node which is a comment
                     numComments.num++;
                     const comment = commentArr[cmtId];
                     const ago = $.timeago(Date.parse(comment["createTime"]));
+
+                    // commenter avatar, name and post time
                     var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
                         .append($("<dt class='comment'>")
                             .append($("<a>").attr("href", "personal-blog?userId="+comment["commenterId"])
@@ -34,36 +37,38 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
 
-                    const replyBtn = $("<a class='reply-comment-btn fa fa-comments-o'>")
+                    const replyBtn = $("<a class='reply-comment-btn'>")
                         .attr("id", "reply-comment-btn-" + cmtId)
-                        //.attr("href", "#popup-reply-" + cmtId)
-                        //.text(" reply");
+                        .text(" Reply")
+                        .prepend($("<span class='fa fa fa-comments-o'>"));
 
                     const replyForm = $("<form class='popup'>").attr("id", "popup-reply-" + cmtId)
                         .append(($("<textarea class='reply-text form-control' rows='2' required>")
                             .attr("id", "reply-text-" + cmtId))
                             .attr("placeholder", "Reply to " + comment["commenter"]))
-                        .append(($("<button type='submit' class='reply-submit btn btn-success'>Reply</button>")
+                        .append(($("<button type='submit' class='reply-submit btn btn-success'> Reply</button>")
+                            .prepend($("<span class='fa fa-comments-o'>"))
                             .attr("id", "reply-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
-                    const editBtn = $("<a class='edit-comment-btn fa fa-pencil-square-o'>")
+                    const editBtn = $("<a class='edit-comment-btn '>")
                         .attr("id", "delete-comment-btn-" + cmtId)
-                        //.attr("href", "#popup-edit-" + cmtId)
-                        //.text(" edit");
+                        .text(" Edit")
+                        .prepend($("<span class='fa fa-pencil-square-o'>"));
 
                     const editForm = $("<form class='popup'>").attr("id", "popup-edit-" + cmtId)
-                        .append(($("<textarea class='edit-text form-control' rows='1' required>")
+                        .append(($("<textarea class='edit-text form-control' rows='2' required>")
                             .attr("id", "edit-text-" + cmtId))
                             .val(comment["content"]))
-                        .append(($("<button type='submit' class='edit-submit btn btn-success'>Edit</button>")
+                        .append(($("<button type='submit' class='edit-submit btn btn-success'> Edit</button>")
+                            .prepend($("<span class='fa fa-pencil-square-o'>"))
                             .attr("id", "edit-submit-" + cmtId)))
                         .append($("<a class='close' href='#/'>").html("&times;"));
 
-                    const deleteBtn = $("<a class='delete-comment-btn fa fa-trash-o'>")
+                    const deleteBtn = $("<a class='delete-comment-btn'>")
                         .attr("id", "delete-comment-btn-" + cmtId)
-                        //.attr("href", "#popup-delete-" + cmtId)
-                        //.text(" delete");
+                        .text(" Delete")
+                        .prepend($("<span class='fa fa-trash-o'>"));
 
 
                     /*
@@ -91,7 +96,6 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                     if (loggedInUser === comment["commenterId"]) {
                         $dd.append(editForm);
                     }
-
                 }
             }
         } else {
@@ -138,16 +142,14 @@ $(document).ready(function () {
      --  ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚══════╝╚══════╝
      */
     //Create new article area works on load.
-    articleActions();
+    articleActions(0);
 
     /**
      * Ajax load articles on homepage
      */
     const loadedArticles = {num: $(".article-panel").length};
     $("#load-more-articles").on("click", function () {
-        const currentArticleNum = $(".article-panel").length;
-        console.log("loaded articles: "+currentArticleNum);
-        const articleArea = $("#more-article-area");
+        const moreArticleArea = $("#more-article-area");
         $.ajax({
             type: 'post',
             url: 'personal-blog',
@@ -158,28 +160,40 @@ $(document).ready(function () {
             cache: false,
             beforeSend: () => {
                 loadedArticles.num++;
-                //$(this).attr('disabled','disabled');
                 $("#load-article-img").css("display","block");
             },
             success: (resp) => {
-                let html = articleArea.html();
+                let html = moreArticleArea.html();
                 html += resp;
-                articleArea.html(html);
+                moreArticleArea.html(html);
+
+                //no more articles
+                if (resp.startsWith("<h3")){
+                    $(this).css("display","none");
+                }
             },
             error: (msg, status) => {
+                loadedArticles.num--;
                 console.log("error of loading more article!!!");
                 console.log(status);
                 console.log(msg);
             },
-            complete: () => {
-                //$(this).removeAttr('disabled');
+            complete: (resp, status) => {
                 $("#load-article-img").css("display", "none");
-                articleActions();
+
+                // // register event
+                // resp = resp["responseText"];
+                // const articleId = resp.split(/\r?\n/)[0].slice(resp.split(/\r?\n/)[0].lastIndexOf('-') + 1).slice(0, -2);
+                // const $articlePanel = $("#article-panel-" + articleId);
+                // if (!$articlePanel.hasClass("clickable-active")) {
+                //     articleActions(articleId);
+                //     $articlePanel.addClass("clickable-active");
+                // }
             }
         })
     });
 
-    /*let article actions 'focus on' particular article (or none for creating new)*/
+    /**let article actions 'focus on' particular article (or none for creating new)*/
     const articleActionsHandler = (trigger) => {
         trigger.on("click", function () {
             const articleId = entityId($(this));
@@ -188,6 +202,7 @@ $(document).ready(function () {
         })
     };
     articleActionsHandler($(".accordion-bar"));
+
     /**
      * AJAX load article content
      */
@@ -219,13 +234,16 @@ $(document).ready(function () {
             }
         });
     });
+
     /**
      * Ajax load edit article area
      */
     $(".edit-article-btn").on("click", function () {
 
         const articleId = entityId($(this));
+        const $articlePanel = $("#article-panel-"+articleId);
         const editArea = $("#edit-article-area-" + articleId);
+        $("#read-more-"+articleId).click();
         $.ajax({
             type: 'POST',
             url: 'personal-blog',
@@ -243,14 +261,23 @@ $(document).ready(function () {
             },
             complete: () => {
                 articleActionsHandler($(".accordion-bar"));
-                articleActions();
+                // event binding for ajax loaded area
+                if (!$articlePanel.hasClass("clickable-active")){
+                    articleActions(articleId);
+                    $articlePanel.addClass("clickable-active");
+                }
             }
         })
     });
 
-    function articleActions() {
+    function articleActions(articleId) {
+        const $articlePanel = $("#article-panel-"+articleId);
+        console.log($articlePanel);
 
-        $(".article-panel").on("change", ".publish-mode", function () {
+        /**
+         * choose post type: publish/draft
+         */
+        $articlePanel.on("change", ".publish-mode", function () {
 
             const articleId = entityId($(this));
 
@@ -271,7 +298,10 @@ $(document).ready(function () {
             }
         });
 
-        $(".article-panel").on("click", ".publish", function (e) {
+        /**
+         * Post a new article or edit existing article
+         */
+        $articlePanel.on("click", ".publish", function (e) {
             e.preventDefault();
             const articleId = entityId($(this));
 
@@ -279,6 +309,7 @@ $(document).ready(function () {
 
             const uploadingImg = $("img.uploading-img");
 
+            // validate article title
             if (form["title"].val() === "") {
                 swal({
                     title: "Need a title!",
@@ -299,6 +330,7 @@ $(document).ready(function () {
                 return;
             }
 
+            // validate article content
             if (form["content"].val() === "" || form["content"].val() === undefined) {
                 swal("Write something!", "You need have some content!", "warning");
                 return;
@@ -306,6 +338,7 @@ $(document).ready(function () {
 
             let availableDate = new Date();
 
+            // if user select to draft, validate available time
             if (form["publishMode"][0].value === "draft") {
                 if (form["datePicker"].val() === "" || form["datePicker"].val() === undefined) {
                     alert("Available time is required.");
@@ -354,8 +387,6 @@ $(document).ready(function () {
                         msg = "Server error";
                         swal("Oops ", msg, "danger")
                     }
-
-
                     console.log(resp);
                 },
                 error: (msg, status) => {
@@ -371,7 +402,10 @@ $(document).ready(function () {
             })
         });
 
-        $(".article-panel").on("click", ".delete-article-btn", function () {
+        /**
+         * delete an article
+         */
+        $articlePanel.on("click", ".delete-article-btn", function () {
             const articleId = entityId($(this));
             swal({
                 title: "Are you sure?",
@@ -410,7 +444,6 @@ $(document).ready(function () {
             });
 
         });
-
     }
 
 
@@ -423,7 +456,7 @@ $(document).ready(function () {
      --   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝
      */
     /**
-     * AJAX load comments of article
+     * AJAX load comments tree of article
      */
     $(document).on("click", ".show-comment-btn", function () {
         const articleID = entityId($(this));
@@ -446,7 +479,7 @@ $(document).ready(function () {
                 success: function (resp) {
                     loadingImg.css("display", "none");
                     commentArea.empty();
-                    /* for passing by reference*/
+                    // Calculate number of comments, pass by ref
                     const numComments = {num: 0};
                     resp.forEach(comments => showCascadingComments(comments, commentArea, numComments));
                     $("#num-comments-"+articleID).html(numComments.num);
@@ -456,12 +489,16 @@ $(document).ready(function () {
                     commentArea.slideDown();
                 },
                 error: (msg, status) => {
-                    console.log("error!!!");
+                    console.log("show-comment-btn error!!!");
                     console.log(status);
                     console.log(msg);
                 },
                 complete: () => {
-                    commentActions();
+                    // event binding for ajax loaded area
+                    if (!commentArea.hasClass("clickable-active")){
+                        commentActions(articleID);
+                        commentArea.addClass("clickable-active");
+                    }
                 }
             });
 
@@ -472,11 +509,96 @@ $(document).ready(function () {
         }
     });
 
-    function commentActions() {
-        $(".comment-area").on("click", ".reply-submit", function (e) {
+    /**
+     * Leave comment under articles
+     */
+    $(document).on("click", ".leave-comment-submit", function (e) {
+        e.preventDefault();
+        const articleId = entityId($(e.target));
+        const $commentText = $("#leave-comment-text-" + articleId);
+
+        if($commentText.val()==="" || $commentText.val()===undefined){
+            swal("Write something!", "You need to have something to say!", "warning");
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {
+                replyArticle: articleId,
+                commenter: loggedInUser,
+                content: $commentText.val(),
+            },
+            cache: false,
+            beforeSend: function () {
+                swal({
+                    title: "Wait a second...",
+                    text: "Ajax request running",
+                    type: "info",
+                    showLoaderOnConfirm: true
+                });
+                $("#showCommentBtn-"+articleId).click();
+            },
+            success: function (resp) {
+                $("#leave-comment-text-" + articleId).val("");
+                swal("Congrats!", "Your comment is posted.", "success");
+            },
+            error: (msg, status) => {
+                console.log("error!!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+                $("#showCommentBtn-"+articleId).click();
+            }
+        })
+    });
+
+    function commentActions(articleID) {
+        const $commentArea = $("#comment-area-"+articleID);
+
+        /**
+         * show reply comment form
+         */
+        $commentArea.on("click", ".reply-comment-btn", function (e) {
+            e.preventDefault();
+            const articleId = entityId($(e.delegateTarget));
+            const cmtId = entityId($(this));
+            const replyForm = $("#popup-reply-" + cmtId);
+            replyForm.slideDown();
+            $(".close").on("click", function () {
+                replyForm.slideUp();
+            })
+        });
+
+        /**
+         * show edit comment form
+         */
+        $commentArea.on("click", ".edit-comment-btn", function (e) {
+            e.preventDefault();
+            const articleId = entityId($(e.delegateTarget));
+            const cmtId = entityId($(this));
+            const editForm = $("#popup-edit-" + cmtId);
+            editForm.slideDown();
+            $(".close").on("click", function () {
+                editForm.slideUp();
+            })
+        });
+
+        /**
+         * reply a comment
+         */
+        $commentArea.on("click", ".reply-submit", function (e) {
             e.preventDefault();
             const articleId = entityId($(e.delegateTarget));
             const cmtId = entityId($(e.target));
+            const $replyText = $("#reply-text-" + cmtId);
+
+            if($replyText.val()==="" || $replyText.val()===undefined){
+                swal("Write something!", "You need to have something to say!", "warning");
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
@@ -485,7 +607,7 @@ $(document).ready(function () {
                     replyArticle: articleId,
                     replyComment: cmtId,
                     commenter: loggedInUser,
-                    content: $("#reply-text-" + cmtId).val(),
+                    content: $replyText.val(),
                 },
                 cache: false,
                 beforeSend: function () {
@@ -512,17 +634,26 @@ $(document).ready(function () {
             })
         });
 
-        $(".comment-area").on("click", ".edit-submit", function (e) {
+        /**
+         * edit a comment
+         */
+        $commentArea.on("click", ".edit-submit", function (e) {
             e.preventDefault();
             const articleId = entityId($(e.delegateTarget));
             const cmtId = entityId($(e.target));
+            const $editText = $("#edit-text-" + cmtId);
+
+            if($editText.val()==="" || $editText.val()===undefined){
+                swal("Write something!", "You need to have something to say!", "warning");
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
                 url: 'personal-blog',
                 data: {
                     editComment: cmtId,
-                    content: $("#edit-text-" + cmtId).val()
+                    content: $editText.val()
                 },
                 cache: false,
                 beforeSend: function () {
@@ -550,29 +681,10 @@ $(document).ready(function () {
             })
         });
 
-        $(".comment-area").on("click", ".reply-comment-btn", function (e) {
-            e.preventDefault();
-            const articleId = entityId($(e.delegateTarget));
-            const cmtId = entityId($(this));
-            const replyForm = $("#popup-reply-" + cmtId);
-            replyForm.slideDown();
-            $(".close").on("click", function () {
-                replyForm.slideUp();
-            })
-        });
-
-        $(".comment-area").on("click", ".edit-comment-btn", function (e) {
-            e.preventDefault();
-            const articleId = entityId($(e.delegateTarget));
-            const cmtId = entityId($(this));
-            const editForm = $("#popup-edit-" + cmtId);
-            editForm.slideDown();
-            $(".close").on("click", function () {
-                editForm.slideUp();
-            })
-        });
-
-        $(".comment-area").on("click", ".delete-comment-btn", function (e) {
+        /**
+         * delete a comment
+         */
+        $commentArea.on("click", ".delete-comment-btn", function (e) {
             e.preventDefault();
             const articleId = entityId($(e.delegateTarget));
             const cmtId = entityId($(this));
@@ -613,40 +725,5 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on("click", ".leave-comment-submit", function (e) {
-        e.preventDefault();
-        const articleId = entityId($(e.target));
-        $.ajax({
-            type: 'POST',
-            url: 'personal-blog',
-            data: {
-                replyArticle: articleId,
-                commenter: loggedInUser,
-                content: $("#leave-comment-text-" + articleId).val(),
-            },
-            cache: false,
-            beforeSend: function () {
-                swal({
-                    title: "Wait a second...",
-                    text: "Ajax request running",
-                    type: "info",
-                    showLoaderOnConfirm: true
-                });
-                $("#showCommentBtn-"+articleId).click();
-            },
-            success: function (resp) {
-                $("#leave-comment-text-" + articleId).val("");
-                swal("Congrats!", "Your comment is posted.", "success");
-            },
-            error: (msg, status) => {
-                console.log("error!!!");
-                console.log(status);
-                console.log(msg);
-            },
-            complete: () => {
-                $("#showCommentBtn-"+articleId).click();
-            }
-        })
-    });
 });
 

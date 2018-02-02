@@ -81,24 +81,7 @@ public class PersonalBlog extends Controller {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         /*load more articles*/
-        if (req.getParameter("loadMoreArticles")!=null){
-            int loadedNum = Integer.parseInt(req.getParameter("loadMoreArticles"));
-            String loadAuthorId = req.getParameter("loadArticleAuthoredBy");
-
-            //Query only valid article by valid user
-            Blog loadBlog = DbConnector.getNextHotBlog(loadedNum);
-            if (loadBlog != null){
-                req.setAttribute("blog", loadBlog);
-                req.setAttribute("id", String.valueOf(loadBlog.getArticle().getId()));
-                req.getRequestDispatcher("WEB-INF/_personal_blog_single_article.jsp").forward(req,resp);
-            } else {
-                resp.setContentType("text/html");
-                resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write("<h3>no more articles</h3>");
-            }
-            cleanAllParameters(req);
-            return;
-        }
+        if (loadArticlesController(req, resp)) return;
 
         /*Load comments tree*/
         if (loadCommentTreeController(req, resp)) return;
@@ -124,6 +107,28 @@ public class PersonalBlog extends Controller {
         /*edit comment*/
         if (editCommentController(req, resp)) return;
 
+    }
+
+    private boolean loadArticlesController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter("loadMoreArticles")!=null){
+            int loadedNum = Integer.parseInt(req.getParameter("loadMoreArticles"));
+            String loadAuthorId = req.getParameter("loadArticleAuthoredBy");
+
+            //Query only valid article by valid user
+            Blog loadBlog = DbConnector.getNextHotBlog(loadedNum);
+            if (loadBlog != null){
+                req.setAttribute("blog", loadBlog);
+                req.setAttribute("id", String.valueOf(loadBlog.getArticle().getId()));
+                req.getRequestDispatcher("WEB-INF/_personal_blog_single_article.jsp").forward(req,resp);
+            } else {
+                resp.setContentType("text/html");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write("<h3 class='no-articles'>no more articles</h3>");
+            }
+            cleanAllParameters(req);
+            return true;
+        }
+        return false;
     }
 
     private boolean loadCommentTreeController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -242,12 +247,10 @@ public class PersonalBlog extends Controller {
                 ArticleRecord articleRecord = new ArticleRecord();
 
                 articleRecord.setId(Integer.valueOf((String) article.get("articleId")));
-
                 articleRecord.setTitle((String) article.get("title"));
                 articleRecord.setContent((String) article.get("content"));
                 articleRecord.setAuthor(((Long)article.get("authorId")).intValue());
                 articleRecord.setValidTime(new Timestamp((Long) article.get("validTime")));
-
 
                 String msg;
                 if (articleRecord.getId()>0){
@@ -259,6 +262,9 @@ public class PersonalBlog extends Controller {
                     //insert new article
                     articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
                     msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
+                    //TODO when creating article, the multimedia files will have id=0 in DB.attachment, need to change that to new article id
+                    int newArticleID = DbConnector.getNewlyCreatedArticleId(articleRecord);
+
                 }
 
                 System.out.println(articleRecord);
@@ -315,6 +321,7 @@ public class PersonalBlog extends Controller {
             CommentRecord comment = commentTree.getData().Val2;
             UserRecord commenter = commentTree.getData().Val1;
             UserRecord articleAuthor = commentTree.getData().Val3;
+            // create json obj only for valid comments to show
             if (comment.getShowHideStatus()==1 && commenter.getIsvalid()==1){
 
                 JSONObject commentJson = new JSONObject();
@@ -326,12 +333,13 @@ public class PersonalBlog extends Controller {
                 commentJson.put("createTime", comment.getCreateTime().toLocalDateTime().toString());
                 commentJson.put("editTime", comment.getEditTime()==null?null:comment.getEditTime().toLocalDateTime().toString());
 
-
+                // commentArr starts with a commentJson HEAD, follows a commentArr TAIL as children of the HEAD
                 JSONArray commentArr = new JSONArray();
                 JSONObject commentObj = new JSONObject();
                 commentObj.put(comment.getId(), commentJson);
-
                 commentArr.add(commentObj);
+
+                // json is array of comments directly reply to article.
                 json.add(commentArr);
 
                 if (!commentTree.getChildren().isEmpty()){
