@@ -149,9 +149,7 @@ $(document).ready(function () {
      */
     const loadedArticles = {num: $(".article-panel").length};
     $("#load-more-articles").on("click", function () {
-        const currentArticleNum = $(".article-panel").length;
-        console.log("loaded articles: "+currentArticleNum);
-        const articleArea = $("#more-article-area");
+        const moreArticleArea = $("#more-article-area");
         $.ajax({
             type: 'post',
             url: 'personal-blog',
@@ -165,12 +163,9 @@ $(document).ready(function () {
                 $("#load-article-img").css("display","block");
             },
             success: (resp) => {
-                let html = articleArea.html();
+                let html = moreArticleArea.html();
                 html += resp;
-                articleArea.html(html);
-                console.log(resp);
-
-
+                moreArticleArea.html(html);
 
                 //no more articles
                 if (resp.startsWith("<h3")){
@@ -183,11 +178,17 @@ $(document).ready(function () {
                 console.log(status);
                 console.log(msg);
             },
-            complete: () => {
+            complete: (resp, status) => {
                 $("#load-article-img").css("display", "none");
 
-                articleActions();
-
+                // // register event
+                // resp = resp["responseText"];
+                // const articleId = resp.split(/\r?\n/)[0].slice(resp.split(/\r?\n/)[0].lastIndexOf('-') + 1).slice(0, -2);
+                // const $articlePanel = $("#article-panel-" + articleId);
+                // if (!$articlePanel.hasClass("clickable-active")) {
+                //     articleActions(articleId);
+                //     $articlePanel.addClass("clickable-active");
+                // }
             }
         })
     });
@@ -240,7 +241,9 @@ $(document).ready(function () {
     $(".edit-article-btn").on("click", function () {
 
         const articleId = entityId($(this));
+        const $articlePanel = $("#article-panel-"+articleId);
         const editArea = $("#edit-article-area-" + articleId);
+        $("#read-more-"+articleId).click();
         $.ajax({
             type: 'POST',
             url: 'personal-blog',
@@ -259,9 +262,9 @@ $(document).ready(function () {
             complete: () => {
                 articleActionsHandler($(".accordion-bar"));
                 // event binding for ajax loaded area
-                if (!editArea.hasClass("clickable-active")){
+                if (!$articlePanel.hasClass("clickable-active")){
                     articleActions(articleId);
-                    editArea.addClass("clickable-active");
+                    $articlePanel.addClass("clickable-active");
                 }
             }
         })
@@ -269,6 +272,8 @@ $(document).ready(function () {
 
     function articleActions(articleId) {
         const $articlePanel = $("#article-panel-"+articleId);
+        console.log($articlePanel);
+
         /**
          * choose post type: publish/draft
          */
@@ -439,26 +444,6 @@ $(document).ready(function () {
             });
 
         });
-
-        /**
-         * deal with the multimedia gallery show content
-         */
-        $articlePanel.on("click", ".show-media", function (){
-            const attachmentId = entityId($(this));
-            const parameterName = entityParameterName($(this));
-            $.ajax({
-                url : 'multimedia-gallery',
-                data : {
-                    attachmentId : attachmentId,
-                    parameterName : parameterName
-                },
-                success : function(responseText) {
-                    $('#multimediaShowArea-' + parameterName + '-'+attachmentId).html(responseText);
-                }
-            })
-        });
-
-
     }
 
 
@@ -504,7 +489,7 @@ $(document).ready(function () {
                     commentArea.slideDown();
                 },
                 error: (msg, status) => {
-                    console.log("error!!!");
+                    console.log("show-comment-btn error!!!");
                     console.log(status);
                     console.log(msg);
                 },

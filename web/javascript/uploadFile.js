@@ -6,8 +6,8 @@ function addFileInput(attachmentId,parameterName) {
     var newButtom = document.createElement("input");
     newButtom.setAttribute("type", "file");
     newButtom.setAttribute("name", "file");
-    files.appendChild(newButtom);
-    files.appendChild(document.createElement("br"));
+    files.prepend(newButtom);
+    // files.appendChild(document.createElement("br"));
 }
 
 //close the window make it look like in the same page
@@ -35,7 +35,8 @@ function showArticles(parameterName,value) {
 
 $(document).ready(function () {
     //deal with the multimedia gallery show content
-    $('.show-media').click(function() {
+    //also works on ajax loaded part
+    $(document).on("click", ".show-media", function() {
         const attachmentId = entityId($(this));
         const parameterName = entityParameterName($(this));
         $.ajax({
@@ -51,7 +52,7 @@ $(document).ready(function () {
     });
 
     //deal with the upload file field
-    $('#uploadButton').click(function() {
+    $(document).on("click", '.uploadButton', function() {
         $.ajax({
             url : 'File-Upload',
             data : {
@@ -62,5 +63,5 @@ $(document).ready(function () {
             }
         });
     });
-})
+});
 

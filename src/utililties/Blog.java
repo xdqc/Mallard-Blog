@@ -17,10 +17,11 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
     private ArticleRecord article;
     private Tree<CommentRecord> commentTree = new Tree<>(new CommentRecord());
     private List<CommentRecord> commentList = new ArrayList<>();
-    private int numComments=0;
+    private int numComments = 0;
     private int validComments = 0;
 
-    public Blog() {}
+    public Blog() {
+    }
 
 
     /**
@@ -48,6 +49,7 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
     /**
      * Put a list of comments in comment tree where each node should be
      * Second step: put children and grandchildren, grand grand ... to tree
+     *
      * @param tree comment tree
      * @param list list of comments to put into tree
      */
@@ -66,7 +68,6 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         }
     }
 
-
     public UserRecord getAuthor() {
         return author;
     }
@@ -84,30 +85,28 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return numComments;
     }
 
-    public int getNumValidComments(){
+    public int getNumValidComments() {
         this.validComments = 0;
         countValidComment(this.commentTree);
         return this.validComments;
     }
 
-    private void countValidComment(Tree<CommentRecord> tree){
+    private void countValidComment(Tree<CommentRecord> tree) {
         for (Tree<CommentRecord> commentTree : tree.getChildren()) {
             CommentRecord comment = commentTree.getData();
             //UserRecord commenter = commentTree.getData().Val2;
             // create json obj only for valid comments to show
-            if (comment.getShowHideStatus()==1){
+            if (comment.getShowHideStatus() == 1) {
                 this.validComments++;
-                if (!commentTree.getChildren().isEmpty()){
+                if (!commentTree.getChildren().isEmpty()) {
                     countValidComment(commentTree);
                 }
             }
         }
     }
 
-
-
-        public void addValue(List<CommentRecord> c) {
-        if (!c.isEmpty()){
+    public void addValue(List<CommentRecord> c) {
+        if (!c.isEmpty()) {
             this.commentList.add(c.get(0));
         }
         convertListToTree();
@@ -118,7 +117,7 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         this.article = t.Val2;
     }
 
-    public void addComment(CommentRecord comment){
+    public void addComment(CommentRecord comment) {
         this.commentList.add(comment);
     }
 
