@@ -1,6 +1,6 @@
 <%--personal information card--%>
     <div class="card">
-        <img class="card-img-top img-responsive" src="http://i.pravatar.cc/300" alt="Card image cap">
+        <img class="card-img-top img-thumbnail" src="http://i.pravatar.cc/300" alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title">${get} ${lname}
                 <c:if test="${gender==0}">

@@ -30,12 +30,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css"
           integrity="sha256-k66BSDvi6XBdtM2RH6QQvCz2wk81XcWsiZ3kn6uFTmM=" crossorigin="anonymous"/>
 
+        <%--table-sorter--%>
+    <script type="text/javascript" src="javascript/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
+    
 
     <script type="text/javascript">
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
     </script>
 
+
+    <!-- For upload files page generate multiple row -->
+    <script type="text/javascript" src="javascript/uploadFile.js"></script>
+    <script type="text/javascript" src="javascript/personal_blog.js"></script>
+    <script type="text/javascript" src="javascript/homepage.js"></script>
+    <script type="text/javascript" src="javascript/login.js"></script>
+
+
+        <!-- PUT CSS HERE -->
+    <link rel="stylesheet" href="css/article.css"/>
+    <link rel="stylesheet" href="css/homepage_menu.css"/>
     <link rel="stylesheet" href="css/personal_panel.css">
-        <link rel="stylesheet" href="css/article.css">
-        <script type="text/javascript" src="javascript/uploadFile.js"></script>
 </head>

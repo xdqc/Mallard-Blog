@@ -1,6 +1,7 @@
 package db_connector;
 
 import ORM.tables.records.CommentRecord;
+import org.jooq.Record;
 import utililties.Blog;
 
 import java.util.ArrayList;
@@ -16,16 +17,9 @@ public class TestDb {
     private void run() {
         new DbConnector("conf/dev/mysql.properties");
 
-        List<Blog> blogs = DbConnector.getBlogsByUserId("1");
+        String[] strings = new String[]{"test", "first",};
+        List<Record> res = DbConnector.findSearchItems(strings);
 
-        for (Blog blog : blogs) {
-
-            System.out.println(blog.getAuthor());
-            System.out.println(blog.getArticle());
-            List<CommentRecord> list = new ArrayList<>();
-            blog.getCommentTree().traverse(blog.getCommentTree(), list);
-            list.forEach(System.out::println);
-        }
-
+        res.forEach(System.out::println);
     }
 }

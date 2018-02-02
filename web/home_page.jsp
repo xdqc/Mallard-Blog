@@ -9,9 +9,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <%@ include file="WEB-INF/_head.jsp" %>
-<script type="text/javascript" src="javascript/moment-with-locales.js"></script>
-<script type="text/javascript" src="javascript/personal_blog.js"></script>
 <title>Mallard Blog</title>
+<style>
+    body{
+        background-image: url("/pictures/background.png");
+    }
+</style>
 <body>
 <%@ include file="WEB-INF/_home_page_menu.jsp" %>
 <div class="container">
@@ -19,21 +22,47 @@
         <%--Logged User information panel--%>
         <c:if test="${not empty sessionScope.get('loggedInUser')}">
             <div class="col-sm-12 col-md-3 col-lg-3">
-                <%@ include file="WEB-INF/_home_page_profile.jsp" %>
+                <button id="load-homepage-user-profile" style="display: none"></button>
+                <div id="profile-area"></div>
+                <%--<%@ include file="WEB-INF/_home_page_profile.jsp" %>--%>
             </div>
             <%--list of blogs--%>
             <div class="col-sm-12 col-md-9 col-lg-9">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
+                <div id="more-article-area">
+                        <%--For ajax loading articles--%>
+                </div>
+
+                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
+                     width="45" style="display: none;" aria-hidden="true">
             </div>
         </c:if>
 
         <c:if test="${empty sessionScope.get('loggedInUser')}">
             <%--list of blogs--%>
-            <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-1 col-lg-1">
+            </div>
+            <div class="col-sm-12 col-md-10 col-lg-10">
                 <%@ include file="WEB-INF/_personal_blog_articles.jsp" %>
+                <div id="more-article-area">
+                        <%--For ajax loading articles--%>
+                </div>
+
+                <img id="load-article-img" src="pictures/loading.gif" alt="loading..."
+                     width="45" style="display: none;" aria-hidden="true">
+            </div>
+            <div class="col-sm-12 col-md-1 col-lg-1">
             </div>
         </c:if>
 
+            <button class="btn btn-info" id="load-more-articles" style="display: none; margin: 0 auto;">Load more articles</button>
+
+
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <%@ include file="WEB-INF/_foot.jsp" %>
 </div>
 </body>
 </html>
