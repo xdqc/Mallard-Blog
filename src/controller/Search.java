@@ -36,6 +36,7 @@ public class Search extends Controller {
 
 //            articleResults.get(0).Val1.getValidTime().getTime();
 
+            req.setAttribute("searchStr", searchStr);
             req.setAttribute("userResults", userResults);
             req.setAttribute("articleResults", articleResults);
             req.getRequestDispatcher("search_result.jsp").forward(req, resp);

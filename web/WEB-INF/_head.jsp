@@ -31,7 +31,10 @@
           integrity="sha256-k66BSDvi6XBdtM2RH6QQvCz2wk81XcWsiZ3kn6uFTmM=" crossorigin="anonymous"/>
 
         <%--table-sorter--%>
-    <script type="text/javascript" src="javascript/jquery.tablesorter.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/jquery.tablesorter.js" integrity="sha256-z8DJfiCHX/POWVqa6jM3xdqizgSoHMQZeb1Ri4FzM3A=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date.min.js" integrity="sha256-tKA6ehiote08tAMlvjaz2u2xKRjMmtA9tnZ0hE4/MMU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date-range.min.js" integrity="sha256-HsOOagtQtwyP0U5GuuHMR0KF8W2bfU/CMg5zsAGE/60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js" integrity="sha256-m4GLhtBF1Ue31vdmii9AEzvSYnBTJFzYkVToaD047Z4=" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 
