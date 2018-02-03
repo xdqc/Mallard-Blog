@@ -215,11 +215,13 @@ public class PersonalBlog extends Controller {
             }
 
             DbConnector.insertNewComment(comment);
+            int newCommentId = DbConnector.getNewlyCreatedCommentId(comment);
+
             cleanAllParameters(req);
 
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write("inserted");
+            resp.getWriter().write("inserted "+newCommentId);
             return true;
         }
         return false;

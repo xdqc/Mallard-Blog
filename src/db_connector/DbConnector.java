@@ -582,6 +582,29 @@ public class DbConnector {
     }
 
     /**
+     * Get newly created comment id (for updating attachment db)
+     * @param comment the comment record passed to insertNewComment()
+     * @return
+     */
+    public static int getNewlyCreatedCommentId(CommentRecord comment) {
+        int commentId=0;
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            commentId = create.select(COMMENT.ID)
+                    .from(COMMENT)
+                    .where(COMMENT.COMMENTER.eq(comment.getCommenter()))
+                    .orderBy(COMMENT.CREATE_TIME.desc())
+                    .limit(1)
+                    .fetchOne(r -> r.into(int.class));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commentId;
+    }
+
+    /**
      * Edit comment
      *
      * @param comment comment to be edit
@@ -675,6 +698,7 @@ public class DbConnector {
         }
         return records;
     }
+
 
 
 }

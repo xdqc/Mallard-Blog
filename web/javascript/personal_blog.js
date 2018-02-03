@@ -385,14 +385,13 @@ $(document).ready(function () {
                         msg = "Server error";
                         swal("Oops ", msg, "danger")
                     }
-                    console.log(resp);
 
                     /*upload file for newly created article or existing article*/
                     const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
                     //change the uploadArea form $div action parameter to newly created articleId
-                    $("#uploadForm-").attr("action", "/File-Upload?articleId="+uploadArticleId);
-                    $("#uploadButton-article-"+articleId).click();
+                    $("#uploadForm-"+articleId).attr("action", "/File-Upload?articleId="+uploadArticleId);
+                    $("#uploadButton-comment-"+articleId).click();
 
                 },
                 error: (msg, status) => {
@@ -549,6 +548,14 @@ $(document).ready(function () {
             success: function (resp) {
                 $("#leave-comment-text-" + articleId).val("");
                 swal("Congrats!", "Your comment is posted.", "success");
+
+                /*upload file for newly created comment*/
+                const uploadCommentId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
+
+                //change the uploadArea form $div action parameter to newly created articleId
+                $("#uploadForm-"+articleId).attr("action", "/File-Upload?commentId="+uploadCommentId);
+                $("#uploadButton-comment-"+articleId).click();
+
             },
             error: (msg, status) => {
                 console.log("error!!!");
