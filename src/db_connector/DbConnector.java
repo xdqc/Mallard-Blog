@@ -524,6 +524,25 @@ public class DbConnector {
     }
 
     /**
+     * Mark attachments own by article as inActive
+     * @param itemToDelete article to be delete
+     */
+    public static void deleteAttachmentOwnBy(String itemToDelete, String attachType) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ATTACHMENT)
+                    .set(ATTACHMENT.ISACTIVATE, (byte) 0)
+                    .where(ATTACHMENT.ATTACH_TYPE.eq(attachType))
+                    .and(ATTACHMENT.OWNBY.eq(Integer.parseInt(itemToDelete)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Mark a comment as hidden
      *
      * @param commentId comment to be hidden
@@ -583,10 +602,10 @@ public class DbConnector {
     }
 
     /**
-     * @param user
-     * @return
+     * Create user account
+     * @param user new user
+     * @return success or not
      */
-
     public static boolean insertNewUser(UserRecord user) {
 
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -656,5 +675,6 @@ public class DbConnector {
         }
         return records;
     }
+
 
 }

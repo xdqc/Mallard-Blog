@@ -369,7 +369,6 @@ $(document).ready(function () {
                 },
 
                 success: resp => {
-
                     form["title"].val("");
                     form["content"].val("");
 
@@ -391,29 +390,9 @@ $(document).ready(function () {
                     /*upload file for newly created article or existing article*/
                     const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
-                    console.log("the newly pulished articleId = " + uploadArticleId);
                     //change the uploadArea form $div action parameter to newly created articleId
                     $("#uploadForm-").attr("action", "/File-Upload?articleId="+uploadArticleId);
                     $("#uploadButton-article-"+articleId).click();
-
-                    /*??? seems not possible to upload file with ajax*/
-                    // $.ajax({
-                    //     type: 'post',
-                    //     url : 'File-Upload',
-                    //     data : {
-                    //         articleId : uploadArticleId
-                    //     },
-                    //     success : function(responseText) {
-                    //         console.log("uploading media for edited article success");
-                    //         $('#uploadFileArea').html(responseText);
-                    //     },
-                    //     error: (msg, status) => {
-                    //         console.log("error uploading media for edited article!!");
-                    //         console.log(status);
-                    //         console.log(msg);
-                    //         swal("Oops ", msg, "danger")
-                    //     },
-                    // });
 
                 },
                 error: (msg, status) => {

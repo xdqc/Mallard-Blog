@@ -229,6 +229,7 @@ public class PersonalBlog extends Controller {
         String articleToDelete = req.getParameter("deleteArticle");
         if (articleToDelete != null){
             DbConnector.deleteArticleById(articleToDelete);
+            DbConnector.deleteAttachmentOwnBy(articleToDelete, "A");
             cleanAllParameters(req);
 
             resp.setContentType("text/html");
@@ -261,7 +262,6 @@ public class PersonalBlog extends Controller {
                 } else {
                     //insert new article
                     articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
-
                     msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
 
                     //when creating article, get that new article id
