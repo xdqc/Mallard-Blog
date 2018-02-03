@@ -1,0 +1,33 @@
+.page-footer{
+    background-color: lightgrey;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.list--inline li{
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.site-footer{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.white-text{
+    font-family: Lato, Helvetica, sans-serif;
+    font-style: italic;
+    text-align: center;
+}
+
+.footer-copyright{
+    background-color: grey;
+}
+
+.footer-copyright .container{
+    font-style: italic;
+}
+
+.white-text span{
+    color: blanchedalmond;
+}

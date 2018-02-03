@@ -1,31 +1,23 @@
-<footer id="footer">
-    <div class="inner">
-        <div class="box-top">
-            <div class="box-left">
-                <h2 class="headline slogan not-mobile">
-                    Mallard Blog, Your creation and communication of heaven and earth
-                </h2>
-                <ul class="menu-footer">
-                    <li class="home">
-                        <a href="home-page">
-                            Home
-                        </a>
-                    </li>
-                    <li class="personal-blog">
-                        <a href="personal-blog">
-                            Personal blog
-                        </a>
-                    </li>
-                    <li class="contact-us">
-                        <a href="contact">
-                            Contact Us
-                        </a>
-                    </li>
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h3 class="white-text"><span>Mallard Blog</span>, your creation and communication of heaven and earth</h3>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <ul class="list--inline site-footer">
+                    <li class="h4"><a class="grey-text text-lighten-3" href="home-page">Home</a></li>&nbsp;&nbsp;
+                    <li class="h4"><a class="grey-text text-lighten-3" href="personal-blog">Personal Blog</a></li>&nbsp;&nbsp;
+                    <li class="h4"><a class="grey-text text-lighten-3" href="contact">Contact Us</a></li>
                 </ul>
-                <p style="margin-top: 25px;">
-                    <i>© 2018 Mallard Blog All Rights Reserved</i>
-                </p>
             </div>
         </div>
     </div>
+<div class="footer-copyright">
+    <br>
+    <div class="container">
+        ©2017 Mallard Blog, All rights reserved
+    </div>
+    <br>
+</div>
 </footer>
