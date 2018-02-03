@@ -7,7 +7,7 @@
             <div class="col l4 offset-l2 s12">
                 <ul class="list--inline site-footer">
                     <li class="h4"><a class="grey-text text-lighten-3" href="home-page">Home</a></li>&nbsp;&nbsp;
-                    <li class="h4"><a class="grey-text text-lighten-3" href="personal-blog">Personal Blog</a></li>&nbsp;&nbsp;
+                    <li class="h4"><a class="grey-text text-lighten-3" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">Personal Blog</a></li>&nbsp;&nbsp;
                     <li class="h4"><a class="grey-text text-lighten-3" href="contact">Contact Us</a></li>
                 </ul>
             </div>

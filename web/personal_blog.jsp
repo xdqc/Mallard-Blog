@@ -32,11 +32,11 @@
         <div class="col-sm-12 col-md-9 col-lg-9">
             <c:if test="${blogs.size()==0}">
                 <c:if test="${!sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
-                    <div class="jumbotron">
-                        <h3>This user has no articles</h3>
-                        <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
-                    </div>
-                </c:if>
+            <div class="jumbotron">
+                <h3>This user has no articles</h3>
+                <p><a class="btn btn-primary btn-lg" href="home-page" role="button">Back to Home</a></p>
+            </div>
+            </c:if>
             </c:if>
 
             <%--logged user create new article in his own page--%>
