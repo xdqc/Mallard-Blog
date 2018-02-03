@@ -153,7 +153,7 @@ public class DbConnector {
      * @param username
      * @return
      */
-    public static UserRecord getUserByUsername(String username) {
+        public static UserRecord getUserByUsername(String username) {
         List<UserRecord> user = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
@@ -466,10 +466,10 @@ public class DbConnector {
 
             articleId = create.select(ARTICLE.ID)
                     .from(ARTICLE)
-                    .where(ARTICLE.TITLE.eq(articleRecord.getTitle()))
-                    .and(ARTICLE.AUTHOR.eq(articleRecord.getAuthor()))
-                    .and(ARTICLE.CREATE_TIME.eq(articleRecord.getCreateTime()))
-                    .fetchOne(0, int.class);
+                    .where(ARTICLE.AUTHOR.eq(articleRecord.getAuthor()))
+                    .orderBy(ARTICLE.CREATE_TIME.desc())
+                    .limit(1)
+                    .fetchOne(r -> r.into(int.class));
 
         } catch (SQLException e) {
             e.printStackTrace();

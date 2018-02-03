@@ -261,10 +261,12 @@ public class PersonalBlog extends Controller {
                 } else {
                     //insert new article
                     articleRecord.setCreateTime(new Timestamp((Long) article.get("createTime")));
-                    msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
-                    //TODO when creating article, the multimedia files will have id=0 in DB.attachment, need to change that to new article id
-                    int newArticleID = DbConnector.getNewlyCreatedArticleId(articleRecord);
 
+                    msg = DbConnector.insertNewArticle(articleRecord) ? "inserted" : "error";
+
+                    //when creating article, get that new article id
+                    int newArticleID = DbConnector.getNewlyCreatedArticleId(articleRecord);
+                    msg += " " + newArticleID;
                 }
 
                 System.out.println(articleRecord);

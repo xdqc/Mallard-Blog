@@ -272,7 +272,6 @@ $(document).ready(function () {
 
     function articleActions(articleId) {
         const $articlePanel = $("#article-panel-"+articleId);
-        console.log($articlePanel);
 
         /**
          * choose post type: publish/draft
@@ -375,11 +374,11 @@ $(document).ready(function () {
                     form["content"].val("");
 
                     let msg;
-                    if (resp === "inserted") {
+                    if (resp.startsWith("inserted")) {
                         msg = form["publishMode"][0].value === "publish" ? "Your article are published."
                             : "Your article will be visible to public on " + availableDate.toLocaleString();
                         swal("Congratulations ", msg, "success");
-                    } else if (resp === "updated") {
+                    } else if (resp.startsWith("updated")) {
                         msg = form["publishMode"][0].value === "publish" ? "Your article are updated."
                             : "Your updated article will be visible to public on " + availableDate.toLocaleString();
                         swal("Congratulations ", msg, "success");
@@ -388,12 +387,40 @@ $(document).ready(function () {
                         swal("Oops ", msg, "danger")
                     }
                     console.log(resp);
+
+                    /*upload file for newly created article or existing article*/
+                    const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
+
+                    console.log("the newly pulished articleId = " + uploadArticleId);
+                    //change the uploadArea form $div action parameter to newly created articleId
+                    $("#uploadForm-").attr("action", "/File-Upload?articleId="+uploadArticleId);
+                    $("#uploadButton-article-"+articleId).click();
+
+                    /*??? seems not possible to upload file with ajax*/
+                    // $.ajax({
+                    //     type: 'post',
+                    //     url : 'File-Upload',
+                    //     data : {
+                    //         articleId : uploadArticleId
+                    //     },
+                    //     success : function(responseText) {
+                    //         console.log("uploading media for edited article success");
+                    //         $('#uploadFileArea').html(responseText);
+                    //     },
+                    //     error: (msg, status) => {
+                    //         console.log("error uploading media for edited article!!");
+                    //         console.log(status);
+                    //         console.log(msg);
+                    //         swal("Oops ", msg, "danger")
+                    //     },
+                    // });
+
                 },
                 error: (msg, status) => {
-                    console.log("error!!");
+                    console.log("error publishing article!!");
                     console.log(status);
                     console.log(msg);
-                    swal("Oops ", msg, "danger")
+                    swal("Oops ", status, "danger")
                 },
                 complete: () => {
                     uploadingImg.hide();

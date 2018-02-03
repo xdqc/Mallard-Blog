@@ -38,7 +38,7 @@
                 <tbody>
                 <c:forEach var="user" items="${userResults}">
                     <tr>
-                        <td class="markCol">${user.getUserName()}</span></td>
+                        <td class="markCol">${user.getUserName()}</td>
                         <td>${user.getLName()}</td>
                         <td>${user.getFName()}</td>
                         <td>${user.getEmail()}</td>
@@ -73,7 +73,7 @@
                 <tbody>
                 <c:forEach var="article" items="${articleResults}">
                     <tr>
-                        <td class="markCol">${article.getVal1().getTitle()}</span></td>
+                        <td class="markCol">${article.getVal1().getTitle()}</td>
                         <td>${article.getVal2().getLName()}</td>
                         <td>${article.getVal2().getFName()}</td>
                         <td class="time create-time">${article.getVal1().getCreateTime()}</td>
@@ -106,12 +106,8 @@
     });
 
     $(document).ready(function () {
-
-
         const str = $("#searchStr").html()
         $(".markCol").mark(str);
-
-
     })
 </script>
 <style>
