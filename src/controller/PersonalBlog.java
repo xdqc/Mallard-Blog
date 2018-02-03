@@ -64,14 +64,13 @@ public class PersonalBlog extends Controller {
         req.setAttribute("current_username", user.getUserName());
         req.setAttribute("user", user);
 
-
+        // If the browsing user is not the blog owner, only show published articles.
         userId = String.valueOf(user.getId());
+        List<Blog> blogs = userId.equals(String.valueOf(getLoggedUserFromSession(req).getId()))
+                ? DbConnector.getBlogsByUserId(userId)
+                : DbConnector.getPublishedBlogsByUserId(userId);
 
-        List<Blog> blogs = DbConnector.getBlogsByUserId(userId);
         req.setAttribute("blogs", blogs);
-        //Filter out comments that is hide (for showing the numComments badge)
-        blogs.forEach(b -> b.getNumComments());
-
 
         req.getRequestDispatcher("/personal_blog.jsp").forward(req, resp);
     }
