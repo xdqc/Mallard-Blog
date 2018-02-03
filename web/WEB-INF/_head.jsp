@@ -59,5 +59,5 @@
     <link rel="stylesheet" href="css/article.css"/>
     <link rel="stylesheet" href="css/homepage_menu.css"/>
     <link rel="stylesheet" href="css/personal_panel.css">
-
+    <link rel="stylesheet" href="css/footer.css"/>
 </head>
