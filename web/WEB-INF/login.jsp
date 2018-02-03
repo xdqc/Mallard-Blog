@@ -36,9 +36,9 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-3 ">
+        <div class="col-md-3">
         </div>
-        <div class="col-md-6 ">
+        <div class="col-md-6">
             <div id="bg" style=" margin-top: 150px ; padding: 5em;">
                 <c:if test="${not empty param.failed}">
                     <div>

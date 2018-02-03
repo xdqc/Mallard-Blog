@@ -1,6 +1,6 @@
  <!-- Collect the nav links, forms, and other content for toggling -->
         <nav class="navbar navbar-inverse">
-            <nav class="navbar navbar-inverse" style="margin-bottom: 0px;">
+            <nav class="navbar navbar-inverse" style="margin-left: -1px;">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">

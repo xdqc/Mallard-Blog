@@ -20,10 +20,7 @@
                     </c:if>
 
                 </div>
-                <div class="panel-text article-likes">
-                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
-                                class="fa fa-thumbs-up"></span></span>
-                </div>
+
 
                 <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
                      alt="random picture"/>
@@ -50,6 +47,11 @@
                     <button id="read-more-${blog.getArticle().getId()}" class="btn btn-default btn-sm read-more-btn">
                         Read more
                     </button>
+                </div>
+                <br>
+                <div class="panel-text article-likes">
+                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
+                                class="fa fa-thumbs-up"></span></span>
                 </div>
                 <br>
                 <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
