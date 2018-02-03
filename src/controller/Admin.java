@@ -6,12 +6,10 @@ import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 import utililties.Tuple;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,30 +55,44 @@ public class Admin extends Controller {
             String username = req.getParameter("username");
             String userEmail = req.getParameter("sendEmail");
 
-            userEmail = "qd16@students.waikato.ac.nz";
+            userEmail = "mallard.blog@gmail.com";
 
             //TODO GENERATE A LINK
             String link = "http://localhost:8080/admin";
 
 
-            // Recipient's email ID needs to be mentioned.
-            String to = userEmail;
 
-            // Sender's email ID needs to be mentioned
-            String from = "webmaster@mallard_blog.com";
-
-            // Assuming you are sending email from localhost
-            String host = "localhost";
+            // reads SMTP server setting from web.xml file
+            ServletContext context = getServletContext();
+            String host = context.getInitParameter("host");
+            String port = context.getInitParameter("port");
+            String user = context.getInitParameter("user");
+            String pass = context.getInitParameter("pass");
 
             // Get system properties
-            Properties properties = System.getProperties();
+            Properties props = System.getProperties();
 
             // Setup mail server
-            properties.setProperty("mail.smtp.host", host);
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.debug", "true");
+            props.put("mail.smtp.host", host);
+            props.put("mail.smtp.user", user);
+            props.put("mail.smtp.password", pass);
+            props.put("mail.smtp.port", port);
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.socketFactory.port", port);
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.socketFactory.fallback", "false");
 
             // Get the default Session object.
-            Session session = Session.getDefaultInstance(properties);
+            Session session = Session.getInstance(props);
+            session.setDebug(true);
 
+
+            // Recipient's email ID needs to be mentioned.
+            String to = userEmail;
+            // Sender's email ID needs to be mentioned
+            String from = user;
 
             try {
                 // Create a default MimeMessage object.
@@ -96,11 +108,14 @@ public class Admin extends Controller {
                 message.setSubject("Reset password link! - from Mallard-Blog.co.nz");
 
                 // Now set the actual message
-
                 message.setText("Please check your reset password link below:\n\n" + link);
 
                 // Send message
-                Transport.send(message);
+                Transport transport = session.getTransport("smtp");
+                transport.connect(host, from, pass);
+                transport.sendMessage(message, message.getAllRecipients());
+                transport.close();
+
 
                 // Feed back response to ajax
                 resp.setContentType("text/html");
