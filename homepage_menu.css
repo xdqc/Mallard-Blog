@@ -4,17 +4,16 @@
     text-decoration: none;
 }
 
+
+#set li a:active{
+    color:#ffffff;
+}
+
 .navbar{
     position: fixed;
     z-index: 99999;
     width: 100%;
     top: 0;
-}
-
-#set li .navbar-brand{
-    position: relative;
-    display: block;
-    box-sizing: border-box;
 }
 
 body { padding-top: 85px; }

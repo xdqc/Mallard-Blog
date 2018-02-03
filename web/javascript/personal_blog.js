@@ -272,7 +272,6 @@ $(document).ready(function () {
 
     function articleActions(articleId) {
         const $articlePanel = $("#article-panel-"+articleId);
-        console.log($articlePanel);
 
         /**
          * choose post type: publish/draft
@@ -286,12 +285,14 @@ $(document).ready(function () {
             if (form["publishMode"][0].value === "publish") {
                 form["datePicker"].hide();
                 form["publishBtn"].empty();
-                form["publishBtn"].append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+                form["publishBtn"].text(" Publish")
+                    .prepend($("<span class='fa fa-paper-plane' aria-hidden='true'>"));
 
             } else if (form["publishMode"][0].value === "draft") {
                 form["datePicker"].show();
                 form["publishBtn"].empty();
-                form["publishBtn"].append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+                form["publishBtn"].text(" Save")
+                    .prepend($("<span class='fa fa-floppy-o' aria-hidden='true'>"));
                 let date = new Date();
                 date = moment(date).format("YYYY-MM-DDTkk:mm");
                 form["datePicker"].val(date);
@@ -370,16 +371,15 @@ $(document).ready(function () {
                 },
 
                 success: resp => {
-
                     form["title"].val("");
                     form["content"].val("");
 
                     let msg;
-                    if (resp === "inserted") {
+                    if (resp.startsWith("inserted")) {
                         msg = form["publishMode"][0].value === "publish" ? "Your article are published."
                             : "Your article will be visible to public on " + availableDate.toLocaleString();
                         swal("Congratulations ", msg, "success");
-                    } else if (resp === "updated") {
+                    } else if (resp.startsWith("updated")) {
                         msg = form["publishMode"][0].value === "publish" ? "Your article are updated."
                             : "Your updated article will be visible to public on " + availableDate.toLocaleString();
                         swal("Congratulations ", msg, "success");
@@ -387,13 +387,20 @@ $(document).ready(function () {
                         msg = "Server error";
                         swal("Oops ", msg, "danger")
                     }
-                    console.log(resp);
+
+                    /*upload file for newly created article or existing article*/
+                    const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
+
+                    //change the uploadArea form $div action parameter to newly created articleId
+                    $("#uploadForm-"+articleId).attr("action", "/File-Upload?articleId="+uploadArticleId);
+                    $("#uploadButton-comment-"+articleId).click();
+
                 },
                 error: (msg, status) => {
-                    console.log("error!!");
+                    console.log("error publishing article!!");
                     console.log(status);
                     console.log(msg);
-                    swal("Oops ", msg, "danger")
+                    swal("Oops ", status, "danger")
                 },
                 complete: () => {
                     uploadingImg.hide();
@@ -543,6 +550,14 @@ $(document).ready(function () {
             success: function (resp) {
                 $("#leave-comment-text-" + articleId).val("");
                 swal("Congrats!", "Your comment is posted.", "success");
+
+                /*upload file for newly created comment*/
+                const uploadCommentId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
+
+                //change the uploadArea form $div action parameter to newly created articleId
+                $("#uploadForm-"+articleId).attr("action", "/File-Upload?commentId="+uploadCommentId);
+                $("#uploadButton-comment-"+articleId).click();
+
             },
             error: (msg, status) => {
                 console.log("error!!!");

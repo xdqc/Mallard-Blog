@@ -52,12 +52,12 @@
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
     <script type="text/javascript" src="javascript/homepage.js"></script>
     <script type="text/javascript" src="javascript/login.js"></script>
-
+    <script type="text/javascript" src="javascript/admin.js"></script>
 
         <!-- PUT CSS HERE -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="stylesheet" href="css/article.css"/>
     <link rel="stylesheet" href="css/homepage_menu.css"/>
     <link rel="stylesheet" href="css/personal_panel.css">
-
+    <link rel="stylesheet" href="css/footer.css"/>
 </head>

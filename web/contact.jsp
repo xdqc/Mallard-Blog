@@ -85,5 +85,8 @@
         </div>
     </div>
 </div>
+<div class="col-sm-12">
+    <%@ include file="WEB-INF/_foot.jsp" %>
+</div>
 </body>
 </html>

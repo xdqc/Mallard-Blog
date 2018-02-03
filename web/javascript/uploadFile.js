@@ -52,7 +52,11 @@ $(document).ready(function () {
     });
 
     //deal with the upload file field
-    $(document).on("click", '.uploadButton', function() {
+    // $(document).on("submit", '.uploadForm', function(e) {
+    //     e.preventDefault();
+    // });
+    $(document).on("click", '.uploadButton', function(e) {
+        console.log(e);
         $.ajax({
             url : 'File-Upload',
             data : {
@@ -63,5 +67,19 @@ $(document).ready(function () {
             }
         });
     });
+
+
+    // $(document).on("click", '.uploadButton', function() {
+    //     $.ajax({
+    //         url : 'File-Upload',
+    //         data : {
+    //             articleId : $('#articleId').val()
+    //         },
+    //         success : function(responseText) {
+    //             $('#uploadFileArea').html(responseText);
+    //         }
+    //     });
+    // });
+
 });
 
