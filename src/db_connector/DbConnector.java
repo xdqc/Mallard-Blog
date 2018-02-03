@@ -656,15 +656,9 @@ public class DbConnector {
     }
 
     /**
-<<<<<<< HEAD
      * function to create new profile
      * @param user user to create new profile
      * @return
-=======
-     * Create user account
-     * @param user new user
-     * @return success or not
->>>>>>> f849cfeb58d1a02839b2973e1bb965540190656a
      */
     public static boolean insertNewUser(UserRecord user) {
 
@@ -795,9 +789,6 @@ public class DbConnector {
     }
 
 
-<<<<<<< HEAD
-
-=======
     /**
      * Get all user, article, comments records from db, for admin page
      */
@@ -839,5 +830,4 @@ public class DbConnector {
         }
         return records;
     }
->>>>>>> f849cfeb58d1a02839b2973e1bb965540190656a
 }

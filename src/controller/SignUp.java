@@ -81,7 +81,7 @@ public class SignUp extends Controller {
         if (req.getParameter("setupAvatarFor") != null) {
             String newUserId = req.getParameter("setupAvatarFor");
             //TODO PROCESS THE AVATAR FORM DATA
-            
+
             return;
         }
 
