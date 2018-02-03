@@ -285,12 +285,14 @@ $(document).ready(function () {
             if (form["publishMode"][0].value === "publish") {
                 form["datePicker"].hide();
                 form["publishBtn"].empty();
-                form["publishBtn"].append($("<span class='fa fa-paper-plane' aria-hidden='true'>").text(" Publish"));
+                form["publishBtn"].text(" Publish")
+                    .prepend($("<span class='fa fa-paper-plane' aria-hidden='true'>"));
 
             } else if (form["publishMode"][0].value === "draft") {
                 form["datePicker"].show();
                 form["publishBtn"].empty();
-                form["publishBtn"].append($("<span class='fa fa-floppy-o' aria-hidden='true'>").text(" Save"));
+                form["publishBtn"].text(" Save")
+                    .prepend($("<span class='fa fa-floppy-o' aria-hidden='true'>"));
                 let date = new Date();
                 date = moment(date).format("YYYY-MM-DDTkk:mm");
                 form["datePicker"].val(date);
