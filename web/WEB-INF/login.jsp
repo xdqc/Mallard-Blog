@@ -23,10 +23,11 @@
         #bg{
             background-color: rgba(52, 73, 94, 0.7);
         }
-        input{
+        .login-form input{
             height: 45px;
             width: 300px;
             font-size: 18px;
+            margin-left: 1em;
             margin-bottom: 20px;
             background-color: #fff;
             padding-left: 30px;
@@ -52,7 +53,7 @@
                 </c:if>
 
 
-                <form id="login-form"  method="post" action="login?login=1">
+                <form id="login-form"  method="post" action="login?login=1" class="login-form">
                     <div class="row">
                         <div class="col-lg-2 col-lg-offset-1">
                             <div class="form-group">
@@ -78,7 +79,7 @@
 
                     <div class="row">
                         <div class="col-lg-2 col-lg-offset-1">
-                            <div class="form-group">
+                            <div class="form-group" style="margin-left: 1em">
                                 <label class="control-label">reCaptcha</label>
                                 <div style="width: 50%">
                                     <div class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX"></div>
@@ -86,18 +87,20 @@
                             </div>
                         </div>
                     </div>
-                    <button style="width: 7em;" id="login_btn" type="submit" class="btn btn-primary">Login</button>
+                    <div class="form-group" style=" margin-left: 4em; margin-top: 1em">
+                        <button  style="width: 20em;" type="submit" class="btn btn-primary">Login</button>
+                    </div>
                 </form>
-                <div style="position: relative; margin: -48px 0 0 80px">
+
+
                     <form action="sign-up?signUp=0" method="post">
-                        <div class="row">
-                            <div class="col-lg-2 col-lg-offset-1">
-                                <button type="submit" id="signUp_btn" class="btn btn-default">Sign Up</button>
+                        <div style="margin-left: 10em">
+                                <p style="color: white"> Need a account ?</p>
+                                <button type="submit" class="btn btn-default">Sign-up</button>
                             </div>
-                        </div>
                     </form>
                 </div>
-            </div>
+        </div>
         </div>
         <div class="col-md-3">
         </div>

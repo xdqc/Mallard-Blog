@@ -28,12 +28,15 @@ public class SignUp extends Controller {
             return;
 
 
+        /**
+         * Handle new user sign-up form processing
+         */
         boolean isSignedIn = req.getParameter("signUp") != null && req.getParameter("signUp").equals("1");
         if (isSignedIn) {
             UserRecord user = new UserRecord();
             String systemRole = "1";
-            Timestamp currentTimes= new Timestamp(Calendar.getInstance().getTime().getTime());
-            String isValid =  "1";
+            Timestamp currentTimes = new Timestamp(Calendar.getInstance().getTime().getTime());
+            String isValid = "1";
 
             user.setFName(req.getParameter("fname"));
             user.setLName(req.getParameter("lname"));
@@ -54,30 +57,76 @@ public class SignUp extends Controller {
             System.out.println(user);
 
 
+            cleanAllParameters(req);
+            DbConnector.insertNewUser(user);
 
-             String msg = DbConnector.insertNewUser(user) ? "success" : "error" ;
+            int newUserId = DbConnector.getNewlySignedUser(user);
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(msg);
+            resp.getWriter().write(newUserId);
 
-
-
+            return;
         }
 
 
+        if (req.getParameter("chooseAvatar") != null) {
+            String newUserId = req.getParameter("newUserId");
+
+            req.setAttribute("newUserId", newUserId);
+            req.getRequestDispatcher("WEB-INF/_choose_avatar.jsp").forward(req, resp);
+
+        }
+
+        //todo change attatchment db to setup avatar for that new user
+        if (req.getParameter("setupAvatarFor") != null) {
+            String newUserId = req.getParameter("setupAvatarFor");
+            //TODO PROCESS THE AVATAR FORM DATA
+            
+            return;
+        }
 
 
-/*
-    private void editProfile(UserRecord user, HttpServletRequest req, HttpServletResponse resp) {
-
+        if (req.getParameter("editProfile") != null) {
+            String userId = req.getParameter("editProfile");
+            editProfile(req, resp);
+            return;
+        }
 
     }
 
+
+    private void editProfile(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        UserRecord user = getLoggedUserFromSession(req);
+        if (user==null)
+            return;
+
+        user.setFName(req.getParameter("fname"));
+        user.setLName(req.getParameter("lname"));
+        user.setGender(Integer.valueOf(req.getParameter("gender")));
+        user.setDob(java.sql.Date.valueOf(req.getParameter("dob")));
+        user.setAddress(req.getParameter("address"));
+        user.setCity(req.getParameter("city"));
+        user.setState(req.getParameter("state"));
+        user.setCountry(req.getParameter("country"));
+        user.setDescription(req.getParameter("description"));
+
+
+        System.out.println(user);
+
+        String msg = DbConnector.updateUserProfile(user) ? "success" : "error";
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(msg);
+    }
+
+/*
     private String hashingPassword(String rawPassword){
         //TODO impliment hashing
         return rawPassword;
     }
 }
-*/
-    }
+
+    */
+
 }

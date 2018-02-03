@@ -32,8 +32,6 @@
 
         <%--table-sorter--%>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/jquery.tablesorter.js" integrity="sha256-z8DJfiCHX/POWVqa6jM3xdqizgSoHMQZeb1Ri4FzM3A=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date.min.js" integrity="sha256-tKA6ehiote08tAMlvjaz2u2xKRjMmtA9tnZ0hE4/MMU=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.29.5/js/parsers/parser-date-range.min.js" integrity="sha256-HsOOagtQtwyP0U5GuuHMR0KF8W2bfU/CMg5zsAGE/60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.js" integrity="sha256-m4GLhtBF1Ue31vdmii9AEzvSYnBTJFzYkVToaD047Z4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.16/features/mark.js/datatables.mark.js"></script>
 

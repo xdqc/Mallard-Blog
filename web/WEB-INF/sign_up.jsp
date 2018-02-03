@@ -41,6 +41,7 @@
             cursor: pointer;
         }
     </style>
+    <%--<script type="text/javascript" src="/javascript/form_validator.js"></script>--%>
 </head>
 <body>
 
@@ -51,15 +52,17 @@
 <div class="container">
     <div class="row">
     <div class="col-6 ">
+
         <%--showing login option after successfully signing up--%>
         <div  id="login-page" style="display: none; "></div>
+        <%--showing avatar option after successfully signing up--%>
+        <div  id="avatar-page" style="display: none; "></div>
+
 
         <div id="box" class="panel panel-default" style= "border-color: lightgray; box-shadow: 1px 3px 4px 5px floralwhite ;" >
             <div style="margin-left: 3%">
                 <form action="sign-up?signUp=1" method="post" class="form-horizontal" role="form" data-toggle="validator" id="user-profile">
-
-
-                    <h3>Personal Information:</h3>
+                                        <h3>Personal Information:</h3>
                     <br><br>
                     <div style="margin-left: 4%">
                     <div class="form-group">
@@ -83,7 +86,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="gnd"><strong>Gender:</strong></label>
-                            <select  class="radio-inline" id="gnd" name="gender" >
+                            <select  class="form-control" required id="gnd" name="gender" >
                                 <option name="gender" selected>Please select</option>
                                 <option value="0" name="gender">Female</option>
                                 <option value="1" name="gender">Male</option>
@@ -111,9 +114,7 @@
                     <div class="form-group">
                         <div style="width: 50%">
                             <label for="usr">User Name:  </label>
-                            <script src="/javascript/jquery.js"></script>
                             <input class="form-control" type="text" id="usr" name="userName"  placeholder="User Name" required><div id="status"></div>
-                            <script type="text/javascript" src="/javascript/user_validator.js"> </script>
                             <br><br>
                         </div>
 
@@ -388,20 +389,7 @@
                     </div>
                     </div>
 
-                    <div class="form-group">
-                        <div id="thumbview">
-                        <h3>Choose Your profile Image:</h3>
-                        <br><br>
-                            <div class="thumb-holder"><img id="defaultimg" src="../pictures/avatars/default.jpg" alt="default" width="100"/></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/1.jpg" alt="1" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/2.png" alt="2" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/3.png" alt="3" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/4.png" alt="4" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/5.png" alt="5" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/6.png" alt="6" width="100"></div>
-                            <div class="thumb-holder"><img src="/pictures/avatars/7.png" alt="7" width="100"></div>
-                        </div>
-                    </div>
+
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
@@ -420,6 +408,8 @@
 
 <script>
     const loginPage = $('#login-page');
+    const AvatarPage = $('#avatar-page');
+
     $('form#user-profile').on('submit', function(event) {
         event.preventDefault(); // or return false, your choice
         console.log($(this).serialize());
@@ -429,31 +419,34 @@
             data: $(this).serialize(),
             success: function(resp, status) {
                 // if success, HTML response is expected, so replace current
-                if(resp === "success"){
-                    swal("congratulations, you have signed up !" , "success");
-                    redirectToLogin();
 
-                }
-                else if (resp === "error"){
-                    swal("SQL error");
-                }
+                    swal("congratulations, you have signed up!","Please choose your Avatar","success");
+
+
+                    redirectToChooseAvatar(resp);
+
+
             },
             error: function (data, status) {
-                swal(status);
+                swal("Sorry, there is an error on your form!");
             }
 
         });
     });
 
-    function redirectToLogin() {
+    function redirectToChooseAvatar(newUserId) {
+
         $.ajax({
-            url: 'login',
+            url: 'sign-up',
             type: 'post',
-            data: 'login=newSignUp',
+            data: {
+                "chooseAvatar" : 1,
+                "newUserId": newUserId,
+            },
             success: function(resp, status) {
                 $('#box').hide();
-                loginPage.html(resp);
-                loginPage.slideDown(2200);
+                AvatarPage.html(resp);
+                AvatarPage.slideDown(2200);
             },
             error: function (resp, status) {
                 swal(status);
@@ -462,6 +455,10 @@
 
         });
     }
+
+
+
+
 
 </script>
 </html>

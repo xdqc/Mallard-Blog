@@ -583,7 +583,8 @@ public class DbConnector {
     }
 
     /**
-     * @param user
+     * function to create new profile
+     * @param user user to create new profile
      * @return
      */
 
@@ -593,9 +594,9 @@ public class DbConnector {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
 
-                create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
-                                    .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                                    .execute();
+                //create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
+                  //                  .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
+                    //                .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -604,6 +605,60 @@ public class DbConnector {
 
         return true;
     }
+
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public static int getNewlySignedUser(UserRecord user) {
+        int newUserId =0;
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            newUserId = create.select(USER.ID)
+                    .from(USER)
+                    .orderBy(USER.CREATE_TIME.desc())
+                    .limit(1)
+                    .fetchOne(r -> r.into(int.class));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newUserId;
+    }
+
+    /**
+     * function to edit user profile
+     * @param user usre to edit his profile
+     * @return
+     */
+    public static boolean updateUserProfile(UserRecord user) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.F_NAME, user.getFName())
+                    .set(USER.L_NAME,user.getLName())
+                    .set(USER.GENDER,user.getGender())
+                    .set(USER.DOB,user.getDob())
+                    .set(USER.ADDRESS,user.getAddress())
+                    .set(USER.CITY,user.getCity())
+                    .set(USER.STATE, user.getState())
+                    .set(USER.COUNTRY,user.getCountry())
+                    .set(USER.DESCRIPTION,user.getDescription())
+                    .where(USER.ID.equal(user.getId()))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+
 
     public static boolean saveAttachmentRecord(AttachmentRecord attachment) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -656,5 +711,7 @@ public class DbConnector {
         }
         return records;
     }
+
+
 
 }
