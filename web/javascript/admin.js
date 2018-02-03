@@ -12,13 +12,14 @@ $(document).ready(function () {
             url: 'admin',
             data: {
                 sendEmail: email,
-                userId: userId
+                userId: userId,
+                username: username
             },
             cache: false,
             beforeSend: () => {
             },
             success: (resp) => {
-                swal("Cheers!", "A reset password email for "+username+" has been send to"+email, "success");
+                swal("Cheers!", resp, "success");
             },
             error: (msg, status) => {
                 console.log("error of sending email!!!");

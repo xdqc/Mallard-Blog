@@ -31,8 +31,6 @@
                 <div id="uploadedFilesArea"></div>
             </div>
             <!-- collapse style upload file end-->
-            <%--TODO: after submitted new comment, do a query to get new commentId, then change the attachmentId correspond to commentId--%>
-            <%--TODO: if comment not submitted, delete attachment--%>
         </div>
     </div>
 </div>
