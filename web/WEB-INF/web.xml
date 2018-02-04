@@ -124,6 +124,14 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>FileManage</servlet-name>
+        <servlet-class>controller.FilesManage</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileManage</servlet-name>
+        <url-pattern>/File-Manage</url-pattern>
+    </servlet-mapping>
         <servlet-name>admin</servlet-name>
         <servlet-class>controller.Admin</servlet-class>
     </servlet>

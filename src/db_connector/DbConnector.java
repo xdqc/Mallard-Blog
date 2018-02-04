@@ -2,6 +2,7 @@ package db_connector;
 
 
 import ORM.tables.Article;
+import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
 
 import ORM.tables.User;
@@ -444,13 +445,14 @@ public class DbConnector {
     }
 
     /**
-     * Get attachment by article id
+     * Get all attachments by article id/ comment id.
+     * when ownby is a article id, return all articles' and all comments' attachments
+     * when ownby is a comment id, return all attachments of this comment
      **/
-    public static List<AttachmentRecord> getAttachmentByArticleId(String ownby, String attachType) {
+    public static List<AttachmentRecord> getAllAttachments(String ownby, String attachType) {
         List<AttachmentRecord> attachments = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
             attachments = create
                     .select(ATTACHMENT.fields())
                     .from(ATTACHMENT)
@@ -458,13 +460,127 @@ public class DbConnector {
                     .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
                     .fetch()
                     .into(AttachmentRecord.class);
-
+            //when ownby is a article , should retrieve all comments' attachments
+            if(attachType.equals("A")) {
+                attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .join(
+                                (COMMENT).join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID)))
+                        .on(COMMENT.ID.eq(ATTACHMENT.OWNBY))
+                        .where(ARTICLE.ID.eq(Integer.parseInt(ownby)))
+                        .and(ATTACHMENT.ATTACH_TYPE.eq("C"))
+                        .orderBy(ATTACHMENT.ID.asc())
+                        .fetch()
+                        .into(AttachmentRecord.class)
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return attachments;
     }
 
+    /**
+     * Get the attachments of one user in one articles.
+     **/
+    public static List<AttachmentRecord> getAttachmentsByUserId(String userId,String articleId) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            //check that the user own the article
+            List<ArticleRecord> checkUserId = create
+                    .select(ARTICLE.fields())
+                    .from(ARTICLE)
+                    .where(ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .fetch()
+                    .into(ArticleRecord.class);
+            //retrieve all the attachments from the article when the user own the article
+            if(checkUserId != null) {
+                attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(articleId)))
+                        .and(ATTACHMENT.ATTACH_TYPE.eq("A"))
+                        .fetch()
+                        .into(AttachmentRecord.class)
+                );
+            }
+            //retrieve all comments' attachments in this article and belong to this user
+            attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .join(
+                                (COMMENT).join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                                         .join(USER).on(USER.ID.eq(COMMENT.COMMENTER)))
+                        .on(COMMENT.ID.eq(ATTACHMENT.OWNBY))
+                        .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                        .and(USER.ID.eq(Integer.parseInt(userId)))
+                        .orderBy(ATTACHMENT.ID.asc())
+                        .fetch()
+                        .into(AttachmentRecord.class)
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+
+    /**
+     * Get all attachments by entity(article/comment/user) id.
+     * when entityId is a article id, return this article's attachments
+     * when entityId is a comment id, return this comment's attachments
+     * when entityId is a user id, return this user's attachments
+     **/
+    public static List<AttachmentRecord> getEntityAttachments(String entityId, String attachType) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            attachments = create
+                    .select(ATTACHMENT.fields())
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(entityId)))
+                    .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
+                    .fetch()
+                    .into(AttachmentRecord.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+
+    /**
+     * delete attachment by attachment id.
+     **/
+    public static void deleteAttachmentById(String attachmentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            create.delete(ATTACHMENT)
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * retrieve ownby by attachment id.
+     **/
+    public static String getOwnbyByAttachmentId(String attachmentId) {
+        System.out.println("attachmentId = [" + attachmentId + "]");
+        String result = "";
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            result = String.valueOf(create.select(ATTACHMENT.OWNBY)
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .fetch());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("result = [" + result + "]");
+        return result;
+    }
     /**
      * Insert a article to db
      *
