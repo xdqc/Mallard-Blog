@@ -11,11 +11,26 @@
     top: 0;
 }
 
-#set li .navbar-brand{
-    position: relative;
-    display: block;
-    box-sizing: border-box;
+#set li a.active{
+    background-color: lightgrey;
 }
+
+#set1 li a.active{
+    background-color: lightgrey;
+}
+
+li .nav-button{
+    white-space: normal;
+}
+
+li .nav{
+    float: left;
+    width: auto;
+    border: none;
+    display: block;
+}
+
+
 
 body { padding-top: 85px; }
 
