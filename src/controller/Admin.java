@@ -4,6 +4,7 @@ import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import utililties.Passwords;
 import utililties.Tuple;
 
 import javax.mail.*;
@@ -14,30 +15,69 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static controller.Login.hashingPassword;
+
 public class Admin extends Controller {
+
+    // Storing the send password link, after ONE time use, remove the link
+    private static Map<String, Tuple<String, byte[]>> activeLink = new ConcurrentHashMap<>();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<Tuple<?,?>> allRecords = DbConnector.getAllRecords();
+        if (req.getParameter("resetPasswordFor") != null) {
+
+            String encodeUserId = req.getParameter("resetPasswordFor");
+
+            // the link is invalid
+            if (!activeLink.containsKey(encodeUserId)) {
+                String errorMsg = "Your reset password link is invalid.";
+                req.getRequestDispatcher("error?errorMsg=" + errorMsg).forward(req, resp);
+                return;
+            }
+
+            String userId = decodeUserIdFromRandomizedLink(encodeUserId);
+
+            if (userId.isEmpty()){
+                String errorMsg = "Your reset password link is invalid.";
+                req.getRequestDispatcher("error?errorMsg=" + errorMsg).forward(req, resp);
+                return;
+            }
+
+            UserRecord user = DbConnector.getUserByUserId(userId);
+
+            if (user == null) {
+                String errorMsg = "User not exist is our blog system.";
+                req.getRequestDispatcher("error?userId=" + userId + "&errorMsg=" + errorMsg).forward(req, resp);
+                return;
+            }
+
+
+            req.setAttribute("user", user);
+            req.getRequestDispatcher("WEB-INF/reset_password.jsp").forward(req, resp);
+            return;
+        }
+
+
+        List<Tuple<?, ?>> allRecords = DbConnector.getAllRecords();
 
         List<UserRecord> userResults = allRecords.stream()
                 .filter(r -> r.Val1 instanceof UserRecord)
-                .map(r -> (UserRecord)r.Val1)
+                .map(r -> (UserRecord) r.Val1)
                 .collect(Collectors.toList());
 
         List<Tuple<ArticleRecord, UserRecord>> articleResults = allRecords.stream()
                 .filter(r -> r.Val1 instanceof ArticleRecord)
-                .map(r -> (Tuple<ArticleRecord, UserRecord>)r)
+                .map(r -> (Tuple<ArticleRecord, UserRecord>) r)
                 .collect(Collectors.toList());
 
         List<Tuple<CommentRecord, UserRecord>> commentResults = allRecords.stream()
                 .filter(r -> r.Val1 instanceof CommentRecord)
-                .map(r -> (Tuple<CommentRecord, UserRecord>)r)
+                .map(r -> (Tuple<CommentRecord, UserRecord>) r)
                 .collect(Collectors.toList());
 
         req.setAttribute("userResults", userResults);
@@ -47,19 +87,25 @@ public class Admin extends Controller {
         return;
     }
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (req.getParameter("sendEmail")!=null){
+        /*
+         * send email with reset password link
+         */
+        if (req.getParameter("sendEmail") != null) {
             String userId = req.getParameter("userId");
             String username = req.getParameter("username");
             String userEmail = req.getParameter("sendEmail");
 
             userEmail = "mallard.blog@gmail.com";
 
-            //TODO GENERATE A LINK
-            String link = "http://localhost:8080/admin";
 
+            //GENERATE A LINK
+            String encodePart = encodeResetPasswordLink(userId);
+
+            String link = "http://localhost:8080/admin?resetPasswordFor=" + encodePart;
 
 
             // reads SMTP server setting from web.xml file
@@ -92,14 +138,13 @@ public class Admin extends Controller {
             // Recipient's email ID needs to be mentioned.
             String to = userEmail;
             // Sender's email ID needs to be mentioned
-            String from = user;
 
             try {
                 // Create a default MimeMessage object.
                 MimeMessage message = new MimeMessage(session);
 
                 // Set From: header field of the header.
-                message.setFrom(new InternetAddress(from));
+                message.setFrom(new InternetAddress(user));
 
                 // Set To: header field of the header.
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -108,25 +153,77 @@ public class Admin extends Controller {
                 message.setSubject("Reset password link! - from Mallard-Blog.co.nz");
 
                 // Now set the actual message
-                message.setText("Please check your reset password link below:\n\n" + link);
+                message.setText("Please check your reset password link below:\n\n" + link
+                        + "\n\nBe ware, you can only user this link one time.");
 
                 // Send message
                 Transport transport = session.getTransport("smtp");
-                transport.connect(host, from, pass);
+                transport.connect(host, user, pass);
                 transport.sendMessage(message, message.getAllRecipients());
                 transport.close();
-
 
                 // Feed back response to ajax
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write("A reset password email for " +username+ " has been send to "+userEmail);
+                resp.getWriter().write("A reset password email for " + username + " has been send to " + userEmail);
 
             } catch (MessagingException mex) {
                 mex.printStackTrace();
             }
 
+            return;
         }
 
+        /*
+         * Process the reset password form
+         */
+        if (req.getParameter("passwordReset") != null) {
+            // clear current session
+            req.getSession(false).invalidate();
+
+            String userId = req.getParameter("passwordReset");
+            String password = req.getParameter("password");
+            String enCodedPassword = hashingPassword(password);
+
+            DbConnector.resetPasswordByUserID(enCodedPassword, userId);
+
+            cleanAllParameters(req);
+            req.getRequestDispatcher("login?login=0").forward(req, resp);
+            return;
+        }
+
+    }
+
+    private String encodeResetPasswordLink(String userId) {
+
+        String randomizedUserId = String.valueOf(Integer.parseInt(userId) + Math.random());
+
+        byte[] salt = Passwords.getNextSalt();
+        byte[] hash = Passwords.hash(randomizedUserId.toCharArray(), salt);
+
+        String encodedLinkPart = Passwords.base64Encode(hash);
+
+        activeLink.put(encodedLinkPart, new Tuple<>(randomizedUserId, salt));
+
+        return encodedLinkPart;
+    }
+
+
+    private String decodeUserIdFromRandomizedLink(String encodeUserId) {
+        String plainUserId = "";
+
+        byte[] hash = Passwords.base64Decode(encodeUserId);
+        byte[] salt = activeLink.get(encodeUserId).Val2;
+        String uncheckedUserId = activeLink.get(encodeUserId).Val1;
+
+        if (Passwords.isExpectedPassword(uncheckedUserId.toCharArray(), salt, hash)){
+
+            plainUserId = uncheckedUserId.substring(0, uncheckedUserId.indexOf('.'));
+        }
+
+        // after used, de-active the link
+        activeLink.remove(encodeUserId);
+
+        return plainUserId;
     }
 }

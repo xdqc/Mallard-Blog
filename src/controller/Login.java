@@ -72,4 +72,9 @@ public class Login extends Controller {
 
         return user.getPassword().equals(password);
     }
+
+    static String hashingPassword(String rawPassword){
+        //TODO impliment hashing
+        return rawPassword;
+    }
 }

@@ -946,4 +946,18 @@ public class DbConnector {
         }
         return records;
     }
+
+    public static void resetPasswordByUserID(String password, String userId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.PASSWORD, password)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

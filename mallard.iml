@@ -43,5 +43,7 @@
     <orderEntry type="library" name="javacv" level="project" />
     <orderEntry type="library" name="opencv" level="project" />
     <orderEntry type="library" name="javacpp-1.0" level="project" />
+    <orderEntry type="library" name="Java EE 6" level="project" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6 (2)" level="project" />
   </component>
 </module>

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import static controller.Login.hashingPassword;
+
 public class SignUp extends Controller {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,7 +48,10 @@ public class SignUp extends Controller {
             user.setCreateTime(currentTimes);
             user.setEmail(req.getParameter("email"));
             user.setUserName(req.getParameter("userName"));
-            user.setPassword(req.getParameter("password"));
+
+            String encodedPassword = hashingPassword(req.getParameter("password"));
+            user.setPassword(encodedPassword);
+
             user.setAddress(req.getParameter("address"));
             user.setCity(req.getParameter("city"));
             user.setState(req.getParameter("state"));
@@ -120,13 +125,8 @@ public class SignUp extends Controller {
         resp.getWriter().write(msg);
     }
 
-/*
-    private String hashingPassword(String rawPassword){
-        //TODO impliment hashing
-        return rawPassword;
-    }
-}
 
-    */
+
+
 
 }
