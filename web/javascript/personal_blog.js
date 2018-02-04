@@ -42,6 +42,7 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));
 
+                    /* Reply/Edit/Delete actions */
                     const replyBtn = $("<a class='reply-comment-btn'>")
                         .attr("id", "reply-comment-btn-" + cmtId)
                         .text(" Reply")
@@ -75,22 +76,41 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                         .text(" Delete")
                         .prepend($("<span class='fa fa-trash-o'>"));
 
+                    /* multimedia gallery actions*/
+                    const showCommentMedia = $("<a class='show-media show-comment-media' data-toggle='collapse'>")
+                        .attr("id", "showMultimedia-UserCheck_"+comment["commenterId"]+"-comment-"+cmtId)
+                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .text(" Show")
+                        .prepend($("<span class='fa fa-eye'>"));
 
-                    /*
+                    const activateCommentMedia = $("<a class='show-media active-comment-media' data-toggle='collapse'>")
+                        .attr("id", "showMultimedia-activateList-comment-"+cmtId)
+                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .text(" Activate")
+                        .prepend($("<span class='fa fa-eyedropper'>"));
+
+                    const deleteCommentMedia = $("<a class='show-media delete-comment-media' data-toggle='collapse'>")
+                        .attr("id", "showMultimedia-FileList-comment-"+cmtId)
+                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .text(" Delete")
+                        .prepend($("<span class='fa fa-eye-slash'>"));
 
 
-                     */
 
-                    //This is a special use case of exploiting of var hijacking to access it outside loop
+
                     const $dd = ($("<dd class='comment status-upload'>").text(comment.content)).appendTo($dl);
                     const $ddd = ($("<div class='comment-action-btn'>")).appendTo($dd)
-                        .append(replyBtn).append(editBtn).append(deleteBtn);
+                        .append(replyBtn).append(editBtn).append(deleteBtn)
+                        .append($("<span class='comment-media-text'>").html("&nbsp;&nbsp;Media Gallery&nbsp;"))
+                        .append(showCommentMedia).append(activateCommentMedia).append(deleteCommentMedia);
 
                     if (loggedInUser !== comment["articleAuthorId"] && loggedInUser !== comment["commenterId"]) {
                         deleteBtn.off("click").addClass("disabled");
+                        deleteCommentMedia.off("click").addClass("disabled");
                     }
                     if (loggedInUser !== comment["commenterId"]) {
                         editBtn.off("click").addClass("disabled");
+                        activateCommentMedia.off("click").addClass("disabled");
                     }
                     if (loggedInUser === 0) {
                         replyBtn.off("click").addClass("disabled");
@@ -101,6 +121,10 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                     if (loggedInUser === comment["commenterId"]) {
                         $dd.append(editForm);
                     }
+
+                    // Comment Gallery Area
+                    $dd.append($("<div class='collapse comment-gallery-area'>")
+                        .attr("id","multimediaShowArea-comment-"+cmtId));
                 }
             }
         } else {
@@ -507,10 +531,17 @@ $(document).ready(function () {
                 },
                 complete: () => {
                     // event binding for ajax loaded area
-                    if (!commentArea.hasClass("clickable-active")){
+                    if (!commentArea.hasClass("clickable-active")) {
                         commentActions(articleID);
                         commentArea.addClass("clickable-active");
                     }
+
+                    // if comments nested too deep, remove the left padding
+                    $('dl.comment').each(function () {
+                        if ($(this).width() < 500) {
+                            $(this).css('margin', '10px -10px 10px 0px');
+                        }
+                    });
                 }
             });
 
