@@ -40,7 +40,6 @@ public class Login extends Controller {
             return;
         }
 
-
         boolean isLogin = req.getParameter("login") != null && req.getParameter("login").equals("1");
         if (isLogin){
             String username = req.getParameter("username");

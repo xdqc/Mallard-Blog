@@ -17,16 +17,20 @@
             ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
 
         </div>
-        <div class="panel-text article-likes">
-            <span class="h5 text-muted"> ${blog.getArticle().getLikeNum()}&nbsp;<span
-                    class="fa fa-thumbs-up"></span></span>
-        </div>
 
         <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
              alt="random picture"/>
 
-        <%--display multimedia gallery here by ajax--%>
-        <div id="multimedia-gallery-${blog.getArticle().getId()}"></div>
+        <%--&lt;%&ndash;display multimedia gallery here by ajax&ndash;%&gt;--%>
+        <%--<div id="multimedia-gallery-${blog.getArticle().getId()}"></div>--%>
+
+        <!-- collapse style multimedia gallery begin-->
+        <div>
+            <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                <span class="glyphicon glyphicon-file"></span>Show more multimedia</a>
+            <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
+        </div>
+        <!-- collapse style multimedia gallery end-->
 
         <br>
         <div id="article-content-${blog.getArticle().getId()}" class="panel-text article-content">
@@ -40,25 +44,24 @@
                 Read more
             </button>
         </div>
+        <div class="panel-text article-likes">
+                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
+                                class="fa fa-thumbs-up"></span></span>
+        </div>
         <br>
         <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
         <br>
-        <a href="/File-Upload?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Upload
-            multimedia</a>
-        <a href="/multimedia-gallery?articleId=${blog.getArticle().getId()}" class="btn btn-primary">Multimedia
-            Gallery</a>
-
 
         <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                 class="btn btn-info show-comment-btn">
-            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumComments()}</span>
+            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
             Comments
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>
 
 
         ${sessionScope.get("loggedInUser")==null? "" :
-                '<div class="leave-comment" id="leave-comment-'.concat(id).concat('"><h4>Leave a comment</h4><div class="widget-area no-padding blank"><div class="status-upload"><form><textarea id="leave-comment-text-').concat(id).concat('"placeholder="What are you thinking about this article?"></textarea><ul class="list-unstyled list-inline"><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Audio"><i class="fa fa-music"></i></a><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li></ul><button type="submit" class="btn btn-success leave-comment-submit"id="leave-comment-submit-').concat(id).concat('"><iclass="fa fa-share"></i> Comment</button></form></div></div></div>')
+                '<div class="leave-comment" id="leave-comment-'.concat(id).concat('">    <h4 class="leave-a-comment" style="display: none">Comment</h4>    <div class="widget-area no-padding blank">        <div class="status-upload">            <form>                <textarea id="leave-comment-text-').concat(id).concat('"                          placeholder="What are you thinking about this article?"></textarea>                <ul class="list-unstyled list-inline">                    <li><a title="" data-toggle="collapse" href="#uploadArea-').concat(id).concat('">                        <i class="fa fa-video-camera"></i></a></li>                    <li><a title="" data-toggle="collapse" href="#uploadArea-').concat(id).concat('">                        <i class="fa fa-picture-o"></i></a></li>                </ul>                <button type="submit" class="btn btn-success leave-comment-submit"                        id="leave-comment-submit-').concat(id).concat('"><i class="fa fa-share"></i> Comment                </button>            </form>                        <div id="uploadArea-').concat(id).concat('" class="collapse upload-area">                <form class="uploadForm" id="uploadForm-').concat(id).concat('" action="/File-Upload?commentId=0" method="post" enctype="multipart/form-data">                    <fieldset id="files-commentToArticle-').concat(id).concat('">                        <legend>Select your file</legend>                        <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput(').concat(id).concat(', ').concat("'commentToArticle'").concat(')"><br>                    </fieldset>                    <input id="uploadButton-comment-').concat(id).concat('" class="upload-buttons" type = "submit" value = "Upload" style="display: none"></form><div id="uploadedFilesArea"></div></div></div></div></div>')
         }
 
         <div id="comment-area-${blog.getArticle().getId()}" class="widget-area blank comment-area"
@@ -67,3 +70,4 @@
     </div>
 </article>
 <br>
+                <%--'<div class="leave-comment" id="leave-comment-'.concat(id).concat('"><h4 class="leave-a-comment" style="display:none">Comment</h4><div class="widget-area no-padding blank"><div class="status-upload"><form><textarea id="leave-comment-text-').concat(id).concat('"placeholder="What are you thinking about this article?"></textarea><ul class="list-unstyled list-inline"><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Audio"><i class="fa fa-video-camera"></i></a><li><a title="" data-toggle="tooltip" data-placement="bottom"data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li></ul><button type="submit" class="btn btn-success leave-comment-submit"id="leave-comment-submit-').concat(id).concat('"><iclass="fa fa-share"></i> Comment</button></form></div></div></div>')--%>

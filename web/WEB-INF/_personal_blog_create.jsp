@@ -25,16 +25,33 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="well well-sm well-primary">
                             <div class="input-group image-preview">
 
+                                <!-- collapse style upload file begin-->
+                                <div>
+                                    <script type="text/javascript" src="../javascript/uploadFile.js"></script>
+                                    <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${articleId}" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
+                                    <div id="uploadArea-${articleId}" class="collapse upload-area">
+                                        <form class="uploadForm" id="uploadForm-${articleId}" action="/File-Upload?articleId=${articleId}" method="post" enctype="multipart/form-data">
+                                            <fieldset id="files-article-${articleId}">
+                                                <legend>Select your file</legend>
+                                                <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${articleId}','article')"><br>
+                                            </fieldset>
+                                            <input id="uploadButton-article-${articleId}" class="upload-buttons" type = "submit" value = "Upload" style="display: none">
+                                        </form>
+                                        <div id="uploadedFilesArea"></div>
+                                    </div>
+                                </div>
+                                <!-- collapse style upload file end-->
 
 
                             </div><!-- /input-group image-preview [TO HERE]-->
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="well well-sm well-primary">
                             <form class="form form-inline " role="form">
                                 <div class="form-group">
@@ -42,12 +59,12 @@
                                             id="publish-${articleId}">
                                         <span class="fa fa-paper-plane"> Publish</span>
                                     </button>
-                                    <button type="button" class="btn btn-default preview"
-                                            id="preview-${articleId}">
-                                        <span class="fa fa-eye"> Preview</span>
-                                    </button>
+                                    <%--<button type="button" class="btn btn-default preview"--%>
+                                            <%--id="preview-${articleId}">--%>
+                                        <%--<span class="fa fa-eye"> Preview</span>--%>
+                                    <%--</button>--%>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group create-article-group">
                                     <select class="form-control text-input-dialog publish-mode"
                                             id="publish-mode-${articleId}">
                                         <option value="publish">Publish</option>

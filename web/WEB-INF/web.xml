@@ -12,6 +12,27 @@
         </param-value>
     </context-param>
 
+    <!-- SMTP settings -->
+    <context-param>
+        <param-name>host</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>port</param-name>
+        <param-value>465</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>user</param-name>
+        <param-value>mallard.blog@gmail.com</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>pass</param-name>
+        <param-value>aoeuidht</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>home-page</servlet-name>
         <servlet-class>controller.HomePage</servlet-class>
@@ -71,11 +92,6 @@
         <url-pattern>/contact</url-pattern>
     </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>home-page</welcome-file>
-    </welcome-file-list>
-
-
     <servlet>
         <servlet-name>multimedia_gallery</servlet-name>
         <servlet-class>controller.MultimediaGallery</servlet-class>
@@ -116,4 +132,16 @@
         <servlet-name>FileManage</servlet-name>
         <url-pattern>/File-Manage</url-pattern>
     </servlet-mapping>
+        <servlet-name>admin</servlet-name>
+        <servlet-class>controller.Admin</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>admin</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>admin</welcome-file>
+    </welcome-file-list>
 </web-app>

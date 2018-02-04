@@ -21,7 +21,18 @@ public class Search extends Controller {
 
         String searchStr = req.getParameter("search");
         if (searchStr != null){
-            String[] searchItems = searchStr.split(" ");
+            searchStr = searchStr.trim();
+            if (searchStr.isEmpty()){
+                req.getRequestDispatcher("error?&errorMsg=" + "Please enter something to search.").forward(req, resp);
+            }
+
+
+
+            String[] searchItems = searchStr.split("\\s+");
+            for (int i = 0; i < searchItems.length; i++) {
+                searchItems[i] = searchItems[i].trim();
+            }
+
             List<Tuple<?,?>> searchResults = DbConnector.findSearchItems(searchItems);
 
             List<UserRecord> userResults = searchResults.stream()
@@ -46,6 +57,6 @@ public class Search extends Controller {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        doGet(req, resp);
     }
 }

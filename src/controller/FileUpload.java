@@ -131,6 +131,7 @@ public class FileUpload extends HttpServlet {
                     FileUtilities.createThumbnail(this.fullPath,getServletContext().getRealPath("/pictures/"),uploadFileName);
                     String articleId = request.getParameter("articleId");
                     String commentId = request.getParameter("commentId");
+                    String userId = request.getParameter("userID");
                     String attachType = "U";
                     Integer ownby = this.user.getId();
                     if(articleId != null && !articleId.equals("")){
@@ -141,6 +142,12 @@ public class FileUpload extends HttpServlet {
                         attachType = "C";
                         ownby = Integer.parseInt(commentId);
                     }
+                    /* There is no session at that time for us to get user info, because new user not logged in yet*/
+                    if (userId != null && !userId.equals("")){
+                        attachType = "U";
+                        ownby = Integer.parseInt(userId);
+                    }
+                    System.out.println("ownby = [" + ownby + "]");
                     // save the information into database
                     FileUtilities.saveInformationToDB(theFileName,"/UploadedFile/multimedia/" + this.user.getId() + "/",fileTypeFlag,attachType, ownby);
                     //store the result information

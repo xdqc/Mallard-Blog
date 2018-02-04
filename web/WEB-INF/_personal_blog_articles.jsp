@@ -20,10 +20,7 @@
                     </c:if>
 
                 </div>
-                <div class="panel-text article-likes">
-                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
-                                class="fa fa-thumbs-up"></span></span>
-                </div>
+
 
                 <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
                      alt="random picture"/>
@@ -59,26 +56,31 @@
                     </button>
                 </div>
                 <br>
+                <div class="panel-text article-likes">
+                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
+                                class="fa fa-thumbs-up"></span></span>
+                </div>
+                <br>
                 <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
                 <br>
 
-                <!-- collapse style upload file begin-->
-                <div>
-                    <script type="text/javascript" src="../javascript/uploadFile.js"></script>
-                    <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${blog.getArticle().getId()}" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
-                    <div id="uploadArea-${blog.getArticle().getId()}" class="collapse">
-                        <form id="uploadForm" action="/File-Upload?articleId=${blog.getArticle().getId()}" method="post" enctype="multipart/form-data">
-                            <fieldset id="files-article-${blog.getArticle().getId()}">
-                                <legend>Select your file</legend>
-                                <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${blog.getArticle().getId()}','article')"><br>
-                            </fieldset>
-                            <input id="uploadButton-article-${blog.getArticle().getId()}" class="upload-buttons" type = "submit" value = "Upload">
-                        </form>
-                        <div id="uploadedFilesArea"></div>
-                    </div>
-                </div>
-                <!-- collapse style upload file end-->
+                <%--<!-- collapse style upload file begin-->--%>
+                <%--<div>--%>
+                    <%--<script type="text/javascript" src="../javascript/uploadFile.js"></script>--%>
+                    <%--<a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${blog.getArticle().getId()}" class="btn btn-primary">--%>
+                        <%--<span class="glyphicon glyphicon-file"></span>Upload multimedia</a>--%>
+                    <%--<div id="uploadArea-${blog.getArticle().getId()}" class="collapse">--%>
+                        <%--<form id="uploadForm" action="/File-Upload?articleId=${blog.getArticle().getId()}" method="post" enctype="multipart/form-data">--%>
+                            <%--<fieldset id="files-article-${blog.getArticle().getId()}">--%>
+                                <%--<legend>Select your file</legend>--%>
+                                <%--<input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${blog.getArticle().getId()}','article')"><br>--%>
+                            <%--</fieldset>--%>
+                            <%--<input id="uploadButton-article-${blog.getArticle().getId()}" class="upload-buttons" type = "submit" value = "Upload">--%>
+                        <%--</form>--%>
+                        <%--<div id="uploadedFilesArea"></div>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+                <%--<!-- collapse style upload file end-->--%>
 
                     <%--edit and delete article button--%>
                 <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
@@ -93,7 +95,7 @@
                     <%--<c:if test="${blog.getNumComments() > 0}">--%>
                 <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
                         class="btn btn-info show-comment-btn">
-                    <span class="badge" id="num-comments-${blog.getArticle().getId()}"></span>
+                    <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
                     Comments
                     <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
                 </button>

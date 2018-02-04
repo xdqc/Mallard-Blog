@@ -49,11 +49,12 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name">
                                     Message</label>
-                                <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required"
+                                <textarea style="overflow: auto; resize: none" name="message" id="message" class="form-control" rows="9" cols="25" required="required"
                                           placeholder="Message"></textarea>
                             </div>
                         </div>
@@ -83,6 +84,9 @@
             </form>
         </div>
     </div>
+</div>
+<div class="col-sm-12">
+    <%@ include file="WEB-INF/_foot.jsp" %>
 </div>
 </body>
 </html>

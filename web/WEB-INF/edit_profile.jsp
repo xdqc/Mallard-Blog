@@ -3,28 +3,28 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <%@include file="WEB-INF/_head.jsp"%>
+    <%@include file="_head.jsp"%>
     <title>Edit Account</title>
 </head>
 <body>
-<%@include file="WEB-INF/_home_page_menu.jsp"%>
+<%@include file="_home_page_menu.jsp"%>
 
+<c:set var = "user" scope = "session" value = "${sessionScope.get('loggedInUser')}"/>
 <div class="container">
     <div class="row">
         <div class="col-6 ">
             <div id="box" class="panel panel-default" style= "border-color: lightgray; box-shadow: 1px 3px 4px 5px floralwhite ;" >
                 <div style="margin-left: 3%">
-                    <form action="sign-up?editProfile=1" method="post">
+                    <form action="sign-up?editProfile=${user.getId()}" method="post" id="edit-form">
                         <h2 style="text-align: center">Edit Your Profile</h2>
 
-                        <c:set var = "user" scope = "session" value = "${sessionScope.get('loggedInUser')}"/>
                         <h3>Personal Information:</h3>
                         <br><br>
                         <div style="margin-left: 4%">
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="firstN">First Name:</label>
-                                    <input class="form-control" type="text" id="firstN" name="fname" value="${user.getFName()}" >
+                                    <input class="form-control" type="text" id="firstN" name="fname" required value="${user.getFName()}" >
                                     <br>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="lastN">Last Name:</label>
-                                    <input class="form-control" type="text" id="lastN" name="lname" value="${user.getLName()}" >
+                                    <input class="form-control" type="text" id="lastN" name="lname" required value="${user.getLName()}" >
                                     <br>
                                 </div>
                             </div><br><br>
@@ -40,8 +40,8 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="gnd"><strong>Gender:</strong></label>
-                                    <select  class="radio-inline" id="gnd" name="gender" >
-                                        <option name="gender" value="${user.getGender()}"></option>
+                                    <select  class="radio-inline" required id="gnd" name="gender" >
+                                        <option>${user.getGender()}</option>
                                         <option value="0" name="gender">Female</option>
                                         <option value="1" name="gender">Male</option>
                                         <option value="2" name="gender">Other</option>
@@ -54,7 +54,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="DOB">Date Of Birth</label>
-                                    <input class="form-control" type="date" id="DOB" value="${user.getDob()}">
+                                    <input class="form-control" type="date" required id="DOB" value="${user.getDob()}">
                                     <br><br>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="addr">Address:  </label>
-                                    <input class="form-control" type="text" id="addr" name="address">
+                                    <input class="form-control" type="text" id="addr" required value="${user.getAddress()}" name="address">
                                     <br><br>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="cty">City:  </label>
-                                    <input class="form-control" type="text" id="cty" name="city">
+                                    <input class="form-control" type="text" id="cty" required value="${user.getCity()}" name="city">
                                     <br><br>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="ste" >State:  </label>
-                                    <input class="form-control" type="text" id="ste" name="state">
+                                    <input class="form-control" type="text" id="ste" required value="${user.getState()}" name="state">
                                     <br><br>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                             <div class="form-group">
                                 <div style="width: 40%">
                                     <label for="cuntry">Country:  </label>
-                                    <select id="cuntry" name="country">
+                                    <select id="cuntry" required name="country">
                                         <option selected>${user.getCountry()}</option>
                                         <option> Afghanistan </option>
                                         <option> Albania</option>
@@ -294,14 +294,16 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <p><strong>Description:</strong></p>
-                                    <textarea style="overflow: auto; resize: none" name="description" cols="60" rows="8" placeholder="${user.getDescription()}"></textarea>
+                                    <textarea style="overflow: auto; resize: none" name="description" required cols="60" rows="8">
+                                        ${user.getDescription()}
+                                    </textarea>
                                     <br><br>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-inline">
-                            <input style="width: 10em; align-content: space-around" class="form-control" type="submit" value="Save Changes">
+                            <input style="width: 10em; align-content: space-around" class="form-control" type="submit" value="Update">
                             <input style="width: 10em" class="form-control" type="reset" value="Cancel">
                             <br><br><br><br><br>
                         </div>
@@ -314,3 +316,30 @@
 
 
 </body>
+<script>
+    $('form#edit-form').on('submit', function(event) {
+        event.preventDefault(); // or return false, your choice
+        console.log($(this).serialize());
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            data: $(this).serialize(),
+            success: function(resp, status) {
+                // if success, HTML response is expected, so replace current
+                if(resp === "success"){
+                    swal("Your changes has been made :)");
+                    $('#edit-form').reset();
+                }
+                else if (resp === "error"){
+                    swal("SQL error");
+                }
+            },
+            error: function (data, status) {
+                swal("Sorry, there is an error on your form!");
+            }
+
+        });
+    });
+
+</script>
+</html>

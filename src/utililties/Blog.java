@@ -15,32 +15,19 @@ import java.util.Map;
 public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<CommentRecord>>, Serializable {
     private UserRecord author;
     private ArticleRecord article;
-    private int numComments=0;
     private Tree<CommentRecord> commentTree = new Tree<>(new CommentRecord());
     private List<CommentRecord> commentList = new ArrayList<>();
+    private int numComments = 0;
+    private int validComments = 0;
 
-//    public Blog(ArticleRecord article) {
-//        this.article = article;
-//        this.author = DbConnector.getAuthorByArticleId(String.valueOf(article.getId()));
-//        this.numComments = DbConnector.getCommentNumberByArticle(String.valueOf(article.getId()));
-//        this.commentList = DbConnector.getCommentsByArticleId(String.valueOf(article.getId()));
-//        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
-//        convertListToTree();
-//    }
+    public Blog() {
+    }
 
-//    public Blog(Tuple<UserRecord, ArticleRecord> tuple, List<CommentRecord> commentList){
-//        this.author = tuple.Val1;
-//        this.article = tuple.Val2;
-//        this.commentList = commentList;
-//        this.numComments = commentList.size();
-//        this.commentTree = new Tree<>(new CommentRecord(null, null, null, null, null, null, null, this.article.getId(), null));
-//
-//        convertListToTree();
-//    }
 
-    public Blog() {}
-
-    
+    /**
+     * Put a list of comments in comment tree where each node should be
+     * First step: put comment directly to article under the root's children
+     */
     public void convertListToTree() {
         // Add comment that directly under the article
         for (int i = 0; i < commentList.size(); i++) {
@@ -59,6 +46,13 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         }
     }
 
+    /**
+     * Put a list of comments in comment tree where each node should be
+     * Second step: put children and grandchildren, grand grand ... to tree
+     *
+     * @param tree comment tree
+     * @param list list of comments to put into tree
+     */
     private void moveCommentsToTree(Tree<CommentRecord> tree, List<CommentRecord> list) {
         for (int i = 0; i < list.size(); i++) {
             CommentRecord comment = list.get(i);
@@ -73,7 +67,6 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
             }
         }
     }
-
 
     public UserRecord getAuthor() {
         return author;
@@ -92,8 +85,28 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return numComments;
     }
 
+    public int getNumValidComments() {
+        this.validComments = 0;
+        countValidComment(this.commentTree);
+        return this.validComments;
+    }
+
+    private void countValidComment(Tree<CommentRecord> tree) {
+        for (Tree<CommentRecord> commentTree : tree.getChildren()) {
+            CommentRecord comment = commentTree.getData();
+            //UserRecord commenter = commentTree.getData().Val2;
+            // create json obj only for valid comments to show
+            if (comment.getShowHideStatus() == 1) {
+                this.validComments++;
+                if (!commentTree.getChildren().isEmpty()) {
+                    countValidComment(commentTree);
+                }
+            }
+        }
+    }
+
     public void addValue(List<CommentRecord> c) {
-        if (!c.isEmpty()){
+        if (!c.isEmpty()) {
             this.commentList.add(c.get(0));
         }
         convertListToTree();
@@ -104,10 +117,9 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         this.article = t.Val2;
     }
 
-    public List<CommentRecord> getCommentList() {
-        return commentList;
+    public void addComment(CommentRecord comment) {
+        this.commentList.add(comment);
     }
-
 
     /**
      * Returns the key corresponding to this entry.
