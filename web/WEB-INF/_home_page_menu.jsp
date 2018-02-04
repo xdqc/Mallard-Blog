@@ -38,6 +38,10 @@
                             <a href="home_page.jsp" id="refresh-after-delete" style="display: none"></a>
                         </li>
                         <li><a href="#" class="send-email" id="send-email-${user.getId()}">Re-set Password</a></li>
+
+                        <c:if test="${user.getSystemRole()==0}">
+                            <li><a href="admin">Admin's Pleasure Hub</a></li>
+                        </c:if>
                     </ul>
                     </li>
                     <li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>

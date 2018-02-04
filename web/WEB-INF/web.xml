@@ -149,6 +149,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>admin</welcome-file>
+        <welcome-file>home-page</welcome-file>
     </welcome-file-list>
 </web-app>

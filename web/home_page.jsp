@@ -53,8 +53,8 @@
         </c:if>
 
             <img id="load-article-img" src="pictures/big_loading.gif" alt="loading..."
-                 width="200" style="display: none;margin: 200px auto;" aria-hidden="true">
-            <button class="btn btn-info" id="load-more-articles" style="display: none; margin: 20px auto;">Load more articles</button>
+                 width="200" style="display: none;margin: 400px auto;" aria-hidden="true">
+            <button class="btn btn-info" id="load-more-articles" style="display: none; margin: 50px auto;">Load more articles</button>
 
 
     </div>

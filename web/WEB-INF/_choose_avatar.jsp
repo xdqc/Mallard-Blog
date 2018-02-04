@@ -90,6 +90,7 @@
             data: 'login=newSignUp',
             success: function(resp, status) {
                 $('#box').hide();
+                $('#choose-avatar').hide();
                 loginPage.html(resp);
                 loginPage.slideDown(2200);
             },

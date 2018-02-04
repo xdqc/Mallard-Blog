@@ -48,7 +48,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'POST',
                     url: 'admin',
-                    data: {deleteUser: userId},
+                    data: {deleteOwnAccount: userId},
                     cache: false,
                     beforeSend: () => {
                     },
