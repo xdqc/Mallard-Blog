@@ -132,6 +132,8 @@
         <servlet-name>FileManage</servlet-name>
         <url-pattern>/File-Manage</url-pattern>
     </servlet-mapping>
+
+    <servlet>
         <servlet-name>admin</servlet-name>
         <servlet-class>controller.Admin</servlet-class>
     </servlet>
@@ -142,6 +144,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>admin</welcome-file>
+        <welcome-file>home-page</welcome-file>
     </welcome-file-list>
 </web-app>

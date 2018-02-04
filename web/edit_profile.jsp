@@ -3,11 +3,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <%@include file="_head.jsp"%>
+    <%@include file="WEB-INF/_head.jsp"%>
     <title>Edit Account</title>
 </head>
 <body>
-<%@include file="_home_page_menu.jsp"%>
+<%@include file="WEB-INF/_home_page_menu.jsp"%>
 
 <c:set var = "user" scope = "session" value = "${sessionScope.get('loggedInUser')}"/>
 <div class="container">
@@ -41,7 +41,15 @@
                                 <div style="width: 50%">
                                     <label for="gnd"><strong>Gender:</strong></label>
                                     <select  class="radio-inline" required id="gnd" name="gender" >
-                                        <option>${user.getGender()}</option>
+                                            <c:if test="${user.getGender().equal('0')}" >
+                                                <option selected>Female</option>
+                                            </c:if>
+                                            <c:if test="${user.getGender().equal('1')}" >
+                                            <option selected>Male</option>
+                                             </c:if>
+                                            <c:if test="${user.getGender().equal('2')}" >
+                                            <option selected>Other</option>
+                                            </c:if>
                                         <option value="0" name="gender">Female</option>
                                         <option value="1" name="gender">Male</option>
                                         <option value="2" name="gender">Other</option>

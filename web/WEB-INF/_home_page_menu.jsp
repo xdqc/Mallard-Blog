@@ -32,7 +32,7 @@
 
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
-                        <li><a href="edit_profile.jsp">Edit Profile</a></li>
+                        <li><a href="../edit_profile.jsp">Edit Profile</a></li>
                         <li><a href="#">Delete account</a></li>
                         <li><a href="#">Re-set Password</a></li>
                     </ul>

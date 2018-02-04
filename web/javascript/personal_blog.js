@@ -32,7 +32,11 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                     var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
                         .append($("<dt class='comment'>")
                             .append($("<a>").attr("href", "personal-blog?userId="+comment["commenterId"])
-                                .html(comment["commenter"]))
+                                .html("&nbsp;&nbsp;"+comment["commenter"])
+                                .prepend(
+                                    $("<img class='img-circle' src='http://i.pravatar.cc/40' alt='Card image cap'>")
+                                )
+                            )
                             .append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"))
                             .append($("<span class='text-muted fa fa-clock-o'>")
                                 .append($("<abbr>").attr("title", comment["createTime"]).html("&nbsp;" + ago))));

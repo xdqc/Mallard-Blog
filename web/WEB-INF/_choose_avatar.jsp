@@ -14,15 +14,30 @@
         <div id="selected-pic" style="margin-left: 3em"><img id="defaultimg" src="../pictures/avatars/default.jpg" alt="default" width="220"/></div>
 
         <div id="thumbview">
-            <div class="thumb-holder"><img src="/pictures/avatars/1.jpg" alt="1" width="100"></div>
+            <div class="thumb-holder"><img src="/pictures/avatars/1.jpg" alt="1" width="100">
+                <input type="radio" value="1" name="avatar">
+            </div>
             <input type="radio" value="1" name="avatar">
-            <%--TODO --%>
-            <div class="thumb-holder"><img src="/pictures/avatars/2.png" alt="2" width="100"></div>
-            <div class="thumb-holder"><img src="/pictures/avatars/3.png" alt="3" width="100"></div>
-            <div class="thumb-holder"><img src="/pictures/avatars/4.png" alt="4" width="100"></div>
-            <div class="thumb-holder"><img src="/pictures/avatars/5.png" alt="5" width="100"></div>
-            <div class="thumb-holder"><img src="/pictures/avatars/6.png" alt="6" width="100"></div>
-            <div class="thumb-holder"><img src="/pictures/avatars/7.png" alt="7" width="100"></div>
+            <div class="thumb-holder"><img src="/pictures/avatars/2.png" alt="2" width="100">
+                <input type="radio" value="2" name="avatar">
+            </div>
+
+            <div class="thumb-holder"><img src="/pictures/avatars/3.png" alt="3" width="100">
+                <input type="radio" value="3" name="avatar">
+            </div>
+            <div class="thumb-holder"><img src="/pictures/avatars/4.png" alt="4" width="100">
+                <input type="radio" value="4" name="avatar">
+            </div>
+            <div class="thumb-holder"><img src="/pictures/avatars/5.png" alt="5" width="100">
+                <input type="radio" value="5" name="avatar">
+            </div>
+            <div class="thumb-holder"><img src="/pictures/avatars/6.png" alt="6" width="100">
+                <input type="radio" value="6" name="avatar">
+            </div>
+            <div class="thumb-holder"><img src="/pictures/avatars/7.png" alt="7" width="100">
+                <input type="radio" value="7" name="avatar">
+            </div>
+
         </div>
     </div>
 
