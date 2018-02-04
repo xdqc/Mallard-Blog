@@ -194,6 +194,13 @@ public class Admin extends Controller {
             return;
         }
 
+        if (req.getParameter("deleteUser")!=null){
+            String userId = req.getParameter("deleteUser");
+
+            
+        }
+
+
     }
 
     private String encodeResetPasswordLink(String userId) {

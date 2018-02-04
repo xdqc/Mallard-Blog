@@ -29,11 +29,11 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
-
+                    <c:set var="user" value="${sessionScope.get('loggedInUser')}"/>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
                         <li><a href="edit_profile.jsp">Edit Profile</a></li>
-                        <li><a href="#">Delete account</a></li>
+                        <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a></li>
                         <li><a href="#">Re-set Password</a></li>
                     </ul>
                     </li>

@@ -67,7 +67,7 @@ public class Login extends Controller {
     }
 
     /**
-     * Check
+     * Check login form password match db record or not
      * @param user user record in db
      * @param password user enter pw to be checked
      * @return match or not
@@ -86,7 +86,7 @@ public class Login extends Controller {
      * @param username username
      * @return hashed pw string b64
      */
-    static String hashingPassword(String rawPassword, String username) {
+    public static String hashingPassword(String rawPassword, String username) {
         int iteration = username.length() % 7 + 1;
         byte[] salt = (username + "mallard").getBytes();
         byte[] hash = Passwords.hash(rawPassword.toCharArray(), salt, iteration);
