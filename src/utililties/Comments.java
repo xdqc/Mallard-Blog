@@ -20,6 +20,10 @@ public class Comments extends Tree<Tuple3<UserRecord, CommentRecord, UserRecord>
 
     private List<Tuple3<UserRecord, CommentRecord, UserRecord>> commentList = new ArrayList<>();
 
+    /**
+     * Put a list of comments in comment tree where each node should be
+     * First step: put comment directly to article under the root's children
+     */
     public void convertListToTree() {
         // Add comment that directly under the article
         for (int i = 0; i < commentList.size(); i++) {
@@ -38,6 +42,13 @@ public class Comments extends Tree<Tuple3<UserRecord, CommentRecord, UserRecord>
         }
     }
 
+    /**
+     * Put a list of comments in comment tree where each node should be
+     * Second step: put children and grandchildren, grand grand ... to tree
+     *
+     * @param tree comment tree
+     * @param list list of comments to put into tree
+     */
     private void moveCommentsToTree(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> tree, List<Tuple3<UserRecord, CommentRecord, UserRecord>> list) {
         for (int i = 0; i < list.size(); i++) {
             Tuple3<UserRecord, CommentRecord, UserRecord> comment = list.get(i);
