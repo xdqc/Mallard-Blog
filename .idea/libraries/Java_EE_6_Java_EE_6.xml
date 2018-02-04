@@ -1,21 +1,6 @@
 <component name="libraryTable">
   <library name="Java EE 6-Java EE 6">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/javax.annotation.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.transaction.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.ejb.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.resource.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.jms.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.persistence.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jsp.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/activation.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/imap.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/mail.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/mailapi.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/pop3.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/smtp.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>

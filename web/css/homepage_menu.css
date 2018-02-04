@@ -1,7 +1,9 @@
 #bs-example-navbar-collapse-1 {
+    position: relative;
     color: #666;
     padding: 14px 16px;
     text-decoration: none;
+    z-index: 2;
 }
 
 .navbar{
@@ -11,11 +13,22 @@
     top: 0;
 }
 
-#set li .navbar-brand{
-    position: relative;
-    display: block;
-    box-sizing: border-box;
+.nav .nav-button{
+    white-space: normal;
 }
+
+.nav .navbar-brand{
+    float: left;
+    width: auto;
+    border: none;
+    display: block;
+}
+
+#bs-example-navbar-collapse-1 .nav li .active > a{
+    background-color: lightgrey;
+}
+
+
 
 body { padding-top: 85px; }
 
@@ -26,4 +39,8 @@ body { padding-top: 85px; }
         z-index: 99999;
         width: 100%;
     }
+}
+
+.navbar-inverse{
+    border-radius: 0 0 4px 4px;
 }
