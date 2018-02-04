@@ -136,6 +136,9 @@ public class FileUpload extends HttpServlet {
                     String articleId = request.getParameter("articleId");
                     System.out.println("articleId = [" + articleId + "]");
                     String commentId = request.getParameter("commentId");
+                    /* To Tonny: This is for newly created user to choose avatar, need to accept "userId" as parameter - samuel*/
+                    /* There is no session at that time, because new user not logged in yet*/
+                    String userId = request.getParameter("userID");
                     String attachType = "U";
                     Integer ownby = this.user.getId();
                     if(articleId != null && !articleId.equals("")){
@@ -145,6 +148,11 @@ public class FileUpload extends HttpServlet {
                     if(commentId != null && !commentId.equals("")){
                         attachType = "C";
                         ownby = Integer.parseInt(commentId);
+                    }
+                    /* There is no session at that time for us to get user info, because new user not logged in yet*/
+                    if (userId != null && !userId.equals("")){
+                        attachType = "U";
+                        ownby = Integer.parseInt(userId);
                     }
                     System.out.println("ownby = [" + ownby + "]");
                     // save the information into database
