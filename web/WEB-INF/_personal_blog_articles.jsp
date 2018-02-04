@@ -9,7 +9,7 @@
             <div class="panel-body">
 
                 <div class="panel-text article-author">
-                    <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
+                    <span><img src="http://i.pravatar.cc/75?u=${blog.getAuthor().getId()}" alt="mp" width="75" class="img-circle"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
                 </div>
                 <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>

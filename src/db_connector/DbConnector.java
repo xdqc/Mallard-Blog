@@ -17,6 +17,7 @@ import utililties.Comments;
 import utililties.Tuple;
 import utililties.Tuple3;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -162,6 +163,7 @@ public class DbConnector {
             user = create.select()
                     .from(USER)
                     .where(USER.USER_NAME.equalIgnoreCase(username))
+                    .and(USER.ISVALID.eq((byte)1))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -739,6 +741,7 @@ public class DbConnector {
         }
     }
 
+
     /**
      * Add new comment
      *
@@ -812,10 +815,9 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-
-                //create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
-                  //                  .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                    //                .execute();
+                create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
+                                    .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
+                                    .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -877,7 +879,121 @@ public class DbConnector {
     }
 
 
+    /**
+     * delete user by user id
+     * @param userId
+     */
+    public static void deleteUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 0)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 1))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * recover user by user id
+     * @param userId
+     */
+    public static void recoverUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 1)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 0))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * show article by article id
+     * @param articleId
+     */
+    public static void showAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * hide article by article id
+     * @param articleId
+     */
+    public static void hideAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * show comment by comment id
+     * @param commentId
+     */
+    public static void showCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * hide comment by comment id
+     * @param commentId
+     */
+    public static void hideCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean saveAttachmentRecord(AttachmentRecord attachment) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -976,5 +1092,19 @@ public class DbConnector {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public static void resetPasswordByUserID(String password, String userId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.PASSWORD, password)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

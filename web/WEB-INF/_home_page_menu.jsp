@@ -14,27 +14,34 @@
                         </button>
                     </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" id="set">
+            <ul class="nav navbar-nav">
                 <li>
-                    <a class="navbar-brand" href="home-page">
+                    <a class="navbar-brand nav-button" href="home-page">
+                        <a class="navbar-brand nav-button active" href="home-page">
                         <span class="glyphicon glyphicon-home"
-                              aria-hidden="true"></span>&nbsp;Home</a>&nbsp;&nbsp;&nbsp;
+                              aria-hidden="true"></span>&nbsp;Home</a></a>&nbsp;&nbsp;&nbsp;
                 </li>
             </ul>
 
-              <ul class="nav navbar-nav" id="set1">
-                  <li><a class="navbar-brand" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
+              <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand nav-button" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
                       <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
               </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
-
+                    <c:set var="user" value="${sessionScope.get('loggedInUser')}"/>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
                         <li><a href="edit_profile.jsp">Edit Profile</a></li>
-                        <li><a href="#">Delete account</a></li>
-                        <li><a href="#">Re-set Password</a></li>
+                        <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a>
+                            <a href="home_page.jsp" id="refresh-after-delete" style="display: none"></a>
+                        </li>
+                        <li><a href="#" class="send-email" id="send-email-${user.getId()}">Re-set Password</a></li>
+
+                        <c:if test="${user.getSystemRole()==0}">
+                            <li><a href="admin">Admin's Pleasure Hub</a></li>
+                        </c:if>
                     </ul>
                     </li>
                     <li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>
