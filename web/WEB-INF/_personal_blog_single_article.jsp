@@ -10,7 +10,7 @@
     <div class="panel-body">
 
         <div class="panel-text article-author"><a href="personal-blog?userId=${blog.getAuthor().getId()}">
-            <span><img src="/pictures/mp.png" alt="mp" width="75"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</a>
+            <span><img src="http://i.pravatar.cc/75?u=${blog.getAuthor().getId()}" alt="mp" width="75" class="img-circle"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}</a>
         </div>
         <div class="panel-text article-time">
             <span class="h5 text-muted"><span class="fa fa-clock-o"></span>

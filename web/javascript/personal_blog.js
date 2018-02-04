@@ -34,7 +34,8 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                             .append($("<a>").attr("href", "personal-blog?userId="+comment["commenterId"])
                                 .html("&nbsp;&nbsp;"+comment["commenter"])
                                 .prepend(
-                                    $("<img class='img-circle' src='http://i.pravatar.cc/40' alt='Card image cap'>")
+                                    $("<img class='img-circle' alt='Card image cap'>")
+                                        .attr("src", "http://i.pravatar.cc/40?u="+comment["commenterId"])
                                 )
                             )
                             .append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"))

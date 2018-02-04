@@ -40,19 +40,23 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="gnd"><strong>Gender:</strong></label>
-                                    <select  class="radio-inline" required id="gnd" name="gender" >
-                                            <c:if test="${user.getGender().equal('0')}" >
-                                                <option selected>Female</option>
-                                            </c:if>
-                                            <c:if test="${user.getGender().equal('1')}" >
-                                            <option selected>Male</option>
-                                             </c:if>
-                                            <c:if test="${user.getGender().equal('2')}" >
-                                            <option selected>Other</option>
-                                            </c:if>
-                                        <option value="0" name="gender">Female</option>
-                                        <option value="1" name="gender">Male</option>
-                                        <option value="2" name="gender">Other</option>
+                                    <select  class="form-control" required id="gnd" name="gender" >
+                                        <c:if test="${user.getGender()==0}" >
+                                            <option selected value="0" name="gender">Female</option>
+                                            <option value="1" name="gender">Male</option>
+                                            <option value="2" name="gender">Other</option>
+                                        </c:if>
+                                        <c:if test="${user.getGender()==1}" >
+                                            <option value="0" name="gender">Female</option>
+                                            <option selected value="1" name="gender">Male</option>
+                                            <option value="2" name="gender">Other</option>
+                                        </c:if>
+                                        <c:if test="${user.getGender()==2}" >
+                                            <option value="0" name="gender">Female</option>
+                                            <option value="1" name="gender">Male</option>
+                                            <option selected value="2" name="gender">Other</option>
+                                        </c:if>
+
                                     </select>
                                     <br><br><br>
                                 </div>
@@ -62,7 +66,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <label for="DOB">Date Of Birth</label>
-                                    <input class="form-control" type="date" required id="DOB" value="${user.getDob()}">
+                                    <input class="form-control" type="date" required id="DOB" value="${user.getDob()}" name="dob">
                                     <br><br>
                                 </div>
                             </div>
@@ -302,9 +306,7 @@
                             <div class="form-group">
                                 <div style="width: 50%">
                                     <p><strong>Description:</strong></p>
-                                    <textarea style="overflow: auto; resize: none" name="description" required cols="60" rows="8">
-                                        ${user.getDescription()}
-                                    </textarea>
+                                    <textarea style="overflow: auto; resize: none" name="description" required cols="60" rows="8">${user.getDescription()}</textarea>
                                     <br><br>
                                 </div>
                             </div>

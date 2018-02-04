@@ -33,11 +33,6 @@
                     <c:set var="user" value="${sessionScope.get('loggedInUser')}"/>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
-<<<<<<< HEAD
-                        <li><a href="../edit_profile.jsp">Edit Profile</a></li>
-                        <li><a href="#">Delete account</a></li>
-                        <li><a href="#">Re-set Password</a></li>
-=======
                         <li><a href="edit_profile.jsp">Edit Profile</a></li>
                         <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a>
                             <a href="home_page.jsp" id="refresh-after-delete" style="display: none"></a>
@@ -47,7 +42,6 @@
                         <c:if test="${user.getSystemRole()==0}">
                             <li><a href="admin">Admin's Pleasure Hub</a></li>
                         </c:if>
->>>>>>> 188e83d89361f788e9af12977a043e46d48d7a7c
                     </ul>
                     </li>
                     <li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>

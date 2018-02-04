@@ -209,7 +209,7 @@ public class Admin extends Controller {
          * Delete user's own account done by himself
          */
         if (req.getParameter("deleteOwnAccount")!=null){
-            String userId = req.getParameter("deleteUser");
+            String userId = req.getParameter("deleteOwnAccount");
 
             DbConnector.deleteUserById(userId);
 
