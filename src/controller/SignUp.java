@@ -87,6 +87,10 @@ public class SignUp extends Controller {
             String newUserId = req.getParameter("setupAvatarFor");
             //TODO PROCESS THE AVATAR FORM DATA
 
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("success");
             return;
         }
 

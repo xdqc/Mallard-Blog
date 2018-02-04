@@ -34,8 +34,10 @@
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
                         <li><a href="edit_profile.jsp">Edit Profile</a></li>
-                        <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a></li>
-                        <li><a href="#">Re-set Password</a></li>
+                        <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a>
+                            <a href="home_page.jsp" id="refresh-after-delete" style="display: none"></a>
+                        </li>
+                        <li><a href="#" class="send-email" id="send-email-${user.getId()}">Re-set Password</a></li>
                     </ul>
                     </li>
                     <li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>

@@ -194,10 +194,22 @@ public class Admin extends Controller {
             return;
         }
 
+        /**
+         * Delete user action
+         */
         if (req.getParameter("deleteUser")!=null){
             String userId = req.getParameter("deleteUser");
 
-            
+            DbConnector.deleteUserById(userId);
+
+            req.getSession(false).invalidate();
+            cleanAllParameters(req);
+            //req.getRequestDispatcher("home-page").forward(req, resp);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("user deleted");
+            return;
         }
 
 

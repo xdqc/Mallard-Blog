@@ -26,9 +26,11 @@ $(document).ready(function () {
         })
     });
 
+    /**
+     * Ask user to confirm, if yes, do delete, then fire refresh action to homepage
+     */
     $(".delete-account-btn").on("click", function (e) {
         e.preventDefault();
-
         const userId = entityId($(this));
         swal({
             title: "Are you sure?",
@@ -52,9 +54,12 @@ $(document).ready(function () {
                     },
                     success: (resp) => {
                         swal("Deleted!", "Your account has been deleted.", "success");
+
+                        // fire the real delete event
+                        $("#refresh-after-delete")[0].click();
                     },
                     error: (msg, status) => {
-                        console.log("error of deleting article!!!");
+                        console.log("error of deleting own account!!!");
                         console.log(status);
                         console.log(msg);
                     },
