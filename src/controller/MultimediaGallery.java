@@ -15,7 +15,7 @@ public class MultimediaGallery extends Controller {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserRecord user = getLoggedUserFromSession(req);
 
-        String attachmentId = req.getParameter("attachmentId");
+        String attachmentId = req.getParameter("entityId");
         String parameterName = req.getParameter("parameterName");
         String userID = req.getParameter("userID");
         String attachType = "";
@@ -32,9 +32,6 @@ public class MultimediaGallery extends Controller {
         }else{
             attachments = DbConnector.getAttachmentsByUserId(userID,attachmentId);
         }
-        attachments.forEach( a -> {
-            System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]");
-        });
         req.setAttribute("attachments", attachments);
 
         String result = "";

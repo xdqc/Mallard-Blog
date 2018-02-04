@@ -35,7 +35,13 @@
                     <span class="glyphicon glyphicon-file"></span>Show my own multimedia</a>
                  <!-- show the attachments of this article -->
                  <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                        <span class="glyphicon glyphicon-file"></span>Show my own multimedia</a>
+                    <span class="glyphicon glyphicon-file"></span>Edit multimedia</a>
+                    <!-- show the attachments of this article -->
+                    <a id="showMultimedia-FileList-comment-57" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="glyphicon glyphicon-file"></span>Edit multimedia222</a>
+                    <!-- active pictures -->
+                    <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="glyphicon glyphicon-file"></span>Attachment attachments</a>
                 <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
                 </div>
                 <!-- collapse style multimedia gallery end-->
