@@ -290,7 +290,7 @@ public class Admin extends Controller {
         if (req.getParameter("showComment")!=null){
             String commentId = req.getParameter("showComment");
 
-            DbConnector.showAritcleById(commentId);
+            DbConnector.showCommentById(commentId);
 
             cleanAllParameters(req);
             resp.setContentType("text/html");
@@ -305,7 +305,7 @@ public class Admin extends Controller {
         if (req.getParameter("hideComment")!=null){
             String commentId = req.getParameter("hideComment");
 
-            DbConnector.hideAritcleById(commentId);
+            DbConnector.hideCommentById(commentId);
 
             cleanAllParameters(req);
             resp.setContentType("text/html");

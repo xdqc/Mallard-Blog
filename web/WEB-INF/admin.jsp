@@ -50,15 +50,15 @@
                         <td>${user.getIsvalid()==0?"Deleted":"Active"}</td>
                         <td>
                             <c:if test="${user.getIsvalid()==1}">
-                                <button id="delete-user-${user.getId()}" class="delete-user btn btn-sm btn-outline-danger">Delete</button>
+                                <button id="delete-user-${user.getId()}" class="delete-user btn btn-sm btn-danger">Delete</button>
                             </c:if>
                             <c:if test="${user.getIsvalid()==0}">
-                                <button id="recover-user-${user.getId()}" class="recover-user btn btn-sm btn-outline-success">Recover</button>
+                                <button id="recover-user-${user.getId()}" class="recover-user btn btn-sm btn-success">Recover</button>
                             </c:if>
                         </td>
                         <td>
                             <c:if test="${user.getIsvalid()==1}">
-                                <button id="send-email-${user.getId()}" class="send-email btn btn-sm btn-outline-info">Send email</button>
+                                <button id="send-email-${user.getId()}" class="send-email btn btn-sm btn-info">Send email</button>
                             </c:if>
                         </td>
                     </tr>
@@ -66,24 +66,22 @@
                 <tr>
                     <form method="post" action="">
                         <td>Add new user</td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
-                        <td><input type="text" name=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td><button type="submit" id="add-new-user-admin" class="add-new-user-admin btn btn-sm btn-primary">Add</button>
+                        </td>
                     </form>
                 </tr>
                 </tbody>
             </table>
-            <br>
-            <button type="submit" id="add-new-user-admin" class="add-new-user-admin btn btn-sm btn-outline-success">Add</button>
-            <br>
         </div>
     </div>
     <br>
@@ -121,10 +119,10 @@
                         <td>${article.getVal1().getShowHideStatus()==1?"Visable":"Hidden"}</td>
                         <td>
                             <c:if test="${article.getVal1().getShowHideStatus()==1}">
-                                <button id="hide-article-${article.getVal1().getId()}" class="hide-article btn btn-sm btn-outline-danger">Hide It</button>
+                                <button id="hide-article-${article.getVal1().getId()}" class="hide-article btn btn-sm btn-danger">Hide It</button>
                             </c:if>
                             <c:if test="${article.getVal1().getShowHideStatus()==0}">
-                                <button id="show-article-${article.getVal1().getId()}" class="show-article btn btn-sm btn-outline-success">Show It</button>
+                                <button id="show-article-${article.getVal1().getId()}" class="show-article btn btn-sm btn-success">Show It</button>
                             </c:if>
                         </td>
                     </tr>
@@ -168,10 +166,10 @@
                         <td>${comment.getVal1().getShowHideStatus()==1?"Visible":"Hidden"}</td>
                         <td>
                             <c:if test="${comment.getVal1().getShowHideStatus()==1}">
-                                <button id="hide-comment-${comment.getVal1().getId()}" class="hide-comment btn btn-sm btn-outline-danger">Hide It</button>
+                                <button id="hide-comment-${comment.getVal1().getId()}" class="hide-comment btn btn-sm btn-danger">Hide It</button>
                             </c:if>
                             <c:if test="${comment.getVal1().getShowHideStatus()==0}">
-                                <button id="show-comment-${comment.getVal1().getId()}" class="show-comment btn btn-sm btn-outline-success">Show It</button>
+                                <button id="show-comment-${comment.getVal1().getId()}" class="show-comment btn btn-sm btn-success">Show It</button>
                             </c:if>
                         </td>
                     </tr>
