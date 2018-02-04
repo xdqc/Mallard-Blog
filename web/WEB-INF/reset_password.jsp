@@ -36,7 +36,12 @@
         }
 
         .help-block {
+            width: auto;
             color: #FAA;
+        }
+        h4{
+            color: #E0E0E0;
+            font-family: Lato, Helvetica, sans-serif;
         }
 
     </style>
@@ -59,8 +64,10 @@
                     </div>
                 </c:if>
 
-                <form id="reset-pw-form" method="post" action="admin?passwordReset=${user.getId()}" class="reset-pw-form"
-                      role="form" data-toggle="validator">
+                <h4>Please reset your password, ${user.getUserName()}</h4>
+
+                <form id="reset-pw-form" method="post" action="admin?passwordReset=${user.getId()}&username=${user.getUserName()}"
+                      class="reset-pw-form" role="form" data-toggle="validator">
                     <div class="row">
                         <div class="col-lg-10 col-lg-offset-1">
                             <div class="form-group">

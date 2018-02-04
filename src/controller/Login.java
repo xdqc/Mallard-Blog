@@ -2,6 +2,7 @@ package controller;
 
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
+import utililties.Passwords;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +42,12 @@ public class Login extends Controller {
         }
 
         boolean isLogin = req.getParameter("login") != null && req.getParameter("login").equals("1");
-        if (isLogin){
+        if (isLogin) {
             String username = req.getParameter("username");
             String password = req.getParameter("password");
 
             UserRecord userRecord = DbConnector.getUserByUsername(username);
-            if (userRecord==null){
+            if (userRecord == null) {
                 cleanAllParameters(req);
                 req.getRequestDispatcher("login?failed=1&login=0").forward(req, resp);
                 return;
@@ -65,16 +66,30 @@ public class Login extends Controller {
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
     }
 
-
-
+    /**
+     * Check
+     * @param user user record in db
+     * @param password user enter pw to be checked
+     * @return match or not
+     */
     private boolean authenticationPassed(UserRecord user, String password) {
-        //TODO implement auth
-
-        return user.getPassword().equals(password);
+        int iteration = user.getUserName().length() % 7 + 1;
+        byte[] salt = (user.getUserName() + "mallard").getBytes();
+        byte[] expectedHash = Passwords.base64Decode(user.getPassword());
+        return (Passwords.isExpectedPassword(password.toCharArray(), salt, iteration, expectedHash));
     }
 
-    static String hashingPassword(String rawPassword){
-        //TODO impliment hashing
-        return rawPassword;
+    /**
+     * Make a hashed password with salt and iteration
+     *
+     * @param rawPassword user entered password
+     * @param username username
+     * @return hashed pw string b64
+     */
+    static String hashingPassword(String rawPassword, String username) {
+        int iteration = username.length() % 7 + 1;
+        byte[] salt = (username + "mallard").getBytes();
+        byte[] hash = Passwords.hash(rawPassword.toCharArray(), salt, iteration);
+        return Passwords.base64Encode(hash);
     }
 }

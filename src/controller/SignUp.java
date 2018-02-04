@@ -49,7 +49,7 @@ public class SignUp extends Controller {
             user.setEmail(req.getParameter("email"));
             user.setUserName(req.getParameter("userName"));
 
-            String encodedPassword = hashingPassword(req.getParameter("password"));
+            String encodedPassword = hashingPassword(req.getParameter("password"), req.getParameter("userName"));
             user.setPassword(encodedPassword);
 
             user.setAddress(req.getParameter("address"));

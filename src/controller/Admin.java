@@ -102,18 +102,19 @@ public class Admin extends Controller {
             userEmail = "mallard.blog@gmail.com";
 
 
-            //GENERATE A LINK
-            String encodePart = encodeResetPasswordLink(userId);
-
-            String link = "http://localhost:8080/admin?resetPasswordFor=" + encodePart;
-
-
             // reads SMTP server setting from web.xml file
             ServletContext context = getServletContext();
             String host = context.getInitParameter("host");
             String port = context.getInitParameter("port");
             String user = context.getInitParameter("user");
             String pass = context.getInitParameter("pass");
+            String server = context.getInitParameter("server");
+
+            //GENERATE A LINK
+            String encodePart = encodeResetPasswordLink(userId);
+
+            String link = server + "/admin?resetPasswordFor=" + encodePart;
+
 
             // Get system properties
             Properties props = System.getProperties();
@@ -174,7 +175,7 @@ public class Admin extends Controller {
             return;
         }
 
-        /*
+        /**
          * Process the reset password form
          */
         if (req.getParameter("passwordReset") != null) {
@@ -182,8 +183,9 @@ public class Admin extends Controller {
             req.getSession(false).invalidate();
 
             String userId = req.getParameter("passwordReset");
+            String username = req.getParameter("username");
             String password = req.getParameter("password");
-            String enCodedPassword = hashingPassword(password);
+            String enCodedPassword = hashingPassword(password, username);
 
             DbConnector.resetPasswordByUserID(enCodedPassword, userId);
 
@@ -195,7 +197,7 @@ public class Admin extends Controller {
     }
 
     private String encodeResetPasswordLink(String userId) {
-
+        // Append random to userId ,make the userId string longer, so that harder to break
         String randomizedUserId = String.valueOf(Integer.parseInt(userId) + Math.random());
 
         byte[] salt = Passwords.getNextSalt();
@@ -217,7 +219,6 @@ public class Admin extends Controller {
         String uncheckedUserId = activeLink.get(encodeUserId).Val1;
 
         if (Passwords.isExpectedPassword(uncheckedUserId.toCharArray(), salt, hash)){
-
             plainUserId = uncheckedUserId.substring(0, uncheckedUserId.indexOf('.'));
         }
 
