@@ -2,6 +2,7 @@ package db_connector;
 
 
 import ORM.tables.Article;
+import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
 
 import ORM.tables.User;
@@ -16,6 +17,7 @@ import utililties.Comments;
 import utililties.Tuple;
 import utililties.Tuple3;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -161,6 +163,7 @@ public class DbConnector {
             user = create.select()
                     .from(USER)
                     .where(USER.USER_NAME.equalIgnoreCase(username))
+                    .and(USER.ISVALID.eq((byte)1))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -443,13 +446,14 @@ public class DbConnector {
     }
 
     /**
-     * Get attachment by article id
+     * Get all attachments by article id/ comment id.
+     * when ownby is a article id, return all articles' and all comments' attachments
+     * when ownby is a comment id, return all attachments of this comment
      **/
-    public static List<AttachmentRecord> getAttachmentByArticleId(String ownby, String attachType) {
+    public static List<AttachmentRecord> getAllAttachments(String ownby, String attachType) {
         List<AttachmentRecord> attachments = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
             attachments = create
                     .select(ATTACHMENT.fields())
                     .from(ATTACHMENT)
@@ -457,13 +461,127 @@ public class DbConnector {
                     .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
                     .fetch()
                     .into(AttachmentRecord.class);
-
+            //when ownby is a article , should retrieve all comments' attachments
+            if(attachType.equals("A")) {
+                attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .join(
+                                (COMMENT).join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID)))
+                        .on(COMMENT.ID.eq(ATTACHMENT.OWNBY))
+                        .where(ARTICLE.ID.eq(Integer.parseInt(ownby)))
+                        .and(ATTACHMENT.ATTACH_TYPE.eq("C"))
+                        .orderBy(ATTACHMENT.ID.asc())
+                        .fetch()
+                        .into(AttachmentRecord.class)
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return attachments;
     }
 
+    /**
+     * Get the attachments of one user in one articles.
+     **/
+    public static List<AttachmentRecord> getAttachmentsByUserId(String userId,String articleId) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            //check that the user own the article
+            List<ArticleRecord> checkUserId = create
+                    .select(ARTICLE.fields())
+                    .from(ARTICLE)
+                    .where(ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .fetch()
+                    .into(ArticleRecord.class);
+            //retrieve all the attachments from the article when the user own the article
+            if(checkUserId != null) {
+                attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(articleId)))
+                        .and(ATTACHMENT.ATTACH_TYPE.eq("A"))
+                        .fetch()
+                        .into(AttachmentRecord.class)
+                );
+            }
+            //retrieve all comments' attachments in this article and belong to this user
+            attachments.addAll(create
+                        .select(ATTACHMENT.fields())
+                        .from(ATTACHMENT)
+                        .join(
+                                (COMMENT).join(ARTICLE).on(COMMENT.PARENT_ARTICLE.eq(ARTICLE.ID))
+                                         .join(USER).on(USER.ID.eq(COMMENT.COMMENTER)))
+                        .on(COMMENT.ID.eq(ATTACHMENT.OWNBY))
+                        .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                        .and(USER.ID.eq(Integer.parseInt(userId)))
+                        .orderBy(ATTACHMENT.ID.asc())
+                        .fetch()
+                        .into(AttachmentRecord.class)
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+
+    /**
+     * Get all attachments by entity(article/comment/user) id.
+     * when entityId is a article id, return this article's attachments
+     * when entityId is a comment id, return this comment's attachments
+     * when entityId is a user id, return this user's attachments
+     **/
+    public static List<AttachmentRecord> getEntityAttachments(String entityId, String attachType) {
+        List<AttachmentRecord> attachments = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            attachments = create
+                    .select(ATTACHMENT.fields())
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(entityId)))
+                    .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
+                    .fetch()
+                    .into(AttachmentRecord.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+
+    /**
+     * delete attachment by attachment id.
+     **/
+    public static void deleteAttachmentById(String attachmentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            create.delete(ATTACHMENT)
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * retrieve ownby by attachment id.
+     **/
+    public static String getOwnbyByAttachmentId(String attachmentId) {
+        System.out.println("attachmentId = [" + attachmentId + "]");
+        String result = "";
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            result = String.valueOf(create.select(ATTACHMENT.OWNBY)
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .fetch());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("result = [" + result + "]");
+        return result;
+    }
     /**
      * Insert a article to db
      *
@@ -592,6 +710,7 @@ public class DbConnector {
         }
     }
 
+
     /**
      * Add new comment
      *
@@ -665,10 +784,9 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-
-                //create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
-                  //                  .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                    //                .execute();
+                create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
+                                    .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
+                                    .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -730,7 +848,121 @@ public class DbConnector {
     }
 
 
+    /**
+     * delete user by user id
+     * @param userId
+     */
+    public static void deleteUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 0)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 1))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * recover user by user id
+     * @param userId
+     */
+    public static void recoverUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 1)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 0))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * show article by article id
+     * @param articleId
+     */
+    public static void showAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * hide article by article id
+     * @param articleId
+     */
+    public static void hideAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * show comment by comment id
+     * @param commentId
+     */
+    public static void showCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * hide comment by comment id
+     * @param commentId
+     */
+    public static void hideCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean saveAttachmentRecord(AttachmentRecord attachment) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
@@ -829,5 +1061,19 @@ public class DbConnector {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public static void resetPasswordByUserID(String password, String userId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.PASSWORD, password)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

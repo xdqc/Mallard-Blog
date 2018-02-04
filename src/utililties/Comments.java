@@ -38,9 +38,9 @@ public class Comments extends Tree<Tuple3<UserRecord, CommentRecord, UserRecord>
 
         // Add children comment's to their parents
         while (commentList.size() > 0) {
-            moveCommentsToTree(this.getCommentTree(), commentList);
-        }
+        moveCommentsToTree(this.getCommentTree(), commentList);
     }
+}
 
     /**
      * Put a list of comments in comment tree where each node should be

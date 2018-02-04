@@ -9,7 +9,7 @@
             <div class="panel-body">
 
                 <div class="panel-text article-author">
-                    <span class="fa  fa-user"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
+                    <span><img src="http://i.pravatar.cc/75?u=${blog.getAuthor().getId()}" alt="mp" width="75" class="img-circle"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
                 </div>
                 <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
@@ -27,8 +27,15 @@
 
                 <!-- collapse style multimedia gallery begin-->
                 <div>
+                <!-- show all attachments of one article -->
                 <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Show more multimedia</a>
+                    <span class="glyphicon glyphicon-file"></span>Show all multimedia</a>
+                <!-- show the user's own attachments of one article including comments' attachments in this article -->
+                <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                    <span class="glyphicon glyphicon-file"></span>Show my own multimedia</a>
+                 <!-- show the attachments of this article -->
+                 <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="glyphicon glyphicon-file"></span>Show my own multimedia</a>
                 <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
                 </div>
                 <!-- collapse style multimedia gallery end-->

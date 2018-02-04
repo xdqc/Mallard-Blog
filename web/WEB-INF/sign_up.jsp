@@ -67,8 +67,8 @@
                     <div style="margin-left: 4%">
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="firstN">First Name:</label>
-                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="firstN" name="fname" data-error="Invalid value" placeholder="First Name" required>
+                            <label for="inputFName">First Name:</label>
+                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="inputFName" name="fname" data-error="Invalid value" placeholder="First Name" required>
                             <br>
                         </div>
                         <div class="help-block with-errors"></div>
@@ -76,8 +76,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="lastN">Last Name:</label>
-                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="lastN" name="lname" data-error="Invalid value" placeholder="Last Name" required>
+                            <label for="inputLName">Last Name:</label>
+                            <input class="form-control" pattern="[A-z]{1,15}" type="text" id="inputLName" name="lname" data-error="Invalid value" placeholder="Last Name" required>
                             <br>
                         </div>
                         <div class="help-block with-errors"></div>
@@ -85,8 +85,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="gnd"><strong>Gender:</strong></label>
-                            <select  class="form-control" required id="gnd" name="gender" >
+                            <label for="inputGender"><strong>Gender:</strong></label>
+                            <select  class="form-control" required id="inputGender" name="gender" >
                                 <option name="gender" selected>Please select</option>
                                 <option value="0" name="gender">Female</option>
                                 <option value="1" name="gender">Male</option>
@@ -99,8 +99,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="DOB">Date Of Birth</label>
-                            <input class="form-control" type="date" name="dob" id="DOB" required>
+                            <label for="inputDob">Date Of Birth</label>
+                            <input class="form-control" type="date" name="dob" id="inputDob" required>
                             <br><br>
                         </div>
                     </div>
@@ -113,8 +113,8 @@
                     <div style="margin-left: 4%">
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="usr">User Name:  </label>
-                            <input class="form-control" type="text" id="usr" name="userName"  placeholder="User Name" required><div id="status"></div>
+                            <label for="inputUserName">User Name:  </label>
+                            <input class="form-control" type="text" id="inputUserName" name="userName"  placeholder="User Name" required><div id="status"></div>
                             <br><br>
                         </div>
 
@@ -123,8 +123,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="emil">Email:   </label>
-                            <input class="form-control" type="email" id="emil" name="email"  placeholder="Email" data-error="Sorry, this email address is invalid" required>
+                            <label for="inputEmail">Email:   </label>
+                            <input class="form-control" type="email" id="inputEmail" name="email"  placeholder="Email" data-error="Sorry, this email address is invalid" required>
                             <br><br>
                         </div>
                         <div class="help-block with-errors"></div>
@@ -133,8 +133,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="password">Password:  </label>
-                            <input class="form-control" data-minlength="4" type="password" id="password" name="password"  placeholder="Password" required>
+                            <label for="inputPassword">Password:  </label>
+                            <input class="form-control" data-minlength="4" type="password" id="inputPassword" name="password"  placeholder="Password" required>
                             <div class="help-block">Minimum of 4 characters</div>
                             <br><br>
                         </div>
@@ -143,8 +143,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="confirm_password">Confirm Password:  </label>
-                            <input class="form-control"  data-match="#password" type="password" id="confirm_password" name="password" data-match-error="Whoops, the password you have entered is wrong !!"  placeholder="Confirm" required>
+                            <label for="inputConfirmPassword">Confirm Password:  </label>
+                            <input class="form-control"  data-match="#inputPassword" type="password" id="inputConfirmPassword" name="password" data-match-error="Whoops, the password you have entered is wrong !!"  placeholder="Confirm" required>
                             <div class="help-block with-errors"></div>
                             <br><br>
                         </div>
@@ -156,16 +156,16 @@
                     <div style="margin-left: 4%">
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="addr">Address:  </label>
-                            <input class="form-control" type="text" id="addr" name="address"  placeholder="Address" required>
+                            <label for="inputAddress">Address:  </label>
+                            <input class="form-control" type="text" id="inputAddress" name="address"  placeholder="Address">
                             <br><br>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="cty">City:  </label>
-                            <input class="form-control" type="text" id="cty" name="city"  placeholder="City" required>
+                            <label for="inputCity">City:  </label>
+                            <input class="form-control" type="text" id="inputCity" name="city"  placeholder="City">
                             <br><br>
                         </div>
                     </div>
@@ -173,8 +173,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="ste" >State:  </label>
-                            <input class="form-control" type="text" id="ste" name="state"  placeholder="State" required>
+                            <label for="inputState" >State:  </label>
+                            <input class="form-control" type="text" id="inputState" name="state"  placeholder="State" >
                             <br><br>
                         </div>
                     </div>
@@ -183,8 +183,8 @@
 
                     <div class="form-group">
                         <div style="width: 50%">
-                            <label for="cuntry">Country:  </label>
-                            <select id="cuntry" name="country">
+                            <label for="inputCountry">Country:  </label>
+                            <select id="inputCountry" name="country" required>
                                 <option selected>New Zealand</option>
                                 <option> Afghanistan </option>
                                 <option> Albania</option>
@@ -389,8 +389,6 @@
                     </div>
                     </div>
 
-
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
                         <button type="reset" class="btn btn-default">Cancel</button>
@@ -407,7 +405,6 @@
 </body>
 
 <script>
-    const loginPage = $('#login-page');
     const AvatarPage = $('#avatar-page');
 
     $('form#user-profile').on('submit', function(event) {
@@ -421,11 +418,7 @@
                 // if success, HTML response is expected, so replace current
 
                     swal("congratulations, you have signed up!","Please choose your Avatar","success");
-
-
                     redirectToChooseAvatar(resp);
-
-
             },
             error: function (data, status) {
                 swal("Sorry, there is an error on your form!");

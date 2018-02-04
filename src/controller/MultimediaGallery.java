@@ -10,24 +10,31 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class MultimediaGallery  extends Controller {
+public class MultimediaGallery extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserRecord user = getLoggedUserFromSession(req);
 
         String attachmentId = req.getParameter("attachmentId");
         String parameterName = req.getParameter("parameterName");
+        String userID = req.getParameter("userID");
         String attachType = "";
-        String ownby = "";
         if(parameterName.equals("article")){
             attachType = "A";
         }
         if(parameterName.equals("comment")){
             attachType = "C";
         }
-        ownby = attachmentId;
         //get all articles sort by like number
-        List<AttachmentRecord> attachments = DbConnector.getAttachmentByArticleId(ownby,attachType);
+        List<AttachmentRecord> attachments ;
+        if(userID == null || user.equals("")){
+            attachments = DbConnector.getAllAttachments(attachmentId,attachType);
+        }else{
+            attachments = DbConnector.getAttachmentsByUserId(userID,attachmentId);
+        }
+        attachments.forEach( a -> {
+            System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]");
+        });
         req.setAttribute("attachments", attachments);
 
         String result = "";

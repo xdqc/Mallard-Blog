@@ -41,18 +41,15 @@
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
     </script>
 
-
-
-
         <!-- Form validator -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
     <!-- For upload files page generate multiple row -->
     <script type="text/javascript" src="javascript/uploadFile.js"></script>
     <script type="text/javascript" src="javascript/personal_blog.js"></script>
-    <script type="text/javascript" src="javascript/homepage.js"></script>
     <script type="text/javascript" src="javascript/login.js"></script>
     <script type="text/javascript" src="javascript/admin.js"></script>
+    <script type="text/javascript" src="javascript/homepage.js"></script>
 
         <!-- PUT CSS HERE -->
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">

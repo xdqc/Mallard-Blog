@@ -31,7 +31,7 @@
 
                                 <!-- collapse style upload file begin-->
                                 <div>
-                                    <script type="text/javascript" src="../javascript/uploadFile.js"></script>
+                                    <%--<script type="text/javascript" src="../javascript/uploadFile.js"></script>--%>
                                     <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${articleId}" class="btn btn-primary">
                                         <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
                                     <div id="uploadArea-${articleId}" class="collapse upload-area">
