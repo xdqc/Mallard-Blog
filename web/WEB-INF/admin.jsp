@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <table id="user-table" class="tablesorter table table-striped table-hover  table-responsive">
-                <caption>Users</caption>
+                <caption id="user-management">User Management</caption>
                 <thead>
                 <tr>
                     <th>User ID</th>
@@ -35,10 +35,10 @@
                     <th>Reset Password</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="user-table-body">
                 <c:forEach var="user" items="${userResults}">
                     <tr>
-                        <td id="user-id->${user.getId()}" class="user-id">${user.getId()}</td>
+                        <td id="user-id-${user.getId()}" class="user-id">${user.getId()}</td>
                         <td id="username-${user.getId()}" class="username markCol">${user.getUserName()}</td>
                         <td>${user.getLName()}</td>
                         <td>${user.getFName()}</td>
@@ -50,19 +50,36 @@
                         <td>${user.getIsvalid()==0?"Deleted":"Active"}</td>
                         <td>
                             <c:if test="${user.getIsvalid()==1}">
-                                <button>Delete</button>
+                                <button id="delete-user-${user.getId()}" class="delete-user btn btn-sm btn-danger">Delete</button>
                             </c:if>
                             <c:if test="${user.getIsvalid()==0}">
-                                <button>Recover</button>
+                                <button id="recover-user-${user.getId()}" class="recover-user btn btn-sm btn-success">Recover</button>
                             </c:if>
                         </td>
                         <td>
                             <c:if test="${user.getIsvalid()==1}">
-                                <button id="send-email-${user.getId()}" class="send-email">Send email</button>
+                                <button id="send-email-${user.getId()}" class="send-email btn btn-sm btn-info">Send email</button>
                             </c:if>
                         </td>
                     </tr>
                 </c:forEach>
+                <tr>
+                    <form method="post" action="">
+                        <td>Add new user</td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="" class=""></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><button type="submit" id="add-new-user-admin" class="add-new-user-admin btn btn-sm btn-primary">Add</button>
+                        </td>
+                    </form>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -73,7 +90,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <table id="article-table"
                    class="tablesorter table table-striped table-hover table-bordered table-responsive">
-                <caption>Articles</caption>
+                <caption id="article-management">Article Management</caption>
                 <thead>
                 <tr>
                     <th>Article ID</th>
@@ -102,10 +119,10 @@
                         <td>${article.getVal1().getShowHideStatus()==1?"Visable":"Hidden"}</td>
                         <td>
                             <c:if test="${article.getVal1().getShowHideStatus()==1}">
-                                <button>Hide It</button>
+                                <button id="hide-article-${article.getVal1().getId()}" class="hide-article btn btn-sm btn-danger">Hide It</button>
                             </c:if>
                             <c:if test="${article.getVal1().getShowHideStatus()==0}">
-                                <button>Show It</button>
+                                <button id="show-article-${article.getVal1().getId()}" class="show-article btn btn-sm btn-success">Show It</button>
                             </c:if>
                         </td>
                     </tr>
@@ -120,7 +137,7 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <table id="comment-table"
                    class="tablesorter table table-striped table-hover table-bordered table-responsive">
-                <caption>Comments</caption>
+                <caption id="comment-management">Comment Management</caption>
                 <thead>
                 <tr>
                     <th>Comment ID</th>
@@ -149,10 +166,10 @@
                         <td>${comment.getVal1().getShowHideStatus()==1?"Visible":"Hidden"}</td>
                         <td>
                             <c:if test="${comment.getVal1().getShowHideStatus()==1}">
-                                <button>Hide It</button>
+                                <button id="hide-comment-${comment.getVal1().getId()}" class="hide-comment btn btn-sm btn-danger">Hide It</button>
                             </c:if>
                             <c:if test="${comment.getVal1().getShowHideStatus()==0}">
-                                <button>Show It</button>
+                                <button id="show-comment-${comment.getVal1().getId()}" class="show-comment btn btn-sm btn-success">Show It</button>
                             </c:if>
                         </td>
                     </tr>
@@ -219,5 +236,14 @@
     mark {
         background: orange;
         color: black;
+    }
+
+    caption {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        color: #666;
+        text-align: left;
+        font-family: Lato, Helvetica, sans-serif;
+        font-size: 36px;
     }
 </style>

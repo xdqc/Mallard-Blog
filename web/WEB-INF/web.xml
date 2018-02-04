@@ -12,6 +12,11 @@
         </param-value>
     </context-param>
 
+    <context-param>
+        <param-name>server</param-name>
+        <param-value>http://localhost:8080</param-value>
+    </context-param>
+
     <!-- SMTP settings -->
     <context-param>
         <param-name>host</param-name>
@@ -132,6 +137,8 @@
         <servlet-name>FileManage</servlet-name>
         <url-pattern>/File-Manage</url-pattern>
     </servlet-mapping>
+
+    <servlet>
         <servlet-name>admin</servlet-name>
         <servlet-class>controller.Admin</servlet-class>
     </servlet>
@@ -142,6 +149,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>admin</welcome-file>
+        <welcome-file>home-page</welcome-file>
     </welcome-file-list>
 </web-app>

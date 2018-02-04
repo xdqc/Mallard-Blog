@@ -163,6 +163,7 @@ public class DbConnector {
             user = create.select()
                     .from(USER)
                     .where(USER.USER_NAME.equalIgnoreCase(username))
+                    .and(USER.ISVALID.eq((byte)1))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -783,10 +784,9 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-
-                //create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
-                  //                  .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                    //                .execute();
+                create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
+                                    .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
+                                    .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -1061,5 +1061,19 @@ public class DbConnector {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public static void resetPasswordByUserID(String password, String userId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.PASSWORD, password)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -29,33 +29,32 @@
 
 
 
-    <div class="form-group">
-        <p>Or choose a file from your device</p>
-        <input type="radio" value="9" name="avatar">
-        <!-- collapse style upload file begin-->
+    <%--<div class="form-group">--%>
+        <%--<p>Or choose a file from your device</p>--%>
+        <%--<input type="radio" value="9" name="avatar">--%>
+        <%--<!-- collapse style upload file begin-->--%>
 
-        <div id="uploadArea" class="collapse">
-            <form id="uploadForm" action="/File-Upload?userId=${newUserId}" method="post" enctype="multipart/form-data">
-                <fieldset id="files-commentToArticle">
-                    <legend>Select your file</legend>
-                    <input id ="file" type="file" name="file" />
-                </fieldset>
-                <input id="uploadButton-comment-${newUserId}" class="upload-buttons" type = "submit" value = "Upload">
-            </form>
-            <div id="uploadedFilesArea"></div>
-        </div>
-        <!-- collapse style upload file end-->
+        <%--<div id="uploadArea" class="collapse">--%>
+            <%--<form id="uploadForm" action="/File-Upload?userId=${newUserId}" method="post" enctype="multipart/form-data">--%>
+                <%--<fieldset id="files-commentToArticle">--%>
+                    <%--<legend>Select your file</legend>--%>
+                    <%--<input id ="file" type="file" name="file" />--%>
+                <%--</fieldset>--%>
+                <%--<input id="uploadButton-comment-${newUserId}" class="upload-buttons" type = "submit" value = "Upload">--%>
+            <%--</form>--%>
+            <%--<div id="uploadedFilesArea"></div>--%>
+        <%--</div>--%>
+        <%--<!-- collapse style upload file end-->--%>
 
-    </div>
+    <%--</div>--%>
 
         <br><br>
-        <<input type="submit" value="">
+        <input type="submit" value="Confirm" id="choose-avatar-submit">
     </form>
 </div>
 
 <script type="text/javascript">
     const loginPage = $('#login-page');
-    const AvatarPage = $('#avatar-page');
 
     $('form#choose-avatar').on('submit', function(event) {
         event.preventDefault(); // or return false, your choice
@@ -91,6 +90,7 @@
             data: 'login=newSignUp',
             success: function(resp, status) {
                 $('#box').hide();
+                $('#choose-avatar').hide();
                 loginPage.html(resp);
                 loginPage.slideDown(2200);
             },

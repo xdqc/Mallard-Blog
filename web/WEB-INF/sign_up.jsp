@@ -389,8 +389,6 @@
                     </div>
                     </div>
 
-
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
                         <button type="reset" class="btn btn-default">Cancel</button>
@@ -407,7 +405,6 @@
 </body>
 
 <script>
-    const loginPage = $('#login-page');
     const AvatarPage = $('#avatar-page');
 
     $('form#user-profile').on('submit', function(event) {
