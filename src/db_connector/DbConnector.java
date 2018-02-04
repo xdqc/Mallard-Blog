@@ -17,6 +17,7 @@ import utililties.Comments;
 import utililties.Tuple;
 import utililties.Tuple3;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -708,6 +709,7 @@ public class DbConnector {
         }
     }
 
+
     /**
      * Add new comment
      *
@@ -846,7 +848,121 @@ public class DbConnector {
     }
 
 
+    /**
+     * delete user by user id
+     * @param userId
+     */
+    public static void deleteUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 0)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 1))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * recover user by user id
+     * @param userId
+     */
+    public static void recoverUserById(String userId){
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)){
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.ISVALID, (byte) 1)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .and(USER.ISVALID.eq((byte) 0))
+                    .execute();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * show article by article id
+     * @param articleId
+     */
+    public static void showAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * hide article by article id
+     * @param articleId
+     */
+    public static void hideAritcleById(String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * show comment by comment id
+     * @param commentId
+     */
+    public static void showCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 1)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 0))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * hide comment by comment id
+     * @param commentId
+     */
+    public static void hideCommentById(String commentId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(COMMENT)
+                    .set(COMMENT.SHOW_HIDE_STATUS, (byte) 0)
+                    .where(COMMENT.ID.eq(Integer.parseInt(commentId)))
+                    .and(COMMENT.SHOW_HIDE_STATUS.eq((byte) 1))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean saveAttachmentRecord(AttachmentRecord attachment) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
