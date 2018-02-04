@@ -88,7 +88,7 @@ $(document).ready(function () {
                 parameterName : parameterName
             },
             success : function(responseText) {
-                $('#multimediaShowArea-' + parameterName + '-'+attachmentId).html(responseText);
+                $('#multimediaShowArea-' + parameterName + '-'+entityId).html(responseText);
             }
         });
         }else if(userCheck.toLowerCase() == "activatelist" ){
