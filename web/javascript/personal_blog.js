@@ -397,8 +397,8 @@ $(document).ready(function () {
                     const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
                     //change the uploadArea form $div action parameter to newly created articleId
-                    $("#uploadForm-"+articleId).attr("action", "/File-Upload?articleId="+uploadArticleId);
-                    $("#uploadButton-comment-"+articleId).click();
+                    $("#uploadForm-article-"+articleId).attr("action", "/File-Upload?articleId="+uploadArticleId);
+                    $("#uploadButton-article-"+articleId).click();
 
                 },
                 error: (msg, status) => {
@@ -560,8 +560,8 @@ $(document).ready(function () {
                 const uploadCommentId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
                 //change the uploadArea form $div action parameter to newly created articleId
-                $("#uploadForm-"+articleId).attr("action", "/File-Upload?commentId="+uploadCommentId);
-                $("#uploadButton-comment-"+articleId).click();
+                $("#uploadForm-a-comment-"+articleId).attr("action", "/File-Upload?commentId="+uploadCommentId);
+                $("#uploadButton-a-comment-"+articleId).click();
 
             },
             error: (msg, status) => {
