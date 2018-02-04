@@ -124,14 +124,16 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>FileManage</servlet-name>
-        <servlet-class>controller.FilesManage</servlet-class>
+        <servlet-name>AttachmentManage</servlet-name>
+        <servlet-class>controller.AttachmentManage</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>FileManage</servlet-name>
-        <url-pattern>/File-Manage</url-pattern>
+        <servlet-name>AttachmentManage</servlet-name>
+        <url-pattern>/Attachment-Manage</url-pattern>
     </servlet-mapping>
+
+    <servlet>
         <servlet-name>admin</servlet-name>
         <servlet-class>controller.Admin</servlet-class>
     </servlet>
@@ -144,4 +146,15 @@
     <welcome-file-list>
         <welcome-file>admin</welcome-file>
     </welcome-file-list>
+
+    <servlet>
+        <servlet-name>FileManage</servlet-name>
+        <servlet-class>controller.FilesManage</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FileManage</servlet-name>
+        <url-pattern>/File-Manage</url-pattern>
+    </servlet-mapping>
+
 </web-app>
