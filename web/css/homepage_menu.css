@@ -1,7 +1,9 @@
 #bs-example-navbar-collapse-1 {
+    position: relative;
     color: #666;
     padding: 14px 16px;
     text-decoration: none;
+    z-index: 2;
 }
 
 .navbar{
@@ -11,23 +13,19 @@
     top: 0;
 }
 
-#set li a.active{
-    background-color: lightgrey;
-}
-
-#set1 li a.active{
-    background-color: lightgrey;
-}
-
-li .nav-button{
+.nav .nav-button{
     white-space: normal;
 }
 
-li .nav{
+.nav .navbar-brand{
     float: left;
     width: auto;
     border: none;
     display: block;
+}
+
+#bs-example-navbar-collapse-1 .nav li .active > a{
+    background-color: lightgrey;
 }
 
 

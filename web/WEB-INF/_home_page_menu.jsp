@@ -14,16 +14,17 @@
                         </button>
                     </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" id="set">
+            <ul class="nav navbar-nav">
                 <li>
-                    <a class="navbar-brand nav-button active" href="home-page">
+                    <a class="navbar-brand nav-button" href="home-page">
+                        <a class="navbar-brand nav-button active" href="home-page">
                         <span class="glyphicon glyphicon-home"
-                              aria-hidden="true"></span>&nbsp;Home</a>&nbsp;&nbsp;&nbsp;
+                              aria-hidden="true"></span>&nbsp;Home</a></a>&nbsp;&nbsp;&nbsp;
                 </li>
             </ul>
 
-              <ul class="nav navbar-nav" id="set1">
-                  <li><a class="navbar-brand nav-button active" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
+              <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand nav-button" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
                       <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
               </ul>
 
