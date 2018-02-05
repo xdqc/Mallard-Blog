@@ -1,19 +1,19 @@
 # Meta Data #
 ## user.gender
-0-- Female
-1-- Male
-2-- Other
+* 0-- Female
+* 1-- Male
+* 2-- Other
 ## user.system_role
-0-- Administrator
-1-- Public
+* 0-- Administrator
+* 1-- Public
 ## attachment.attach_type
-A-- Article id
-C-- Comment id
-U-- User id
+* A-- Article id
+* C-- Comment id
+* U-- User id
 ## attachment.mine
-Picture-- .jpg .jpn .bpm
-Audio-- .wmv .mp3 .wav
-Media-- .mov .mp4
+* Picture-- .jpg .jpn .bpm
+* Audio-- .wmv .mp3 .wav
+* Media-- .mov .mp4
  
 
 
@@ -138,3 +138,11 @@ delete their account.
 
 Using default Bootstrap, w3.css or similar is ok, but do not use any commercial or freely
 available 'website templates'. If in doubt, check with your lecturer first .
+
+** Pack One
+
+** Pack Three
+
+** Pack Four
+
+** Pack Six: Extensively Use of AJAX
