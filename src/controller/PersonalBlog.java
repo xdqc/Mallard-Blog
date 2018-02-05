@@ -211,10 +211,13 @@ public class PersonalBlog extends Controller {
             comment.setContent(req.getParameter("content"));
             comment.setParentArticle(Integer.parseInt(req.getParameter("replyArticle")));
             comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
+            //For comment reply to other comment
             if (req.getParameter("replyComment") != null) {
                 comment.setParentComment(Integer.parseInt(req.getParameter("replyComment")));
             }
 
+            //Response the new comment Id for uploading files
             DbConnector.insertNewComment(comment);
             int newCommentId = DbConnector.getNewlyCreatedCommentId(comment);
 

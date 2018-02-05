@@ -24,25 +24,24 @@
 
                 <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
                      alt="random picture"/>
-
+                <br>
                 <!-- collapse style multimedia gallery begin-->
                 <div>
-                <!-- show all attachments of one article -->
-                <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Show article&all comments media</a>
-                <!-- show the user's own attachments of one article including comments' attachments in this article -->
-                <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Show my own article&comments multimedia</a>
-                 <!-- show the attachments of this article -->
-                 <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Delete article multimedia</a>
-                    <!-- show the attachments of this comment -->
-                    <a id="showMultimedia-FileList-comment-57" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                        <span class="glyphicon glyphicon-file"></span>Delete comments multimedia</a>
+                    <span class="comment-media-text">Multi-Media Gallery</span>
+                    <!-- show all attachments of one article -->
+                    <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media show-comment-media-all" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-picture-o"></span> Article & Comments</a>
+                    <!-- show the user's own attachments of one article including comments' attachments in this article -->
+                    <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media show-my-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eye"></span> My Media</a>
                     <!-- active pictures -->
-                    <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                        <span class="glyphicon glyphicon-file"></span>Activate attachments</a>
-                <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
+                    <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media active-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eyedropper"></span> Activate</a>
+                    <!-- show the attachments of this article -->
+                    <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media delete-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eye-slash"></span> Delete</a>
+
+                    <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
                 </div>
                 <!-- collapse style multimedia gallery end-->
 

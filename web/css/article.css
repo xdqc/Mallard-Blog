@@ -52,6 +52,21 @@ a.show-comment-media {
     font-size: 14px;
     cursor: pointer;
 }
+a.show-my-media {
+    padding-left: 1em;
+    color: royalblue;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a.show-comment-media-all {
+    padding-left: 1em;
+    color: seagreen;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
 
 a.active-comment-media {
     padding-left: 1em;
@@ -68,12 +83,14 @@ a.delete-comment-media {
     font-size: 14px;
     cursor: pointer;
 }
-
 span.comment-media-text {
     padding-left: 1em;
     color: royalblue;
     font-family: Lato, Helvetica, sans-serif;
     font-size: 14px;
+}
+div.comment-gallery-area{
+    margin-top: 10px;
 }
 
 a.disabled {

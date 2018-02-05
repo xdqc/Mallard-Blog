@@ -20,14 +20,14 @@
 
         <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
              alt="random picture"/>
-
-        <%--&lt;%&ndash;display multimedia gallery here by ajax&ndash;%&gt;--%>
-        <%--<div id="multimedia-gallery-${blog.getArticle().getId()}"></div>--%>
-
+        <br>
         <!-- collapse style multimedia gallery begin-->
         <div>
-            <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                <span class="glyphicon glyphicon-file"></span>Show more multimedia</a>
+            <span class="comment-media-text">Multi-Media Gallery</span>
+            <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media show-comment-media-all" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                <span class="fa fa-picture-o"></span> Article & Comments</a>
+            <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media show-my-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                <span class="fa fa-eye"></span> My Media</a>
             <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
         </div>
         <!-- collapse style multimedia gallery end-->

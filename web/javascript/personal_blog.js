@@ -31,11 +31,11 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                     // commenter avatar, name and post time
                     var $dl = $("<dl class='comment widget-area '>").appendTo($parent)
                         .append($("<dt class='comment'>")
-                            .append($("<a>").attr("href", "personal-blog?userId="+comment["commenterId"])
-                                .html("&nbsp;&nbsp;"+comment["commenter"])
+                            .append($("<a>").attr("href", "personal-blog?userId=" + comment["commenterId"])
+                                .html("&nbsp;&nbsp;" + comment["commenter"])
                                 .prepend(
                                     $("<img class='img-circle' alt='Card image cap'>")
-                                        .attr("src", "http://i.pravatar.cc/40?u="+comment["commenterId"])
+                                        .attr("src", "http://i.pravatar.cc/40?u=" + comment["commenterId"])
                                 )
                             )
                             .append($("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"))
@@ -78,24 +78,41 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
 
                     /* multimedia gallery actions*/
                     const showCommentMedia = $("<a class='show-media show-comment-media' data-toggle='collapse'>")
-                        .attr("id", "showMultimedia-UserCheck_"+comment["commenterId"]+"-comment-"+cmtId)
-                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .attr("id", "showMultimedia-comment-" + cmtId)
+                        .attr("href", "#multimediaShowArea-comment-" + cmtId)
                         .text(" Show")
-                        .prepend($("<span class='fa fa-eye'>"));
+                        .prepend($("<span class='fa fa-picture-o'>"));
 
                     const activateCommentMedia = $("<a class='show-media active-comment-media' data-toggle='collapse'>")
-                        .attr("id", "showMultimedia-activateList-comment-"+cmtId)
-                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .attr("id", "showMultimedia-activateList-comment-" + cmtId)
+                        .attr("href", "#multimediaShowArea-comment-" + cmtId)
                         .text(" Activate")
                         .prepend($("<span class='fa fa-eyedropper'>"));
 
                     const deleteCommentMedia = $("<a class='show-media delete-comment-media' data-toggle='collapse'>")
-                        .attr("id", "showMultimedia-FileList-comment-"+cmtId)
-                        .attr("href", "#multimediaShowArea-comment-"+cmtId)
+                        .attr("id", "showMultimedia-FileList-comment-" + cmtId)
+                        .attr("href", "#multimediaShowArea-comment-" + cmtId)
                         .text(" Delete")
                         .prepend($("<span class='fa fa-eye-slash'>"));
 
-
+                    const multimediaUploader = $("<div>").html(
+                        '<ul class="list-unstyled list-inline">\n' +
+                        '                    <li><a title="" data-toggle="collapse" href="#uploadArea-comment-' + cmtId + '">\n' +
+                        '                        <i class="fa fa-video-camera"></i></a></li>\n' +
+                        '                    <li><a title="" data-toggle="collapse" href="#uploadArea-comment-' + cmtId + '">\n' +
+                        '                        <i class="fa fa-picture-o"></i></a></li>\n' +
+                        '                </ul>' +
+                        '<div id="uploadArea-comment-' + cmtId + '" class="collapse upload-area">' +
+                        '                <form class="uploadForm" id="uploadForm-comment-' + cmtId + '" action="/File-Upload?commentId=' + cmtId + '" method="post" enctype="multipart/form-data">' +
+                        '                    <fieldset id="files-comment-' + cmtId + '">' +
+                        '                        <legend>Select your file</legend>' +
+                        '                        <input id ="file" type="file" name="file">' +
+                        '                        <input type="button" value="Add more files" onclick="addFileInput(' + cmtId + ',' + "'comment'" + ')"><br>' +
+                        '                    </fieldset>' +
+                        '                    <input id="uploadButton-comment-' + cmtId + '" class="upload-buttons" type = "submit" value = "Upload" style="display:none">' +
+                        '                </form>' +
+                        '                <div id="uploadedFilesArea"></div>' +
+                        '            </div>');
 
 
                     const $dd = ($("<dd class='comment status-upload'>").text(comment.content)).appendTo($dl);
@@ -104,6 +121,7 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                         .append($("<span class='comment-media-text'>").html("&nbsp;&nbsp;Media Gallery&nbsp;"))
                         .append(showCommentMedia).append(activateCommentMedia).append(deleteCommentMedia);
 
+                    //Show comment actions corresponding to user login status and ownership of comments and articles
                     if (loggedInUser !== comment["articleAuthorId"] && loggedInUser !== comment["commenterId"]) {
                         deleteBtn.off("click").addClass("disabled");
                         deleteCommentMedia.off("click").addClass("disabled");
@@ -116,15 +134,15 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                         replyBtn.off("click").addClass("disabled");
                     }
                     if (loggedInUser !== 0) {
-                        $dd.append(replyForm);
+                        $dd.append(replyForm.append(multimediaUploader));
                     }
                     if (loggedInUser === comment["commenterId"]) {
-                        $dd.append(editForm);
+                        $dd.append(editForm.append(multimediaUploader));
                     }
 
                     // Comment Gallery Area
                     $dd.append($("<div class='collapse comment-gallery-area'>")
-                        .attr("id","multimediaShowArea-comment-"+cmtId));
+                        .attr("id", "multimediaShowArea-comment-" + cmtId));
                 }
             }
         } else {
@@ -160,7 +178,6 @@ const articleFocusOn = (id) => {
 };
 
 
-
 $(document).ready(function () {
     /**
      --   █████╗ ██████╗ ████████╗██╗ ██████╗██╗     ███████╗
@@ -189,7 +206,7 @@ $(document).ready(function () {
             cache: false,
             beforeSend: () => {
                 loadedArticles.num++;
-                $("#load-article-img").css("display","block");
+                $("#load-article-img").css("display", "block");
             },
             success: (resp) => {
                 let html = moreArticleArea.html();
@@ -197,8 +214,8 @@ $(document).ready(function () {
                 moreArticleArea.html(html);
 
                 //no more articles
-                if (resp.startsWith("<h3")){
-                    $(this).css("display","none");
+                if (resp.startsWith("<h3")) {
+                    $(this).css("display", "none");
                 }
             },
             error: (msg, status) => {
@@ -210,14 +227,12 @@ $(document).ready(function () {
             complete: (resp, status) => {
                 $("#load-article-img").css("display", "none");
 
-                // // register event
-                // resp = resp["responseText"];
-                // const articleId = resp.split(/\r?\n/)[0].slice(resp.split(/\r?\n/)[0].lastIndexOf('-') + 1).slice(0, -2);
-                // const $articlePanel = $("#article-panel-" + articleId);
-                // if (!$articlePanel.hasClass("clickable-active")) {
-                //     articleActions(articleId);
-                //     $articlePanel.addClass("clickable-active");
-                // }
+                /*Disable multimedia gallery button for guests*/
+                if (!loggedInUser > 0) {
+                    $("a.show-my-media").each(function () {
+                        $(this).off("click").addClass("disabled");
+                    });
+                }
             }
         })
     });
@@ -270,9 +285,9 @@ $(document).ready(function () {
     $(".edit-article-btn").on("click", function () {
 
         const articleId = entityId($(this));
-        const $articlePanel = $("#article-panel-"+articleId);
+        const $articlePanel = $("#article-panel-" + articleId);
         const editArea = $("#edit-article-area-" + articleId);
-        $("#read-more-"+articleId).click();
+        $("#read-more-" + articleId).click();
         $.ajax({
             type: 'POST',
             url: 'personal-blog',
@@ -291,7 +306,7 @@ $(document).ready(function () {
             complete: () => {
                 articleActionsHandler($(".accordion-bar"));
                 // event binding for ajax loaded area
-                if (!$articlePanel.hasClass("clickable-active")){
+                if (!$articlePanel.hasClass("clickable-active")) {
                     articleActions(articleId);
                     $articlePanel.addClass("clickable-active");
                 }
@@ -300,7 +315,7 @@ $(document).ready(function () {
     });
 
     function articleActions(articleId) {
-        const $articlePanel = $("#article-panel-"+articleId);
+        const $articlePanel = $("#article-panel-" + articleId);
 
         /**
          * choose post type: publish/draft
@@ -421,8 +436,8 @@ $(document).ready(function () {
                     const uploadArticleId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
                     //change the uploadArea form $div action parameter to newly created articleId
-                    $("#uploadForm-article-"+articleId).attr("action", "/File-Upload?articleId="+uploadArticleId);
-                    $("#uploadButton-article-"+articleId).click();
+                    $("#uploadForm-article-" + articleId).attr("action", "/File-Upload?articleId=" + uploadArticleId);
+                    $("#uploadButton-article-" + articleId).click();
 
                 },
                 error: (msg, status) => {
@@ -518,7 +533,7 @@ $(document).ready(function () {
                     // Calculate number of comments, pass by ref
                     const numComments = {num: 0};
                     resp.forEach(comments => showCascadingComments(comments, commentArea, numComments));
-                    $("#num-comments-"+articleID).html(numComments.num);
+                    $("#num-comments-" + articleID).html(numComments.num);
 
                     arrow.removeClass("fa-spinner fa-pulse fa-fw");
                     arrow.addClass("fa-chevron-up");
@@ -536,10 +551,10 @@ $(document).ready(function () {
                         commentArea.addClass("clickable-active");
                     }
 
-                    // if comments nested too deep, remove the left padding
+                    // if comments nested too deep, remove the left margin
                     $('dl.comment').each(function () {
                         if ($(this).width() < 500) {
-                            $(this).css('margin', '10px -10px 10px 0px');
+                            $(this).css('margin', '10px -10px 10px -8px');
                         }
                     });
                 }
@@ -560,7 +575,7 @@ $(document).ready(function () {
         const articleId = entityId($(e.target));
         const $commentText = $("#leave-comment-text-" + articleId);
 
-        if($commentText.val()==="" || $commentText.val()===undefined){
+        if ($commentText.val() === "" || $commentText.val() === undefined) {
             swal("Write something!", "You need to have something to say!", "warning");
             return;
         }
@@ -581,7 +596,7 @@ $(document).ready(function () {
                     type: "info",
                     showLoaderOnConfirm: true
                 });
-                $("#showCommentBtn-"+articleId).click();
+                $("#showCommentBtn-" + articleId).click();
             },
             success: function (resp) {
                 $("#leave-comment-text-" + articleId).val("");
@@ -591,8 +606,8 @@ $(document).ready(function () {
                 const uploadCommentId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
 
                 //change the uploadArea form $div action parameter to newly created articleId
-                $("#uploadForm-a-comment-"+articleId).attr("action", "/File-Upload?commentId="+uploadCommentId);
-                $("#uploadButton-a-comment-"+articleId).click();
+                $("#uploadForm-a-comment-" + articleId).attr("action", "/File-Upload?commentId=" + uploadCommentId);
+                $("#uploadButton-a-comment-" + articleId).click();
 
             },
             error: (msg, status) => {
@@ -601,13 +616,13 @@ $(document).ready(function () {
                 console.log(msg);
             },
             complete: () => {
-                $("#showCommentBtn-"+articleId).click();
+                $("#showCommentBtn-" + articleId).click();
             }
         })
     });
 
     function commentActions(articleID) {
-        const $commentArea = $("#comment-area-"+articleID);
+        const $commentArea = $("#comment-area-" + articleID);
 
         /**
          * show reply comment form
@@ -646,7 +661,7 @@ $(document).ready(function () {
             const cmtId = entityId($(e.target));
             const $replyText = $("#reply-text-" + cmtId);
 
-            if($replyText.val()==="" || $replyText.val()===undefined){
+            if ($replyText.val() === "" || $replyText.val() === undefined) {
                 swal("Write something!", "You need to have something to say!", "warning");
                 return;
             }
@@ -668,10 +683,17 @@ $(document).ready(function () {
                         type: "info",
                         showLoaderOnConfirm: true
                     });
-                    $("#showCommentBtn-"+articleId).click();
+                    $("#showCommentBtn-" + articleId).click();
                 },
                 success: function (resp) {
                     swal("Congrats!", "Your comment is posted.", "success");
+
+                    /*upload file for newly created comment*/
+                    const uploadCommentId = resp.startsWith("inserted") ? resp.split(" ")[1] : articleId;
+
+                    //change the uploadArea form $div action parameter to newly created articleId
+                    $("#uploadForm-comment-" + cmtId).attr("action", "/File-Upload?commentId=" + uploadCommentId);
+                    $("#uploadButton-comment-" + cmtId).click();
                 },
                 error: (msg, status) => {
                     console.log("error!!!");
@@ -680,7 +702,7 @@ $(document).ready(function () {
                 },
                 complete: () => {
                     // $(this).parentNode.slideUp();
-                    $("#showCommentBtn-"+articleId).click();
+                    $("#showCommentBtn-" + articleId).click();
                 }
             })
         });
@@ -694,7 +716,7 @@ $(document).ready(function () {
             const cmtId = entityId($(e.target));
             const $editText = $("#edit-text-" + cmtId);
 
-            if($editText.val()==="" || $editText.val()===undefined){
+            if ($editText.val() === "" || $editText.val() === undefined) {
                 swal("Write something!", "You need to have something to say!", "warning");
                 return;
             }
@@ -714,10 +736,13 @@ $(document).ready(function () {
                         type: "info",
                         showLoaderOnConfirm: true
                     });
-                    $("#showCommentBtn-"+articleId).click();
+                    $("#showCommentBtn-" + articleId).click();
                 },
                 success: function () {
                     swal("Congrats!", "Your comment is updated.", "success");
+
+                    /*upload file for edited comment*/
+                    $("#uploadButton-comment-" + cmtId).click();
                 },
                 error: (msg, status) => {
                     console.log("error editing comment!!!");
@@ -726,7 +751,7 @@ $(document).ready(function () {
                 },
                 complete: () => {
                     // $(this).parentNode.slideUp();
-                    $("#showCommentBtn-"+articleId).click();
+                    $("#showCommentBtn-" + articleId).click();
                 }
 
             })
@@ -758,7 +783,7 @@ $(document).ready(function () {
                         data: {deleteComment: cmtId},
                         cache: false,
                         beforeSend: () => {
-                            $("#showCommentBtn-"+articleId).click();
+                            $("#showCommentBtn-" + articleId).click();
                         },
                         success: () => {
                             swal("Deleted!", "This comment has been deleted.", "success");
@@ -769,7 +794,7 @@ $(document).ready(function () {
                             console.log(msg);
                         },
                         complete: () => {
-                            $("#showCommentBtn-"+articleId).click();
+                            $("#showCommentBtn-" + articleId).click();
                         }
                     });
                 });
