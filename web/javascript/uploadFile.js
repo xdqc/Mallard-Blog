@@ -42,7 +42,6 @@ $(document).ready(function () {
         const entityId = getEntityId($(this));
         const parameterName = getEntityParameterName($(this));
         const userCheck = isUserCheck($(this));
-        alert(userCheck);
         if(userCheck.startsWith("UserCheck")){
            const userID = userCheck.split("_")[1];
             $.ajax({
@@ -123,7 +122,6 @@ $(document).ready(function () {
         });
     });
 
-
     // $(document).on("click", '.uploadButton', function() {
     //     $.ajax({
     //         url : 'File-Upload',
@@ -136,5 +134,31 @@ $(document).ready(function () {
     //     });
     // });
 
+
+
+
 });
 
+$(document).bind('DOMSubtreeModified', function() {
+    console.log("page changed");
+    $(".activated-multimedia").each(function() {
+        const entityId = getEntityId($(this));
+        const parameterName = getEntityParameterName($(this));
+        if ($(this).hasClass("activated-multimedia")) { // TODO: CHANGE ME //
+            console.log("onload happened");
+            $.ajax({
+                url: 'Activated-Multimedia',
+                data: {
+                    entityId: entityId,
+                    parameterName: parameterName
+                },
+                error: function (err) {
+                    console.log("function was unsuccessful");
+                }, success: function (responseText) {
+                    console.log("function was successful");
+                    $('#showActivatedMultimedia-' + parameterName + '-' + entityId).html(responseText);
+                }
+            });
+        }
+    });
+});

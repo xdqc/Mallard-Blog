@@ -162,4 +162,14 @@
         <url-pattern>/File-Manage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ActivatedMultimedia</servlet-name>
+        <servlet-class>controller.ActiveAttachment</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ActivatedMultimedia</servlet-name>
+        <url-pattern>/Activated-Multimedia</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -22,8 +22,9 @@
                 </div>
 
 
-                <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
-                     alt="random picture"/>
+                <div id="showActivatedMultimedia-article-${blog.getArticle().getId()}" class="activated-multimedia"></div>
+
+
 
                 <!-- collapse style multimedia gallery begin-->
                 <div>

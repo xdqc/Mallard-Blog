@@ -116,6 +116,7 @@ public class AttachmentManage extends Controller {
                 "                },\n" +
                 "                success : function(responseText) {\n" +
                 "                    $('#multimediaShowArea-' + parameterName + '-'+" + articleId + ").html(responseText);\n" +
+                "                    $('#showActivatedMultimedia-' + article + '-'+" + articleId + ").click();\n" +
                 "                }\n" +
                 "            });\n" +
                 "        }\n" +
@@ -123,6 +124,7 @@ public class AttachmentManage extends Controller {
                 "})\n" +
                 "</script>\n"
                 ;
+        System.out.println("result = [" + result + "]");
         return result;
     }
 }
