@@ -68,13 +68,14 @@ public class Login extends Controller {
 
     /**
      * Check login form password match db record or not
-     * @param user user record in db
+     *
+     * @param user     user record in db
      * @param password user enter pw to be checked
      * @return match or not
      */
     private boolean authenticationPassed(UserRecord user, String password) {
-        int iteration = user.getUserName().length() % 7 + 1;
-        byte[] salt = (user.getUserName() + "mallard").getBytes();
+        int iteration = user.getCreateTime().getNanos() % (user.getUserName().length() % 7 + 1) + 1;
+        byte[] salt = (user.getCreateTime() + user.getEmail()).getBytes();
         byte[] expectedHash = Passwords.base64Decode(user.getPassword());
         return (Passwords.isExpectedPassword(password.toCharArray(), salt, iteration, expectedHash));
     }
@@ -83,12 +84,12 @@ public class Login extends Controller {
      * Make a hashed password with salt and iteration
      *
      * @param rawPassword user entered password
-     * @param username username
+     * @param user        user record
      * @return hashed pw string b64
      */
-    public static String hashingPassword(String rawPassword, String username) {
-        int iteration = username.length() % 7 + 1;
-        byte[] salt = (username + "mallard").getBytes();
+    public static String hashingPassword(String rawPassword, UserRecord user) {
+        int iteration = user.getCreateTime().getNanos() % (user.getUserName().length() % 7 + 1) + 1;
+        byte[] salt = (user.getCreateTime() + user.getEmail()).getBytes();
         byte[] hash = Passwords.hash(rawPassword.toCharArray(), salt, iteration);
         return Passwords.base64Encode(hash);
     }

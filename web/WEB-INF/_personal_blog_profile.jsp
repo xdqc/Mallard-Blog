@@ -1,6 +1,6 @@
 <%--personal information panel--%>
 <div class="panel user-panel" id="user-panel-${user.getId()}" data-spy="affix" data-offset-top="200">
-    <img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300" alt="panel image cap">
+    <img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300?u=${user.getId()}" alt="panel image cap">
     <div class="panel-body" style="padding:10px;">
         <h5 class="panel-title">${fname} ${lname}
             <c:if test="${gender==0}">
@@ -8,6 +8,9 @@
             </c:if>
             <c:if test="${gender==1}">
                 <span class="fa fa-mars" style="color: deepskyblue"></span>
+            </c:if>
+            <c:if test="${gender==2}">
+                <span class="fa fa-2x fa-venus-mars fa-gradient"></span>
             </c:if>
         </h5>
         <p class="panel-text">${description}</p>
@@ -31,12 +34,10 @@
             <c:if test="${!sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
                 <a href="#" class="panel-link">Follow me!</a>
             </c:if>
-            <c:if test="${sessionScope.get('loggedInUser').equals(requestScope.get('browsingUser'))}">
-                <a href="edit_profile.jsp" class="panel-link">Edit my profile</a>
-            </c:if>
         </c:if>
     </div>
 </div>
+
 
 
 
