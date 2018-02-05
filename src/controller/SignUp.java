@@ -74,10 +74,6 @@ public class SignUp extends Controller {
             user.setCreateTime(currentTimes);
             user.setEmail(req.getParameter("email"));
             user.setUserName(req.getParameter("userName"));
-
-            String encodedPassword = hashingPassword(req.getParameter("password"), req.getParameter("userName"));
-            user.setPassword(encodedPassword);
-
             user.setAddress(req.getParameter("address"));
             user.setCity(req.getParameter("city"));
             user.setState(req.getParameter("state"));
@@ -85,16 +81,19 @@ public class SignUp extends Controller {
             user.setDescription(req.getParameter("description"));
             user.setIsvalid(Byte.valueOf(isValid));
 
-            System.out.println(user);
-
+            String encodedPassword = hashingPassword(req.getParameter("password"), user);
+            user.setPassword(encodedPassword);
 
             cleanAllParameters(req);
             DbConnector.insertNewUser(user);
 
             int newUserId = DbConnector.getNewlySignedUser(user);
+
+            System.out.println(user +"\n" + newUserId);
+
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(newUserId);
+            resp.getWriter().write(String.valueOf(newUserId));
 
             return;
         }

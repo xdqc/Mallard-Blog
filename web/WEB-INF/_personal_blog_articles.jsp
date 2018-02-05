@@ -11,17 +11,18 @@
                 <div class="panel-text article-author">
                     <span><img src="http://i.pravatar.cc/75?u=${blog.getAuthor().getId()}" alt="mp" width="75" class="img-circle"></span> ${blog.getAuthor().getFName()} ${blog.getAuthor().getLName()}
                 </div>
+                <br>
                 <div class="panel-text article-time">
                                 <span class="h5 text-muted"><span class="fa fa-clock-o"></span>
                                         ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
                     <c:if test="${not empty blog.getArticle().getEditTime()}">
+                        <br>
                         <span class="h5 text-muted"> Edited on <span class="fa fa-clock-o"></span>
                                 ${blog.getArticle().getEditTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
                     </c:if>
 
                 </div>
-
-
+                <br>
                 <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
                      alt="random picture"/>
                 <br>

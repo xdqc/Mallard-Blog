@@ -269,20 +269,23 @@ form.uploadForm input {
     padding: 6px 15px;
 }
 
-
 h3.article-title{
     font-family: Lato, Helvetica, sans-serif;
     font-variant: small-caps;
     font-size: 24px;
     font-weight: bold;
-    line-height: 30px;
+    line-height: 24px;
 }
 div.article-content{
     font-family: Lato, Helvetica, sans-serif;
     font-size: 18px;
 }
+.article-author{
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
 .panel-body{
     padding: 40px;
     background-color: #F6F9FB;
-    
 }

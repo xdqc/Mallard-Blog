@@ -110,6 +110,9 @@ public class PersonalBlog extends Controller {
 
     }
 
+    /**
+     * Ajax load articles on home-page
+     */
     private boolean loadArticlesController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("loadMoreArticles") != null) {
             int loadedNum = Integer.parseInt(req.getParameter("loadMoreArticles"));
@@ -132,6 +135,9 @@ public class PersonalBlog extends Controller {
         return false;
     }
 
+    /**
+     * Ajax load comment tree on click show comment btn
+     */
     private boolean loadCommentTreeController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String articleId = req.getParameter("showCommentsOfArticle");
         if (articleId != null) {
@@ -145,6 +151,9 @@ public class PersonalBlog extends Controller {
         return false;
     }
 
+    /**
+     * Ajax load article content on click read-more btn
+     */
     private boolean loadArticleContentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String articleId;
         articleId = req.getParameter("loadContentOfArticle");
@@ -157,6 +166,9 @@ public class PersonalBlog extends Controller {
         return false;
     }
 
+    /**
+     * Ajax load create/edit article div on click edit btn
+     */
     private boolean loadEditArticleController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String articleToEdit = req.getParameter("editArticle");
         if (articleToEdit != null) {
@@ -168,10 +180,13 @@ public class PersonalBlog extends Controller {
         return false;
     }
 
+    /**
+     * Ajax hide comment on click delete comment btn
+     */
     private boolean deleteCommentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String commentToDelete = req.getParameter("deleteComment");
         if (commentToDelete != null) {
-            DbConnector.deleteCommentById(commentToDelete);
+            DbConnector.hideCommentById(commentToDelete);
             cleanAllParameters(req);
 
             resp.setContentType("text/html");
@@ -182,6 +197,9 @@ public class PersonalBlog extends Controller {
         return false;
     }
 
+    /**
+     * Ajax edit comment on click edit comment btn
+     */
     private boolean editCommentController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String commentToEdit = req.getParameter("editComment");
         if (commentToEdit != null) {

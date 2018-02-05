@@ -416,9 +416,9 @@
             data: $(this).serialize(),
             success: function(resp, status) {
                 // if success, HTML response is expected, so replace current
-
-                    swal("congratulations, you have signed up!","Please choose your Avatar","success");
-                    redirectToChooseAvatar(resp);
+                console.log("newUserId = "+resp);
+                swal("congratulations, you have signed up!", "Please choose your Avatar", "success");
+                redirectToChooseAvatar(resp);
             },
             error: function (data, status) {
                 swal("Sorry, there is an error on your form!");
@@ -448,9 +448,6 @@
 
         });
     }
-
-
-
 
 
 </script>
