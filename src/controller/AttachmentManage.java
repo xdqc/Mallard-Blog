@@ -1,7 +1,7 @@
 package controller;
 
+
 import ORM.tables.records.AttachmentRecord;
-import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
 
 import javax.servlet.ServletException;
@@ -10,34 +10,34 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class FilesManage extends Controller {
+public class AttachmentManage extends Controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserRecord user = getLoggedUserFromSession(req);
-        System.out.println("req.getParameter(\"operateName\").toLowerCase() = [" + req.getParameter("operateName").toLowerCase() + "]");
         //dispatch the different operation
         switch(req.getParameter("operateName").toLowerCase()){
-            case "filelist" :
-                generateFileList(req,resp,null);
+            case "activatelist" :
+                generateActiveList(req,resp,null);
                 break;
-            case "delete" :
-                deleteFile(req,resp);
+            case "activate" :
+                activateFile(req,resp);
                 break;
         }
+        //DbConnector.setActivePicture(attachmentId);
     }
 
-    //deal with delete file operation
-    private void deleteFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    //deal with set active file
+    private void activateFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         String attachmentId = req.getParameter("attachmentId");
         System.out.println("attachmentId = [" + attachmentId + "]");
         //translate the attachment id to ownby id
         String ownby = DbConnector.getOwnbyByAttachmentId(attachmentId);
-        DbConnector.deleteAttachmentById(attachmentId);
-        generateFileList(req,resp,ownby);
+        DbConnector.setActivePicture(attachmentId);
+        //DbConnector.deleteAttachmentById(attachmentId);
+        generateActiveList(req,resp,ownby);
     }
 
-    //deal with the file list generation
-    private void generateFileList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws ServletException, IOException{
+    //generate active list
+    private void generateActiveList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws ServletException, IOException{
         String attachmentId = req.getParameter("entityId");
         String parameterName = req.getParameter("parameterName");
         if(ownby != null){
@@ -67,9 +67,16 @@ public class FilesManage extends Controller {
             result += "<tr>";
             result += "<td>" + attachment.getFilename() + "</td><td><a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.png\" alt=\"" + attachment.getFilename() + "\"></a></td>";
             //operate setting
-            result += "<td>" +
-                    "<span id=\"showMultimedia-Delete-" + parameterName.toLowerCase() + "-" + attachment.getId() + "\" class=\"delete-item btn btn-danger\" ><span class=\"fa fa-trash\"></span>Delete</span>" +
-                    "</td>";
+            if(attachment.getIsactivate().toString().equals("0")) {
+                result += "<td>" +
+                        "<span id=\"showMultimedia-Activate-" + parameterName.toLowerCase() + "-" + attachment.getId() + "\" class=\"activate-item btn btn-success\" ><span class=\"fa fa-pencil\"></span>Activate</span>" +
+                        "</td>";
+            }else{
+                result += "<td>" +
+                        "<span>Activated</span>" +
+                        "</td>";
+
+            }
 
             result += "</tr>";
         }
@@ -94,45 +101,14 @@ public class FilesManage extends Controller {
                 "</table>"
                 + "<script>\n" +
                 "$(document).ready(function () {\n" +
-                "    $('.delete-item').click(function() {\n" +
+                "    $('.activate-item').click(function() {\n" +
                 "        const attachmentId = getEntityId($(this));\n" +
                 "        const parameterName = getEntityParameterName($(this));\n" +
                 "        const userCheck = isUserCheck($(this));\n" +
                 "        alert(parameterName + attachmentId);\n" +
-                "        if(userCheck.toLowerCase() == \"delete\" ){\n" +
+                "        if(userCheck.toLowerCase() == \"activate\" ){\n" +
                 "            $.ajax({\n" +
-                "                url : 'File-Manage',\n" +
-                "                data : {\n" +
-                "                    attachmentId : attachmentId,\n" +
-                "                    parameterName : parameterName,\n" +
-                "                    operateName : userCheck\n" +
-                "                },\n" +
-                "                success : function(responseText) {\n" +
-                "                    $('#multimediaShowArea-' + parameterName + '-'+" + articleId + ").html(responseText);\n" +
-                "                }\n" +
-                "            });\n" +
-                "        }\n" +
-                "    });\n" +
-                "})\n" +
-                "</script>\n"
-                ;
-        return result;
-    }
-
-    private String getDeleteString(String insertContent,String articleId){
-        String result ="<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
-                + insertContent +
-                "</table>"
-                + "<script>\n" +
-                "$(document).ready(function () {\n" +
-                "    $('.delete-item').click(function() {\n" +
-                "        const attachmentId = entityId($(this));\n" +
-                "        const parameterName = entityParameterName($(this));\n" +
-                "        const userCheck = isUserCheck($(this));\n" +
-                "        alert(parameterName + attachmentId);\n" +
-                "        if(userCheck.toLowerCase() == \"delete\" ){\n" +
-                "            $.ajax({\n" +
-                "                url : 'File-Manage',\n" +
+                "                url : 'Attachment-Manage',\n" +
                 "                data : {\n" +
                 "                    attachmentId : attachmentId,\n" +
                 "                    parameterName : parameterName,\n" +

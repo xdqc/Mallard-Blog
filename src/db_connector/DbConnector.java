@@ -163,6 +163,7 @@ public class DbConnector {
             user = create.select()
                     .from(USER)
                     .where(USER.USER_NAME.equalIgnoreCase(username))
+                    .and(USER.ISVALID.eq((byte)1))
                     .fetch()
                     .into(UserRecord.class);
 
@@ -567,20 +568,51 @@ public class DbConnector {
      * retrieve ownby by attachment id.
      **/
     public static String getOwnbyByAttachmentId(String attachmentId) {
-        System.out.println("attachmentId = [" + attachmentId + "]");
         String result = "";
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-            result = String.valueOf(create.select(ATTACHMENT.OWNBY)
+            result = create.select(ATTACHMENT.OWNBY)
                     .from(ATTACHMENT)
                     .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
-                    .fetch());
+                    .fetchAny()
+                    .into(String.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("result = [" + result + "]");
         return result;
     }
+
+    /**
+     * set active picture in an entities.
+     **/
+    public static void setActivePicture(String attachmentId) {
+        System.out.println("attachmentId = [" + attachmentId + "]");
+        String ownby ="";
+        //retrieve the ownby id by attachment id
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            ownby = create.select(ATTACHMENT.OWNBY)
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .fetchAny()
+                    .into(String.class);
+            System.out.println("ownby = [" + ownby + "]");
+            //set all the attachments of this owner into 0
+            create.update(ATTACHMENT)
+                  .set(ATTACHMENT.ISACTIVATE,new Byte("0"))
+                  .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(ownby)))
+                  .execute();
+            //set the attachments of attachmentId into 1
+            create.update(ATTACHMENT)
+                    .set(ATTACHMENT.ISACTIVATE,new Byte("1"))
+                    .where(ATTACHMENT.ID.eq(Integer.parseInt(attachmentId)))
+                    .execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Insert a article to db
      *
@@ -783,10 +815,9 @@ public class DbConnector {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-
-                //create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
-                  //                  .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
-                    //                .execute();
+                create.insertInto(USER, USER.USER_NAME,USER.PASSWORD,USER.EMAIL,USER.F_NAME,USER.L_NAME,USER.GENDER,USER.DOB,USER.SYSTEM_ROLE,USER.CREATE_TIME,USER.COUNTRY,USER.STATE,USER.CITY,USER.ADDRESS,USER.DESCRIPTION,USER.ISVALID)
+                                    .values(user.getUserName(),user.getPassword(),user.getEmail(),user.getFName(),user.getLName(),user.getGender(),user.getDob(),user.getSystemRole(),user.getCreateTime(),user.getCountry(),user.getState(),user.getCity(),user.getAddress(),user.getDescription(),user.getIsvalid())
+                                    .execute();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -1061,5 +1092,19 @@ public class DbConnector {
             e.printStackTrace();
         }
         return records;
+    }
+
+    public static void resetPasswordByUserID(String password, String userId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(USER)
+                    .set(USER.PASSWORD, password)
+                    .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
