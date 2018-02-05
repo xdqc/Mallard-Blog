@@ -1,5 +1,6 @@
  <!-- Collect the nav links, forms, and other content for toggling -->
-        <nav class="navbar navbar-inverse">
+
+ <nav class="navbar navbar-inverse">
             <nav class="navbar navbar-inverse" style="margin-left: -1px;">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
@@ -13,19 +14,31 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div>
+
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a class="navbar-brand nav-button" href="home-page">
-                        <a class="navbar-brand nav-button active" href="home-page">
+                        <a class="navbar-brand nav-button" href="home-page">
                         <span class="glyphicon glyphicon-home"
                               aria-hidden="true"></span>&nbsp;Home</a></a>&nbsp;&nbsp;&nbsp;
                 </li>
             </ul>
+              <ul class="nav navbar-nav">
+                  <li class="is-active" style="
+<%
+String navbar = request.getParameter("nav");
+
+if (navbar != null && navbar.equals("Personal Blog"))
+{
+    out.print("background: #f2184f");
+}
+%>"><a class="navbar-brand nav-button" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
+                      <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
+              </ul>
 
               <ul class="nav navbar-nav">
-                  <li><a class="navbar-brand nav-button" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
-                      <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
+              <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
+                  Us</a></li>
               </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -55,8 +68,7 @@
                         </c:if>
                     </div>
                 </li>
-                <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
-                    Us</a></li>
+
             </ul>
             <form class="navbar-form navbar-right" action="search" method="get">
                 <div class="form-group">
@@ -66,6 +78,6 @@
                                                                     aria-hidden="true"></span></button>
             </form>
         </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+   </div><!-- /.container-fluid -->
  </nav>
 </nav>
