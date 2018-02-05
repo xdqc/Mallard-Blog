@@ -154,11 +154,10 @@ public class FileUpload extends HttpServlet {
                         ownby = Integer.parseInt(userId);
                     }
                     System.out.println("ownby = [" + ownby + "]");
+
                     // save the information into database
-                    int userPathId = 0;
-                    if (userId != null) {
-                        userPathId = this.user == null ? Integer.parseInt(userId) : this.user.getId();
-                    }
+                    int userPathId = this.user != null ? this.user.getId() : Integer.parseInt(userId != null ? userId : "0");
+
                     FileUtilities.saveInformationToDB(theFileName, "/UploadedFile/multimedia/" + userPathId + "/", fileTypeFlag, attachType, ownby);
                     //store the result information
                     fileUploadResultString += "<tr><td>" + theFileName + "</td><td><img src='/UploadedFile/multimedia/"
