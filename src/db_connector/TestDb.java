@@ -1,16 +1,10 @@
 package db_connector;
 
-import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import controller.Login;
-import org.jooq.Record;
-import utililties.Blog;
 import utililties.Tuple;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class TestDb {
     public static void main(String[] args) {
