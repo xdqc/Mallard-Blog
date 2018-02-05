@@ -195,7 +195,8 @@ public class Admin extends Controller {
             String userId = req.getParameter("passwordReset");
             String username = req.getParameter("username");
             String password = req.getParameter("password");
-            String enCodedPassword = hashingPassword(password, username);
+            UserRecord user = DbConnector.getUserByUserId(userId);
+            String enCodedPassword = hashingPassword(password, user);
 
             DbConnector.resetPasswordByUserID(enCodedPassword, userId);
 
@@ -259,7 +260,7 @@ public class Admin extends Controller {
         if (req.getParameter("showArticle")!=null){
             String articleID = req.getParameter("showArticle");
 
-            DbConnector.showAritcleById(articleID);
+            DbConnector.showArticleById(articleID);
 
             cleanAllParameters(req);
             resp.setContentType("text/html");
@@ -274,7 +275,7 @@ public class Admin extends Controller {
         if (req.getParameter("hideArticle")!=null){
             String articleId = req.getParameter("hideArticle");
 
-            DbConnector.hideAritcleById(articleId);
+            DbConnector.hideArticleById(articleId);
 
             cleanAllParameters(req);
             resp.setContentType("text/html");
