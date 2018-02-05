@@ -35,7 +35,7 @@
                                     <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea-${articleId}" class="btn btn-primary">
                                         <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
                                     <div id="uploadArea-${articleId}" class="collapse upload-area">
-                                        <form class="uploadForm" id="uploadForm-${articleId}" action="/File-Upload?articleId=${articleId}" method="post" enctype="multipart/form-data">
+                                        <form class="uploadForm" id="uploadForm-article-${articleId}" action="/File-Upload?articleId=${articleId}" method="post" enctype="multipart/form-data">
                                             <fieldset id="files-article-${articleId}">
                                                 <legend>Select your file</legend>
                                                 <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput('${articleId}','article')"><br>

@@ -37,6 +37,7 @@
         <param-name>pass</param-name>
         <param-value>aoeuidht</param-value>
     </context-param>
+    <!-- SMTP settings end -->
 
     <servlet>
         <servlet-name>home-page</servlet-name>

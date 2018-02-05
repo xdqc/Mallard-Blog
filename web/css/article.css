@@ -39,10 +39,58 @@ a.edit-comment-btn {
 
 a.delete-comment-btn {
     padding-left: 1em;
+    color: darkred;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a.show-comment-media {
+    padding-left: 1em;
+    color: royalblue;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+a.show-my-media {
+    padding-left: 1em;
+    color: royalblue;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a.show-comment-media-all {
+    padding-left: 1em;
+    color: seagreen;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a.active-comment-media {
+    padding-left: 1em;
+    color: mediumpurple;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+a.delete-comment-media {
+    padding-left: 1em;
     color: salmon;
     font-family: Lato, Helvetica, sans-serif;
     font-size: 14px;
     cursor: pointer;
+}
+span.comment-media-text {
+    padding-left: 1em;
+    color: royalblue;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+}
+div.comment-gallery-area{
+    margin-top: 10px;
 }
 
 a.disabled {
@@ -221,20 +269,23 @@ form.uploadForm input {
     padding: 6px 15px;
 }
 
-
 h3.article-title{
     font-family: Lato, Helvetica, sans-serif;
     font-variant: small-caps;
     font-size: 24px;
     font-weight: bold;
-    line-height: 30px;
+    line-height: 24px;
 }
 div.article-content{
     font-family: Lato, Helvetica, sans-serif;
     font-size: 18px;
 }
+.article-author{
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
 .panel-body{
     padding: 40px;
     background-color: #F6F9FB;
-    
 }

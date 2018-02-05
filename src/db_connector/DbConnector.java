@@ -851,9 +851,7 @@ public class DbConnector {
     }
 
     /**
-     *
-     * @param user
-     * @return
+     * Get the newly sign up user
      */
     public static int getNewlySignedUser(UserRecord user) {
         int newUserId =0;
@@ -945,7 +943,7 @@ public class DbConnector {
      * show article by article id
      * @param articleId
      */
-    public static void showAritcleById(String articleId) {
+    public static void showArticleById(String articleId) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -964,7 +962,7 @@ public class DbConnector {
      * hide article by article id
      * @param articleId
      */
-    public static void hideAritcleById(String articleId) {
+    public static void hideArticleById(String articleId) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 

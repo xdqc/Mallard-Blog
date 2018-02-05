@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<div>
+<div id="choose-avatar-container">
     <form action="sign-up?setupAvatarFor=${newUserId}" id="choose-avatar">
     <div class="form-group">
         <h3>Choose Your profile Image:</h3>
@@ -39,31 +39,32 @@
         </div>
     </div>
 
-
-
-
-    <%--<div class="form-group">--%>
-        <%--<p>Or choose a file from your device</p>--%>
-        <%--<input type="radio" value="9" name="avatar" id="avatar-1">--%>
-        <%--<!-- collapse style upload file begin-->--%>
-
-        <%--<div id="uploadArea" class="collapse">--%>
-            <%--<form id="uploadForm" action="/File-Upload?userId=${newUserId}" method="post" enctype="multipart/form-data">--%>
-                <%--<fieldset id="files-commentToArticle">--%>
-                    <%--<legend>Select your file</legend>--%>
-                    <%--<input id ="file" type="file" name="file" />--%>
-                <%--</fieldset>--%>
-                <%--<input id="uploadButton-comment-${newUserId}" class="upload-buttons" type = "submit" value = "Upload">--%>
-            <%--</form>--%>
-            <%--<div id="uploadedFilesArea"></div>--%>
-        <%--</div>--%>
-        <%--<!-- collapse style upload file end-->--%>
-
-    <%--</div>--%>
-
         <br><br>
         <input type="submit" value="Confirm" id="choose-avatar-submit" class="btn btn-primary">
     </form>
+
+    <div class="form-group" id="upload-avatar-form">
+        <input type="radio" value="9" name="avatar" id="avatar-9">
+        <label for="avatar-9">Choose a photo from your device</label>
+        <br><br>
+        <!-- collapse style upload file begin-->
+        <div>
+            <a id="uploadFileButton" data-toggle="collapse" href="#uploadArea" class="btn btn-primary">
+                <span class="glyphicon glyphicon-file"></span>Upload multimedia</a>
+        </div>
+        <div id="uploadArea" class="collapse upload-area">
+            <form id="uploadForm" action="/File-Upload?userId=${newUserId}" method="post" enctype="multipart/form-data" class="uploadForm">
+                <fieldset id="files-commentToArticle">
+                    <legend>Select your file</legend>
+                    <input id ="file" type="file" name="file" />
+                </fieldset>
+                <input id="uploadButton-comment-${newUserId}" class="upload-buttons" type = "submit" value = "Upload">
+            </form>
+            <div id="uploadedFilesArea"></div>
+        </div>
+        <!-- collapse style upload file end-->
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -95,7 +96,6 @@
     });
 
 
-
     function redirectToLogin() {
         $.ajax({
             url: 'login',
@@ -103,7 +103,7 @@
             data: 'login=newSignUp',
             success: function(resp, status) {
                 $('#box').hide();
-                $('#choose-avatar').hide();
+                $('#choose-avatar-container').hide();
                 loginPage.html(resp);
                 loginPage.slideDown(2200);
             },
@@ -114,5 +114,14 @@
 
         });
     }
-
 </script>
+
+<style>
+    #upload-avatar-form{
+        position: relative;
+        top: -500px;
+        left: 350px;
+        width: auto;
+    }
+
+</style>

@@ -85,12 +85,17 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         return numComments;
     }
 
+    /*Used in jsp, do not delete*/
     public int getNumValidComments() {
         this.validComments = 0;
         countValidComment(this.commentTree);
         return this.validComments;
     }
 
+    /**
+     * Count the number of comments that can be see by users
+     * @param tree this.commentTree as the starter for recursion
+     */
     private void countValidComment(Tree<CommentRecord> tree) {
         for (Tree<CommentRecord> commentTree : tree.getChildren()) {
             CommentRecord comment = commentTree.getData();
@@ -105,6 +110,10 @@ public class Blog implements Map.Entry<Tuple<UserRecord, ArticleRecord>, List<Co
         }
     }
 
+    /**
+     * Put new comments in to commentTree
+     * @param c comments to add in
+     */
     public void addValue(List<CommentRecord> c) {
         if (!c.isEmpty()) {
             this.commentList.add(c.get(0));

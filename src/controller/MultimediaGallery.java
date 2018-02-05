@@ -54,9 +54,10 @@ public class MultimediaGallery extends Controller {
 
     private String getShowString(String insertContent){
         String result =
-                "    <script type=\"text/javascript\" src=\"../javascript/jquery.js\"></script>\n" +
+//                "    <script type=\"text/javascript\" src=\"../javascript/jquery.js\"></script>\n" +
                 "    <script type=\"text/javascript\" src=\"../javascript/html5gallery.js\"></script>\n" +
-                "<div id=\"imagesShowing\" style=\"display:none;\" class=\"html5gallery\" data-skin=\"horizontal\" data-width=\"800\" data-height=\"600\">\n" + insertContent + "</div>\n" ;
+                "<div id=\"imagesShowing\" style=\"display:none;\" class=\"html5gallery\" data-skin=\"horizontal\" data-responsive=\"true\" >\n" + insertContent + "</div>\n" ;
+//        data-width="800" data-height="600"
         return result;
     }
 }
