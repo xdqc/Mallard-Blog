@@ -346,6 +346,7 @@ public class DbConnector {
                     .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
                     .and(ARTICLE.VALID_TIME.lt(new Timestamp(System.currentTimeMillis())))
                     .orderBy(ARTICLE.LIKE_NUM.desc(),
+                            ARTICLE.CREATE_TIME.desc(),
                             COMMENT.CREATE_TIME.asc())
                     .fetch(
                             r -> new Tuple3<>(
@@ -1122,6 +1123,23 @@ public class DbConnector {
             create.update(USER)
                     .set(USER.PASSWORD, password)
                     .where(USER.ID.eq(Integer.parseInt(userId)))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Increment likes of article
+     */
+    public static void addLikeArticleById(int likes, String articleId) {
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+            create.update(ARTICLE)
+                    .set(ARTICLE.LIKE_NUM, likes)
+                    .where(ARTICLE.ID.eq(Integer.parseInt(articleId)))
                     .execute();
 
         } catch (SQLException e) {

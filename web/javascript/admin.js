@@ -198,11 +198,22 @@ $(document).ready(function () {
     /**
      * add new user by admin
      */
-    $("#add-new-user-admin").on("click", function () {
-        $("#user-table-body").append(
+    $('form#add-new-user-form').on('submit', function(event) {
+        event.preventDefault();
+        console.log($(this).serialize());
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            data: $(this).serialize(),
+            success: function(resp, status) {
+                console.log("newUserId = "+resp);
+                swal("congratulations!", "New user added to our system", "success");
+            },
+            error: function (data, status) {
+                swal("Sorry, there is an error on the form!");
+            }
 
-        )
-
+        });
     });
 
 });

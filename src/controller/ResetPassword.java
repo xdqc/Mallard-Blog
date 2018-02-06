@@ -79,9 +79,6 @@ public class ResetPassword extends Controller{
             String username = req.getParameter("username");
             String userEmail = req.getParameter("sendEmail");
 
-            //userEmail = "mallard.blog@gmail.com";
-
-
             // reads SMTP server setting from web.xml file
             ServletContext context = getServletContext();
             String host = context.getInitParameter("host");
@@ -93,7 +90,9 @@ public class ResetPassword extends Controller{
             //GENERATE A LINK
             String encodePart = encodeResetPasswordLink(userId);
 
-            String link = server + "/reset-password?resetPassword=" + encodePart;
+            String webServer = req.getRequestURL().substring(0, req.getRequestURL().lastIndexOf("/"));
+
+            String link = webServer + "/reset-password?resetPassword=" + encodePart;
 
 
             // Get system properties

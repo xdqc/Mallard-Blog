@@ -64,15 +64,20 @@
                     </tr>
                 </c:forEach>
                 <tr>
-                    <form method="post" action="">
+                    <form id="add-new-user-form" method="post" action="sign-up?signUp=1">
                         <td>Add new user</td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
-                        <td><input type="text" name="" class=""></td>
+                        <td><input type="text" name="userName" class="add-user-text"></td>
+                        <td><input type="text" name="lname" class="add-user-text"></td>
+                        <td><input type="text" name="fname" class="add-user-text"></td>
+                        <td><input type="text" name="email" class="add-user-text"></td>
+                        <td><select  class="form-control" required id="inputGender" name="gender" >
+                            <option name="gender" selected>Please select</option>
+                            <option value="0" name="gender">Female</option>
+                            <option value="1" name="gender">Male</option>
+                            <option value="2" name="gender">Other</option>
+                        </select></td>
+                        <td><input class="form-control" type="date" name="dob" id="inputDob" required></td>
+                        <td><input type="text" name="country" class="add-user-text"></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -187,6 +192,7 @@
     $(function () {
         $("#user-table").tablesorter({
             headers:{
+                8: {sorter: 'text'},
                 10: {sorter: false},
                 11: {sorter: false}
             }
@@ -245,5 +251,13 @@
         text-align: left;
         font-family: Lato, Helvetica, sans-serif;
         font-size: 36px;
+    }
+
+    #user-table td, #user-table th {
+        min-width: 100px;
+        max-width: 200px;
+    }
+    #add-new-user-form input{
+        max-width:100px;
     }
 </style>

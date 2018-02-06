@@ -289,3 +289,26 @@ div.article-content{
     padding: 40px;
     background-color: #F6F9FB;
 }
+.show-comment-btn{
+    border: medium none;
+    border-radius: 100px;
+    color: #999;
+    float: right;
+    font-family: Lato, Helvetica, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    margin-right: 9px;
+    margin-top: 9px;
+    padding: 6px 15px;
+}
+.badge-info{
+    background-color: #9BC;
+    width: 40px;
+}
+div.article-likes span{
+    font-variant: small-caps;
+    font-size: 20px;
+    color: salmon;
+    font-weight: bold;
+    line-height: 24px;
+}

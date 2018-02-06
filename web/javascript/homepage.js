@@ -77,11 +77,11 @@ $(document).ready(function () {
     //load user profile panel when user logged in
     $("#load-homepage-user-profile").click();
     //load some articles when page ready
-    for(let i=0; i<5; i++){
+    for(let i=0; i<10; i++){
         (function() {
             setTimeout(function() {
                 $("#load-more-articles").click();
-            }, i * 1200);
+            }, i * 500);
         })(i);
     }
     //show load more btn after 5 sec

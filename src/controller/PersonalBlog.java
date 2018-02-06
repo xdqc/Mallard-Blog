@@ -108,6 +108,23 @@ public class PersonalBlog extends Controller {
         /*edit comment*/
         if (editCommentController(req, resp)) return;
 
+        if (likeArticleController(req, resp)) return;
+
+    }
+
+    private boolean likeArticleController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter("thumbUpArticle") != null) {
+            String articleId = req.getParameter("thumbUpArticle");
+            int likes = Integer.parseInt(req.getParameter("currentLikes").trim());
+            likes++;
+            DbConnector.addLikeArticleById(likes, articleId);
+
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("liked");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -123,7 +140,7 @@ public class PersonalBlog extends Controller {
             if (loadBlog != null) {
                 req.setAttribute("blog", loadBlog);
                 req.setAttribute("id", String.valueOf(loadBlog.getArticle().getId()));
-                req.getRequestDispatcher("WEB-INF/_personal_blog_single_article.jsp").forward(req, resp);
+                req.getRequestDispatcher("WEB-INF/_home_page_single_article.jsp").forward(req, resp);
             } else {
                 resp.setContentType("text/html");
                 resp.setCharacterEncoding("UTF-8");
