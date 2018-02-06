@@ -28,8 +28,6 @@
     background-color: lightgrey;
 }
 
-
-
 body { padding-top: 85px; }
 
 @media screen and (max-width: 768px) {
@@ -43,4 +41,12 @@ body { padding-top: 85px; }
 
 .navbar-inverse{
     border-radius: 0 0 4px 4px;
+}
+
+.dropdown-toggle{
+    margin-left: -13px;
+}
+
+.glyphicon-bell{
+    margin-left: -13px;
 }

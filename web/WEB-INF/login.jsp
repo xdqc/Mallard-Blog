@@ -11,8 +11,8 @@
 <head>
     <%@include file="_head.jsp" %>
     <title>Login</title>
-    <script src="https://www.google.com/recaptcha/api.js"
-            async defer></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style type="text/css">
         body{
             margin: 0 auto;
@@ -92,25 +92,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" style=" margin-left: 4em; margin-top: 1em">
+
+                    <div class="row">
+                        <div class="col-lg-10 col-lg-offset-1">
+                    <div class="form-group" style=" margin-left: 24px; margin-top: 1em">
                         <button  style="width: 20em;" type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                        </div>
                     </div>
                 </form>
 
-
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1">
                     <form action="sign-up?signUp=0" method="post">
-                        <div style="margin-left: 10em">
-                                <p style="color: white"> Need a account ?</p>
+                        <div style="margin-left: 8em">
+                                <p style="color: white; margin-left: -1em;"> Need a account ?</p>
                                 <button type="submit" class="btn btn-default">Sign-up</button>
                             </div>
                     </form>
+                    </div>
                 </div>
-        </div>
-        </div>
-        <div class="col-md-3">
+                 </div>
         </div>
     </div>
 </div>
-
+        <div class="col-md-3">
+        </div>
 </body>
 </html>
