@@ -13,8 +13,6 @@
     top: 0;
 }
 
-
-
 .nav .nav-button{
     white-space: normal;
 }
@@ -26,8 +24,8 @@
     display: block;
 }
 
-#bs-example-navbar-collapse-1 .nav li a:hover{
-    color: lightgrey;
+#bs-example-navbar-collapse-1 .nav li .active > a{
+    background-color: lightgrey;
 }
 
 
