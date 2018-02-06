@@ -16,10 +16,10 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a class="navbar-brand nav-button" href="home-page">
+                    <a class="navbar-brand nav-button" href="home-page" style="margin-left: -31px;">
                         <a class="navbar-brand nav-button active" href="home-page">
                         <span class="glyphicon glyphicon-home"
-                              aria-hidden="true"></span>&nbsp;Home</a></a>&nbsp;&nbsp;&nbsp;
+                              aria-hidden="true"></span>&nbsp;Home</a></a>
                 </li>
             </ul>
 
@@ -28,10 +28,17 @@
                       <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
               </ul>
 
-            <ul class="nav navbar-nav navbar-right">
+              <ul class="nav navbar-nav">
+                  <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
+                  Us</a></li>
+              </ul>
+
+            <ul class="nav navbar-nav navbar-right" style="margin-left: 0px;">
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
                     <c:set var="user" value="${sessionScope.get('loggedInUser')}"/>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true">
+                        </span>&nbsp;${sessionScope.get('loggedInUser').getUserName()}</a>
                     <ul class="dropdown-menu">
                         <li><a href="edit_profile.jsp">Edit Profile</a></li>
                         <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a>
@@ -61,8 +68,7 @@
                         </c:if>
                     </div>
                 </li>
-                <li><a class="navbar-brand" href="contact"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;Contact
-                    Us</a></li>
+
             </ul>
             <form class="navbar-form navbar-right" action="search" method="get">
                 <div class="form-group">
