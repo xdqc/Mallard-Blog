@@ -9,7 +9,7 @@ $(document).ready(function () {
         console.log(email);
         $.ajax({
             type: 'POST',
-            url: 'admin',
+            url: 'reset-password',
             data: {
                 sendEmail: email,
                 userId: userId,
