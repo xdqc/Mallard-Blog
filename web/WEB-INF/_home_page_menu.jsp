@@ -30,10 +30,10 @@ String navbar = request.getParameter("nav");
 
 if (navbar != null && navbar.equals("Personal Blog"))
 {
-    out.print("background: #f2184f");
+    out.print("color: #f2184f");
 }
 %>"><a class="navbar-brand nav-button" href="personal-blog?userId=${sessionScope.get("loggedInUser").getId()}">
-                      <span class="fa fa-user-o" aria-hidden="true"></span>&nbsp;Personal Blog</a></li>
+                      <span class="fa fa-user-o" aria-hidden="true"></span>Personal Blog</a></li>
               </ul>
 
               <ul class="nav navbar-nav">
@@ -64,12 +64,12 @@ if (navbar != null && navbar.equals("Personal Blog"))
                     <div class="btn-group" role="group" aria-label="...">
                         <c:if test="${empty sessionScope.get('loggedInUser')}">
                             <form action="login?login=0" method="post" style="margin-bottom: 0px; margin-top: 8px;">
-                                <button type="submit" class="btn btn-default">Login/SignUp</button>&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-default" style="margin-left: 15px;">&nbsp;Login/SignUp</button>&nbsp;&nbsp;
                             </form>
                         </c:if>
                         <c:if test="${not empty sessionScope.get('loggedInUser')}">
                             <form action="login?logout=1" method="post" style="margin-bottom: 0px; margin-top: 8px;">
-                                <button type="submit" class="btn btn-default" role="button">Logout</button>&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-default" role="button" style="margin-left: 15px;">&nbsp;Logout</button>&nbsp;&nbsp;
                             </form>
                         </c:if>
                     </div>
