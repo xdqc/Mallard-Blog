@@ -551,6 +551,29 @@ public class DbConnector {
     }
 
     /**
+     * Get the activated attachment by entity(article/comment/user) id.
+     * when entityId is a article id, return this article's activated attachment
+     * when entityId is a comment id, return this comment's activated attachment
+     * when entityId is a user id, return this user's activated attachment
+     **/
+    public static AttachmentRecord getActiavedAttachment(String entityId, String attachType) {
+        AttachmentRecord attachments = null;
+        try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
+            DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+            attachments = create
+                    .select(ATTACHMENT.fields())
+                    .from(ATTACHMENT)
+                    .where(ATTACHMENT.OWNBY.eq(Integer.parseInt(entityId)))
+                    .and(ATTACHMENT.ATTACH_TYPE.eq(attachType))
+                    .and(ATTACHMENT.ISACTIVATE.eq((byte)1))
+                    .fetchAny()
+                    .into(AttachmentRecord.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return attachments;
+    }
+    /**
      * delete attachment by attachment id.
      **/
     public static void deleteAttachmentById(String attachmentId) {
@@ -828,9 +851,7 @@ public class DbConnector {
     }
 
     /**
-     *
-     * @param user
-     * @return
+     * Get the newly sign up user
      */
     public static int getNewlySignedUser(UserRecord user) {
         int newUserId =0;
@@ -922,7 +943,7 @@ public class DbConnector {
      * show article by article id
      * @param articleId
      */
-    public static void showAritcleById(String articleId) {
+    public static void showArticleById(String articleId) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
@@ -941,7 +962,7 @@ public class DbConnector {
      * hide article by article id
      * @param articleId
      */
-    public static void hideAritcleById(String articleId) {
+    public static void hideArticleById(String articleId) {
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 

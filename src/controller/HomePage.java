@@ -63,6 +63,7 @@ public class HomePage extends Controller {
             req.setAttribute("country", user.getCountry());
             req.setAttribute("description", user.getDescription());
             req.setAttribute("age", age);
+            req.setAttribute("userId", user.getId());
 
             req.getRequestDispatcher("WEB-INF/_home_page_profile.jsp").forward(req, resp);
             cleanAllParameters(req);

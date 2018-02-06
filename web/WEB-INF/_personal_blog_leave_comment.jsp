@@ -20,13 +20,13 @@
             <!-- collapse style upload file begin-->
 
             <div id="uploadArea-${blog.getArticle().getId()}" class="collapse upload-area">
-                <form class="uploadForm" id="uploadForm-${blog.getArticle().getId()}" action="/File-Upload?commentId=0" method="post" enctype="multipart/form-data">
+                <form class="uploadForm" id="uploadForm-a-comment-${blog.getArticle().getId()}" action="/File-Upload?commentId=0" method="post" enctype="multipart/form-data">
                     <fieldset id="files-commentToArticle-${blog.getArticle().getId()}">
                         <legend>Select your file</legend>
                         <input id ="file" type="file" name="file">
                         <input type="button" value="Add more files" onclick="addFileInput('${blog.getArticle().getId()}','commentToArticle')"><br>
                     </fieldset>
-                    <input id="uploadButton-comment-${blog.getArticle().getId()}" class="upload-buttons" type = "submit" value = "Upload" style="display: none">
+                    <input id="uploadButton-a-comment-${blog.getArticle().getId()}" class="upload-buttons" type = "submit" value = "Upload" style="display: none">
                 </form>
                 <div id="uploadedFilesArea"></div>
             </div>

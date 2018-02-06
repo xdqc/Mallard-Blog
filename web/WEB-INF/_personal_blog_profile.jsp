@@ -1,6 +1,7 @@
 <%--personal information panel--%>
 <div class="panel user-panel" id="user-panel-${user.getId()}" data-spy="affix" data-offset-top="200">
-    <img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300" alt="panel image cap">
+    <!--img class="panel-img-top img-responsive" src="http://i.pravatar.cc/300" alt="panel image cap"-->
+    <div id="showActivatedMultimedia-user-${blog.getArticle().getId()}" class="activated-multimedia"></div>
     <div class="panel-body" style="padding:10px;">
         <h5 class="panel-title">${fname} ${lname}
             <c:if test="${gender==0}">

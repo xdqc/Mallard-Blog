@@ -37,6 +37,7 @@
         <param-name>pass</param-name>
         <param-value>aoeuidht</param-value>
     </context-param>
+    <!-- SMTP settings end -->
 
     <servlet>
         <servlet-name>home-page</servlet-name>
@@ -160,6 +161,26 @@
     <servlet-mapping>
         <servlet-name>FileManage</servlet-name>
         <url-pattern>/File-Manage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ActivatedMultimedia</servlet-name>
+        <servlet-class>controller.ActiveAttachment</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ActivatedMultimedia</servlet-name>
+        <url-pattern>/Activated-Multimedia</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ResetPassword</servlet-name>
+        <servlet-class>controller.ResetPassword</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ResetPassword</servlet-name>
+        <url-pattern>/reset-password</url-pattern>
     </servlet-mapping>
 
 </web-app>
