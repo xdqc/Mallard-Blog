@@ -66,7 +66,7 @@
 
                 <h4>Please reset your password, ${user.getUserName()}</h4>
 
-                <form id="reset-pw-form" method="post" action="admin?passwordReset=${user.getId()}&username=${user.getUserName()}"
+                <form id="reset-pw-form" method="post" action="reset-password?passwordReset=${user.getId()}&username=${user.getUserName()}"
                       class="reset-pw-form" role="form" data-toggle="validator">
                     <div class="row">
                         <div class="col-lg-10 col-lg-offset-1">

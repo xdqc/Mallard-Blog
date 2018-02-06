@@ -173,4 +173,14 @@
         <url-pattern>/Activated-Multimedia</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ResetPassword</servlet-name>
+        <servlet-class>controller.ResetPassword</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ResetPassword</servlet-name>
+        <url-pattern>/reset-password</url-pattern>
+    </servlet-mapping>
+
 </web-app>
