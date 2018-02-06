@@ -33,7 +33,7 @@ public class ActiveAttachment extends Controller {
         }
         resp.setContentType("text/html");
         if(result.equals("")) {
-            resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
+            resp.getWriter().write("<p>There is no multimedia. Please upload some what you like.<p>");
         }else{
             resp.getWriter().write(result);
         }

@@ -48,9 +48,6 @@ public class SignUp extends Controller {
             return;
         }
 
-        if (loggedUserRedirectTo("edit_profile.jsp", req, resp))
-            return;
-
 
         if (redirectTo("signUp=0", "WEB-INF/sign_up.jsp", req, resp))
             return;
@@ -81,7 +78,8 @@ public class SignUp extends Controller {
             user.setDescription(req.getParameter("description"));
             user.setIsvalid(Byte.valueOf(isValid));
 
-            String encodedPassword = hashingPassword(req.getParameter("password"), user);
+            String rawPassword = req.getParameter("password") == null? "password": req.getParameter("password");
+            String encodedPassword = hashingPassword(rawPassword, user);
             user.setPassword(encodedPassword);
 
             cleanAllParameters(req);
@@ -98,7 +96,6 @@ public class SignUp extends Controller {
             return;
         }
 
-
         if (req.getParameter("chooseAvatar") != null) {
             String newUserId = req.getParameter("newUserId");
 
@@ -107,11 +104,8 @@ public class SignUp extends Controller {
             return;
         }
 
-        //todo change attatchment db to setup avatar for that new user
         if (req.getParameter("setupAvatarFor") != null) {
             String newUserId = req.getParameter("setupAvatarFor");
-            //TODO PROCESS THE AVATAR FORM DATA
-
 
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
@@ -119,6 +113,8 @@ public class SignUp extends Controller {
             return;
         }
 
+        if (loggedUserRedirectTo("edit_profile.jsp", req, resp))
+            return;
 
     }
 

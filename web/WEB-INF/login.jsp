@@ -85,7 +85,7 @@
                     <div class="row">
                         <div class="col-lg-10 col-lg-offset-1">
                             <div class="form-group" style="margin-left: 1em">
-                                <label class="control-label">reCaptcha</label>
+                                <%--<label class="control-label">reCaptcha</label>--%>
                                 <div style="width: 50%">
                                     <div class="g-recaptcha" data-sitekey="6LejNkIUAAAAACjc9YfnAHQm8SHTWp3kaEGrXWcX"></div>
                                 </div>

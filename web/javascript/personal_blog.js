@@ -497,6 +497,40 @@ $(document).ready(function () {
         });
     }
 
+    $(document).on("click", "a.thumb-up", function (e) {
+        e.preventDefault();
+       const articleId = entityId($(this));
+        let likes = $("#like-number-"+articleId).text();
+        $.ajax({
+            type: 'POST',
+            url: 'personal-blog',
+            data: {
+                thumbUpArticle: articleId,
+                currentLikes: likes
+            },
+            cache: false,
+            beforeSend: () => {
+            },
+            success: (resp) => {
+                likes++;
+                $("#like-number-"+articleId).html(likes+" <span class='fa fa-thumbs-up'></span>");
+            },
+            error: (msg, status) => {
+                console.log("error of thumb up!!!");
+                console.log(status);
+                console.log(msg);
+            },
+            complete: () => {
+                articleActionsHandler($(".accordion-bar"));
+                // event binding for ajax loaded area
+                if (!$articlePanel.hasClass("clickable-active")) {
+                    articleActions(articleId);
+                    $articlePanel.addClass("clickable-active");
+                }
+            }
+        });
+    });
+
 
     /**
      --   ██████╗ ██████╗ ███╗   ███╗███╗   ███╗███████╗███╗   ██╗████████╗

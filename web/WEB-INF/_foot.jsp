@@ -15,8 +15,8 @@
     </div>
 <div class="footer-copyright">
     <br>
-    <div class="container">
-        ©2017 Mallard Blog, All rights reserved
+    <div class="container" style="margin: 0 auto">
+        &copy; 2017 Mallard Blog, All rights reserved
     </div>
     <br>
 </div>
