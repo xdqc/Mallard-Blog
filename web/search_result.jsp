@@ -38,7 +38,7 @@
                 <tbody>
                 <c:forEach var="user" items="${userResults}">
                     <tr>
-                        <td class="markCol"><a href="personal-blog?userId=${user.getId()}">${user.getUserName()}</td>
+                        <td class="markCol"><a href="personal-blog?userId=${user.getId()}">${user.getUserName()}</a></td>
                         <td>${user.getLName()}</td>
                         <td>${user.getFName()}</td>
                         <td>${user.getEmail()}</td>
@@ -106,7 +106,7 @@
     });
 
     $(document).ready(function () {
-        const str = $("#searchStr").html()
+        const str = $("#searchStr").html();
         $(".markCol").mark(str);
     })
 </script>

@@ -116,7 +116,7 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
 
 
                     const $dd = ($("<dd class='comment status-upload'>").text(comment.content)).appendTo($dl);
-                    const $ddd = ($("<div class='comment-action-btn'>")).appendTo($dd)
+                    ($("<div class='comment-action-btn'>")).appendTo($dd)
                         .append(replyBtn).append(editBtn).append(deleteBtn)
                         .append($("<span class='comment-media-text'>").html("&nbsp;&nbsp;Media Gallery&nbsp;"))
                         .append(showCommentMedia).append(activateCommentMedia).append(deleteCommentMedia);
@@ -146,6 +146,7 @@ const showCascadingComments = (commentTree, $parent, numComments) => {
                 }
             }
         } else {
+            /*This is a exploitation of var hijacking*/
             //The first elem in commentArr will ALWAYS be a commentObj, so $dl will be initialized
             showCascadingComments(commentArr, $dl, numComments);
         }
@@ -663,7 +664,6 @@ $(document).ready(function () {
          */
         $commentArea.on("click", ".reply-comment-btn", function (e) {
             e.preventDefault();
-            const articleId = entityId($(e.delegateTarget));
             const cmtId = entityId($(this));
             const replyForm = $("#popup-reply-" + cmtId);
             replyForm.slideDown();
@@ -677,7 +677,6 @@ $(document).ready(function () {
          */
         $commentArea.on("click", ".edit-comment-btn", function (e) {
             e.preventDefault();
-            const articleId = entityId($(e.delegateTarget));
             const cmtId = entityId($(this));
             const editForm = $("#popup-edit-" + cmtId);
             editForm.slideDown();

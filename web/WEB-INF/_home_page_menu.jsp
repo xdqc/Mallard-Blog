@@ -4,7 +4,7 @@
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <li><img src="/pictures/Logo.png" alt="Logo" width="80"  height="50" style="float: left; margin-top: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                        <li><img src="pictures/Logo.png" alt="Logo" width="80"  height="50" style="float: left; margin-top: 11px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                                 data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="float: right">
                             <span class="sr-only">Toggle navigation</span>
@@ -33,7 +33,7 @@
                   Us</a></li>
               </ul>
 
-            <ul class="nav navbar-nav navbar-right" style="margin-left: 0px;">
+            <ul class="nav navbar-nav navbar-right" style="margin-left: 0;">
                 <c:if test="${not empty sessionScope.get('loggedInUser')}">
                     <c:set var="user" value="${sessionScope.get('loggedInUser')}"/>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -57,12 +57,12 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="...">
                         <c:if test="${empty sessionScope.get('loggedInUser')}">
-                            <form action="login?login=0" method="post" style="margin-bottom: 0px; margin-top: 8px;">
+                            <form action="login?login=0" method="post" style="margin-bottom: 0; margin-top: 8px;">
                                 <button type="submit" class="btn btn-default">Login/SignUp</button>&nbsp;&nbsp;
                             </form>
                         </c:if>
                         <c:if test="${not empty sessionScope.get('loggedInUser')}">
-                            <form action="login?logout=1" method="post" style="margin-bottom: 0px; margin-top: 8px;">
+                            <form action="login?logout=1" method="post" style="margin-bottom: 0; margin-top: 8px;">
                                 <button type="submit" class="btn btn-default" role="button">Logout</button>&nbsp;&nbsp;
                             </form>
                         </c:if>

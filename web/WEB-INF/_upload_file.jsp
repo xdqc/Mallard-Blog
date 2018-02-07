@@ -8,7 +8,7 @@
   Time: 2:14 PM
   To change this template use File | Settings | File Templates.
 --%>
-<form id="uploadForm" action="/File-Upload?" method="post" enctype="multipart/form-data">
+<form id="uploadForm" action="File-Upload?" method="post" enctype="multipart/form-data">
     <fieldset id="files">
         <legend>Select your file</legend>
         <input id ="file" type="file" name="file" /><input type="button" value="Add more files" onclick="addFileInput()"><br>

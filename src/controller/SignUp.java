@@ -113,8 +113,8 @@ public class SignUp extends Controller {
             return;
         }
 
-        if (loggedUserRedirectTo("edit_profile.jsp", req, resp))
-            return;
+        if (loggedUserRedirectTo("edit_profile.jsp", req, resp)) {
+        }
 
     }
 

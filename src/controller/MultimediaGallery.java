@@ -27,22 +27,22 @@ public class MultimediaGallery extends Controller {
         }
         //get all articles sort by like number
         List<AttachmentRecord> attachments ;
-        if(userID == null || user.equals("")){
+        if(userID == null || userID.equals("")){
             attachments = DbConnector.getAllAttachments(attachmentId,attachType);
         }else{
             attachments = DbConnector.getAttachmentsByUserId(userID,attachmentId);
         }
         req.setAttribute("attachments", attachments);
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (AttachmentRecord attachment : attachments) {
-            result += "<a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.jpg\" alt=\"" + attachment.getFilename() + "\"></a>";
+            result.append("<a href=\"").append(attachment.getPath()).append(attachment.getFilename()).append(".").append(attachment.getMime()).append("\"><img src=\"").append(attachment.getPath()).append(attachment.getFilename()).append("_thumbnail.jpg\" alt=\"").append(attachment.getFilename()).append("\"></a>");
         }
         resp.setContentType("text/html");
-        if(result.equals("")) {
+        if(result.toString().equals("")) {
             resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
         }else{
-            resp.getWriter().write(getShowString(result));
+            resp.getWriter().write(getShowString(result.toString()));
         }
     }
 
@@ -53,11 +53,8 @@ public class MultimediaGallery extends Controller {
 
 
     private String getShowString(String insertContent){
-        String result =
-//                "    <script type=\"text/javascript\" src=\"../javascript/jquery.js\"></script>\n" +
-                "    <script type=\"text/javascript\" src=\"../javascript/html5gallery.js\"></script>\n" +
-                "<div id=\"imagesShowing\" style=\"display:none;\" class=\"html5gallery\" data-skin=\"horizontal\" data-responsive=\"true\" >\n" + insertContent + "</div>\n" ;
-//        data-width="800" data-height="600"
-        return result;
+        //        data-width="800" data-height="600"
+        return "    <script type=\"text/javascript\" src=\"../javascript/html5gallery.js\"></script>\n" +
+        "<div id=\"imagesShowing\" style=\"display:none;\" class=\"html5gallery\" data-skin=\"horizontal\" data-responsive=\"true\" >\n" + insertContent + "</div>\n";
     }
 }

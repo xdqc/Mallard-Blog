@@ -39,6 +39,7 @@
     <script type="text/javascript" src="javascript/moment-with-locales.js"></script>
 
     <script type="text/javascript">
+        /*do not delete */
         let loggedInUser = ${sessionScope.get('loggedInUser')==null?0:sessionScope.get('loggedInUser').getId()};
     </script>
 

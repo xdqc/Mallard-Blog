@@ -21,8 +21,6 @@ public class HomePage extends Controller {
         //get all articles sort by like number
         //List<Blog> blogList = DbConnector.getHotBlogsSort();
         List<Blog> blogList = null;
-        req.setAttribute("blogs", blogList);
-
 
 
         //when the user is a visitor, the user can visit the homepage
@@ -34,6 +32,7 @@ public class HomePage extends Controller {
 
 
         // user will not edit article on homepage
+        req.setAttribute("blogs", blogList);
         req.setAttribute("browsingUser", null);
         req.getRequestDispatcher("/home_page.jsp").forward(req, resp);
     }

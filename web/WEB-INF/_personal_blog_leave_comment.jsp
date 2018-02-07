@@ -20,7 +20,7 @@
             <!-- collapse style upload file begin-->
 
             <div id="uploadArea-${blog.getArticle().getId()}" class="collapse upload-area">
-                <form class="uploadForm" id="uploadForm-a-comment-${blog.getArticle().getId()}" action="/File-Upload?commentId=0" method="post" enctype="multipart/form-data">
+                <form class="uploadForm" id="uploadForm-a-comment-${blog.getArticle().getId()}" action="File-Upload?commentId=0" method="post" enctype="multipart/form-data">
                     <fieldset id="files-commentToArticle-${blog.getArticle().getId()}">
                         <legend>Select your file</legend>
                         <input id ="file" type="file" name="file">

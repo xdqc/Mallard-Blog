@@ -33,35 +33,24 @@ public class FileUtilities {
     }
 
     //save the file information into database
-    public static boolean saveInformationToDB(String filename,String path, String mime, String attachType, Integer ownby){
-        return DbConnector.saveAttachmentRecord(new AttachmentRecord(null,filename, path, mime, attachType, ownby, new Byte("0")));
+    public static void saveInformationToDB(String filename, String path, String mime, String attachType, Integer ownby){
+        DbConnector.saveAttachmentRecord(new AttachmentRecord(null, filename, path, mime, attachType, ownby, new Byte("0")));
     }
 
     //check the media type is valid
     public static boolean checkMultimediaType(String extend){
-        if(extend.equals("jpg") || extend.equals("png") || extend.equals("mp4")
-                || extend.equals("mpg")|| extend.equals("mpeg")|| extend.equals("avi")
-                /*
-                || extend.equals("wmv")|| extend.equals("mov")|| extend.equals("rm")
-                || extend.equals("ram")|| extend.equals("swf")|| extend.equals("flv")
-                || extend.equals("ogg")|| extend.equals("webm")|| extend.equals("mp3")
-                || extend.equals("wav")|| extend.equals("wma")|| extend.equals("wav")
-                */
-                ){
-            return true;
-        }
-        return false;
+        return extend.equals("jpg") || extend.equals("png") || extend.equals("mp4")
+                || extend.equals("mpg") || extend.equals("mpeg") || extend.equals("avi");
     }
 
     //combine the inserting string and return the show content
     public static String getShowingString(String insertString){
-        String result = "<form id=\"resultForm\">\n" +
+        return "<form id=\"resultForm\">\n" +
                 "    <fieldset>\n" +
                 "        <legend>Your uploaded file</legend>\n" +
                 insertString +
                 "    </fieldset>\n" +
                 "</form>";
-        return result;
     }
 
     //deal with direction

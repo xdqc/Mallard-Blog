@@ -37,7 +37,7 @@ public class AttachmentManage extends Controller {
     }
 
     //generate active list
-    private void generateActiveList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws ServletException, IOException{
+    private void generateActiveList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws IOException{
         String attachmentId = req.getParameter("entityId");
         String parameterName = req.getParameter("parameterName");
         if(ownby != null){
@@ -57,36 +57,29 @@ public class AttachmentManage extends Controller {
         //get all articles sort by like number
         List<AttachmentRecord> attachments ;
         attachments = DbConnector.getEntityAttachments(attachmentId,attachType);
-        attachments.forEach( a -> {
-            System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]");
-        });
+        attachments.forEach( a -> System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]"));
         req.setAttribute("attachments", attachments);
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (AttachmentRecord attachment : attachments) {
-            result += "<tr>";
-            result += "<td>" + attachment.getFilename() + "</td><td><a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.jpg\" alt=\"" + attachment.getFilename() + "\"></a></td>";
+            result.append("<tr>");
+            result.append("<td>").append(attachment.getFilename()).append("</td><td><a href=\"").append(attachment.getPath()).append(attachment.getFilename()).append(".").append(attachment.getMime()).append("\"><img src=\"").append(attachment.getPath()).append(attachment.getFilename()).append("_thumbnail.jpg\" alt=\"").append(attachment.getFilename()).append("\"></a></td>");
             //operate setting
             if(attachment.getIsactivate().toString().equals("0")) {
-                result += "<td>" +
-                        "<span id=\"showMultimedia-Activate-" + parameterName.toLowerCase() + "-" + attachment.getId() + "\" class=\"activate-item btn btn-success\" ><span class=\"fa fa-pencil\"></span>Activate</span>" +
-                        "</td>";
+                result.append("<td>" + "<span id=\"showMultimedia-Activate-").append(parameterName.toLowerCase()).append("-").append(attachment.getId()).append("\" class=\"activate-item btn btn-success\" ><span class=\"fa fa-pencil\"></span>Activate</span>").append("</td>");
             }else{
-                result += "<td>" +
-                        "<span>Activated</span>" +
-                        "</td>";
+                result.append("<td>" + "<span>Activated</span>" + "</td>");
 
             }
 
-            result += "</tr>";
+            result.append("</tr>");
         }
         resp.setContentType("text/html");
-        if(result.equals("")) {
+        if(result.toString().equals("")) {
             resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
         }else{
-            resp.getWriter().write(getShowString(result,attachmentId));
+            resp.getWriter().write(getShowString(result.toString(),attachmentId));
         }
-        return;
     }
 
     @Override
@@ -96,7 +89,7 @@ public class AttachmentManage extends Controller {
 
 
     private String getShowString(String insertContent,String articleId){
-        String result ="<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
+        return "<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
                 + insertContent +
                 "</table>"
                 + "<script>\n" +
@@ -127,8 +120,6 @@ public class AttachmentManage extends Controller {
                 "        }\n" +
                 "    });\n" +
                 "})\n" +
-                "</script>\n"
-                ;
-        return result;
+                "</script>\n";
     }
 }

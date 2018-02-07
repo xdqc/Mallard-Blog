@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static controller.Login.hashingPassword;
@@ -27,7 +26,7 @@ import static controller.Login.hashingPassword;
 public class ResetPassword extends Controller{
 
     // Storing the send password link, after ONE time use, remove the link
-    private static Map<String, Tuple<String, byte[]>> activeLink = new ConcurrentHashMap<>();
+    private static final Map<String, Tuple<String, byte[]>> activeLink = new ConcurrentHashMap<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -64,7 +63,6 @@ public class ResetPassword extends Controller{
 
             req.setAttribute("user", user);
             req.getRequestDispatcher("WEB-INF/reset_password.jsp").forward(req, resp);
-            return;
         }
     }
 
@@ -116,7 +114,6 @@ public class ResetPassword extends Controller{
 
 
             // Recipient's email ID needs to be mentioned.
-            String to = userEmail;
             // Sender's email ID needs to be mentioned
 
             try {
@@ -127,7 +124,7 @@ public class ResetPassword extends Controller{
                 message.setFrom(new InternetAddress(user));
 
                 // Set To: header field of the header.
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEmail));
 
                 // Set Subject: header field
                 message.setSubject("Reset password link! - from Mallard-Blog.co.nz");
@@ -171,7 +168,6 @@ public class ResetPassword extends Controller{
 
             cleanAllParameters(req);
             req.getRequestDispatcher("login?login=0").forward(req, resp);
-            return;
         }
     }
 

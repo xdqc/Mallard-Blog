@@ -166,7 +166,6 @@ public class Admin extends Controller {
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write("commentId= "+commentId+" is hidden.");
-            return;
         }
 
     }

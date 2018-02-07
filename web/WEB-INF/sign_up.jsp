@@ -13,6 +13,7 @@
     <%@include file="_head.jsp"%>
     <title>Create Account</title>
     <style type="text/css">
+        /*do not delete*/
         div.thumb-holder {
             padding: 10px 5px;
             height: 100%;
@@ -22,12 +23,11 @@
             background-color: white;
         }
         div#thumbview {
-            margin: auto;
             width: 1120px;
             min-width: 1120px;
             height: 130px;
-            margin-top: 40px;
-            padding: 0px 5px;
+            margin: 40px auto auto;
+            padding: 0 5px;
             box-sizing: border-box;
         }
         div#thumbview img {

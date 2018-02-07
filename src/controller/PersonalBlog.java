@@ -108,11 +108,12 @@ public class PersonalBlog extends Controller {
         /*edit comment*/
         if (editCommentController(req, resp)) return;
 
-        if (likeArticleController(req, resp)) return;
+        if (likeArticleController(req, resp)) {
+        }
 
     }
 
-    private boolean likeArticleController(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private boolean likeArticleController(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (req.getParameter("thumbUpArticle") != null) {
             String articleId = req.getParameter("thumbUpArticle");
             int likes = Integer.parseInt(req.getParameter("currentLikes").trim());
@@ -368,7 +369,6 @@ public class PersonalBlog extends Controller {
             if (comment.getShowHideStatus() == 1 && commenter.getIsvalid() == 1) {
 
                 JSONObject commentJson = new JSONObject();
-                assert commenter != null;
                 commentJson.put("articleAuthorId", articleAuthor.getId());
                 commentJson.put("commenterId", commenter.getId());
                 commentJson.put("commenter", commenter.getFName() + " " + commenter.getLName());

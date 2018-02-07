@@ -1,13 +1,13 @@
-<%--personal information card--%>
-    <div class="card">
-        <img class="card-img-top img-thumbnail img-rounded" src="http://i.pravatar.cc/300?u=${userId}" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title">${fname} ${lname}
+<%--personal information panel--%>
+    <div class="panel">
+        <img class="panel-img-top img-thumbnail img-rounded" src="http://i.pravatar.cc/300?u=${userId}" alt="panel image cap">
+        <div class="panel-body">
+            <h5 class="panel-title">${fname} ${lname}
                 ${gender==0? '<span class="fa fa-venus" style="color:hotpink"></span>'
                 :gender==1?'<span class="fa fa-mars" style="color:DEEPSKYBLUE"></span>'
                 :'<span class="fa fa-2x fa-venus-mars fa-gradient"></span>'}
             </h5>
-            <p class="card-text">${description}</p>
+            <p class="panel-text">${description}</p>
         </div>
         <dl class="list-group">
             <div class="list-group-item item-list">
