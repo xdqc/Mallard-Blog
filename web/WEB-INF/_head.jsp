@@ -24,6 +24,8 @@
     <%--jquery-timeago--%>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.1/jquery.timeago.js"
             integrity="sha256-eAM7NHrUqBdkWBYcUVaGo55W9YMG8UAQIceYOf9xnjg=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/en-nz.js" integrity="sha256-mlQNJjxrjuiJvrKTfLRsEGg6cTWQJ6sqwMEMyiM10Ws=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js" integrity="sha256-XWrGUqSiENmD8bL+BVeLl7iCfhs+pkPyIqrZQcS2Te8=" crossorigin="anonymous"></script>
 
     <%--sweet-alert--%>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"
@@ -60,4 +62,26 @@
     <link rel="stylesheet" href="css/personal_panel.css">
     <link rel="stylesheet" href="css/footer.css"/>
     <link rel="stylesheet" href="css/homepage_profile.css">
+
+        <%--favicon--%>
+        <link rel="apple-touch-icon" sizes="57x57" href="pictures/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="pictures/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="pictures/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="pictures/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="pictures/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="pictures/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="pictures/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="pictures/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="pictures/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="pictures/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="pictures/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="pictures/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="pictures/favicon/favicon-16x16.png">
+        <link rel="shortcut icon" href="pictures/favicon/favicon-32x32.png" type="image/x-icon">
+
+        <link rel="manifest" href="pictures/favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
 </head>

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="f17bbfd0-4991-427f-8920-1bf5f6947acb" name="Deployment" url="http://localhost:8080">
-        <fileTransfer port="0" accessType="LOCAL" />
+      <webServer id="f17bbfd0-4991-427f-8920-1bf5f6947acb" name="Deployment" url="https://sporadic.nz/mallard-blog">
+        <fileTransfer host="sporadic.nz" port="22" accessType="SFTP">
+          <option name="port" value="22" />
+        </fileTransfer>
       </webServer>
     </option>
   </component>

@@ -438,8 +438,9 @@ $(document).ready(function () {
 
                     //change the uploadArea form $div action parameter to newly created articleId
                     $("#uploadForm-article-" + articleId).attr("action", "/File-Upload?articleId=" + uploadArticleId);
-                    $("#uploadButton-article-" + articleId).click();
-
+                    if ($("input#file").get(0).file.length !== 0) {
+                        $("#uploadButton-article-" + articleId).click();
+                    }
                 },
                 error: (msg, status) => {
                     console.log("error publishing article!!");
@@ -500,8 +501,8 @@ $(document).ready(function () {
 
     $(document).on("click", "a.thumb-up", function (e) {
         e.preventDefault();
-       const articleId = entityId($(this));
-        let likes = $("#like-number-"+articleId).text();
+        const articleId = entityId($(this));
+        let likes = $("#like-number-" + articleId).text();
         $.ajax({
             type: 'POST',
             url: 'personal-blog',
@@ -514,7 +515,7 @@ $(document).ready(function () {
             },
             success: (resp) => {
                 likes++;
-                $("#like-number-"+articleId).html(likes+" <span class='fa fa-thumbs-up'></span>");
+                $("#like-number-" + articleId).html(likes + " <span class='fa fa-thumbs-up'></span>");
             },
             error: (msg, status) => {
                 console.log("error of thumb up!!!");
@@ -589,7 +590,10 @@ $(document).ready(function () {
                     // if comments nested too deep, remove the left margin
                     $('dl.comment').each(function () {
                         if ($(this).width() < 500) {
-                            $(this).css('margin', '10px -10px 10px -8px');
+                            $(this).css('margin', '10px -12px 10px -8px');
+                        }
+                        if ($(this).width() < 400) {
+                            $(this).css('margin', '10px -15px 10px -13px');
                         }
                     });
                 }
@@ -642,7 +646,10 @@ $(document).ready(function () {
 
                 //change the uploadArea form $div action parameter to newly created articleId
                 $("#uploadForm-a-comment-" + articleId).attr("action", "/File-Upload?commentId=" + uploadCommentId);
-                $("#uploadButton-a-comment-" + articleId).click();
+
+                if ($("input#file").get(0).file.length !== 0) {
+                    $("#uploadButton-a-comment-" + articleId).click();
+                }
 
             },
             error: (msg, status) => {
@@ -726,7 +733,9 @@ $(document).ready(function () {
 
                     //change the uploadArea form $div action parameter to newly created articleId
                     $("#uploadForm-comment-" + cmtId).attr("action", "/File-Upload?commentId=" + uploadCommentId);
-                    $("#uploadButton-comment-" + cmtId).click();
+                    if ($("input#file").get(0).file.length !== 0) {
+                        $("#uploadButton-comment-" + cmtId).click();
+                    }
                 },
                 error: (msg, status) => {
                     console.log("error!!!");

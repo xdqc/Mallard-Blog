@@ -16,7 +16,7 @@
     <style type="text/css">
         body{
             margin: 0 auto;
-            background: url("../pictures/backs.jpg") no-repeat;
+            background: url("${contextPath}/pictures/backs.jpg") no-repeat;
             background-size: 100% 1024px;
         }
         #bg{

@@ -180,6 +180,7 @@ $(document).ready(function () {
     $(document).on("click", '.uploadButton', function(e) {
         //console.log(e);
         const uploadingImg = $("img.uploading-img");
+
         $.ajax({
             url : 'File-Upload',
             data : {

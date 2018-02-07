@@ -60,6 +60,7 @@ public abstract class Controller extends HttpServlet {
         String[] paramsFrom = paramFrom.split("=");
         if (req.getParameter(paramsFrom[0]) !=null && req.getParameter(paramsFrom[0]).equals(paramsFrom[1])){
             cleanAllParameters(req);
+            req.setAttribute("contextPath", req.getContextPath());
             req.getRequestDispatcher(target).forward(req, resp);
             return true;
         }
@@ -79,6 +80,7 @@ public abstract class Controller extends HttpServlet {
             action.accept(req.getSession(false));
 
             cleanAllParameters(req);
+            req.setAttribute("contextPath", req.getContextPath());
             req.getRequestDispatcher("home-page").forward(req, resp);
             return true;
         }
@@ -94,6 +96,7 @@ public abstract class Controller extends HttpServlet {
 
         if (getLoggedUserFromSession(req) != null){
             cleanAllParameters(req);
+            req.setAttribute("contextPath", req.getContextPath());
             req.getRequestDispatcher(target).forward(req, resp);
             return true;
         }
