@@ -1,4 +1,4 @@
-.panel .profile-panel{
+.profile-panel{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     max-width: 300px;
     margin: auto;
@@ -7,11 +7,11 @@
     background-color: beige;
 }
 
-.panel-title .profile-panel-title{
+.profile-panel-title{
     color: #333333;
 }
 
-.panel-text .profile-panel-text{
+.profile-panel-text{
     color: #333333;
 }
 

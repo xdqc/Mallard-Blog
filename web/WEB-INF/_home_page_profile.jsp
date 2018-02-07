@@ -7,14 +7,14 @@
                 :gender==1?'<span class="fa fa-mars" style="color:DEEPSKYBLUE"></span>'
                 :'<span class="fa fa-2x fa-venus-mars fa-gradient"></span>'}
             </h5>
-            <p class="panel-text profile-panel-text">${description}</p>
+            <p class="panel-text " style="padding-top: 10px; padding-bottom: 10px;">${description}</p>
         </div>
-        <dl class="list-group">
+        <dl class="list-group profile-panel-text">
             <div class="list-group-item item-list">
-                <dt><span class="fa fa-map-marker"></span> Posts:&nbsp;${post_number} </dt>
+                <dt><span class="fa fa-file"></span> Posts:&nbsp;${post_number} </dt>
             </div>
             <div class="list-group-item item-list">
-                <dt><span class="fa fa-envelope"></span> From:&nbsp;${country}</dt>
+                <dt><span class="fa fa-map-marker"></span> From:&nbsp;${country}</dt>
             </div>
             <div class="list-group-item item-list">
                 <dt><span class="fa fa-heart"></span> Age:&nbsp; ${age}</dt>
