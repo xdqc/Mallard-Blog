@@ -36,7 +36,7 @@ public class MultimediaGallery extends Controller {
 
         String result = "";
         for (AttachmentRecord attachment : attachments) {
-            result += "<a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.png\" alt=\"" + attachment.getFilename() + "\"></a>";
+            result += "<a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.jpg\" alt=\"" + attachment.getFilename() + "\"></a>";
         }
         resp.setContentType("text/html");
         if(result.equals("")) {

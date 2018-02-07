@@ -65,7 +65,7 @@ public class FilesManage extends Controller {
         String result = "";
         for (AttachmentRecord attachment : attachments) {
             result += "<tr>";
-            result += "<td>" + attachment.getFilename() + "</td><td><a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.png\" alt=\"" + attachment.getFilename() + "\"></a></td>";
+            result += "<td>" + attachment.getFilename() + "</td><td><a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.jpg\" alt=\"" + attachment.getFilename() + "\"></a></td>";
             //operate setting
             result += "<td>" +
                     "<span id=\"showMultimedia-Delete-" + parameterName.toLowerCase() + "-" + attachment.getId() + "\" class=\"delete-item btn btn-danger\" ><span class=\"fa fa-trash\"></span>Delete</span>" +
@@ -98,7 +98,6 @@ public class FilesManage extends Controller {
                 "        const attachmentId = getEntityId($(this));\n" +
                 "        const parameterName = getEntityParameterName($(this));\n" +
                 "        const userCheck = isUserCheck($(this));\n" +
-                "        alert(parameterName + attachmentId);\n" +
                 "        if(userCheck.toLowerCase() == \"delete\" ){\n" +
                 "            $.ajax({\n" +
                 "                url : 'File-Manage',\n" +
@@ -107,9 +106,16 @@ public class FilesManage extends Controller {
                 "                    parameterName : parameterName,\n" +
                 "                    operateName : userCheck\n" +
                 "                },\n" +
+                "                beforeSend: () => {\n" +
+                "                    $(\"#load-article-img\").css(\"display\", \"block\");\n" +
+                "                }," +
                 "                success : function(responseText) {\n" +
                 "                    $('#multimediaShowArea-' + parameterName + '-'+" + articleId + ").html(responseText);\n" +
-                "                }\n" +
+                "                    $('#showActivatedMultimedia-' + parameterName + '-'+" + articleId + ").click();\n" +
+                "                },\n" +
+                "                complete: () => {\n" +
+                "                    $(\"#load-article-img\").css(\"display\", \"none\");\n" +
+                "                }" +
                 "            });\n" +
                 "        }\n" +
                 "    });\n" +
@@ -129,7 +135,6 @@ public class FilesManage extends Controller {
                 "        const attachmentId = entityId($(this));\n" +
                 "        const parameterName = entityParameterName($(this));\n" +
                 "        const userCheck = isUserCheck($(this));\n" +
-                "        alert(parameterName + attachmentId);\n" +
                 "        if(userCheck.toLowerCase() == \"delete\" ){\n" +
                 "            $.ajax({\n" +
                 "                url : 'File-Manage',\n" +

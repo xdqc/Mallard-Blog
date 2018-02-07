@@ -1,23 +1,17 @@
 package controller;
 
-import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.UserRecord;
-import db_connector.DbConnector;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import utililties.Blog;
 import utililties.FileUtilities;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -158,10 +152,10 @@ public class FileUpload extends HttpServlet {
                     // save the information into database
                     int userPathId = this.user != null ? this.user.getId() : Integer.parseInt(userId != null ? userId : "0");
 
-                    FileUtilities.saveInformationToDB(theFileName, "/UploadedFile/multimedia/" + userPathId + "/", fileTypeFlag, attachType, ownby);
+                    FileUtilities.saveInformationToDB(theFileName, "UploadedFile/multimedia/" + userPathId + "/", fileTypeFlag, attachType, ownby);
                     //store the result information
-                    fileUploadResultString += "<tr><td>" + theFileName + "</td><td><img src='/UploadedFile/multimedia/"
-                            + userPathId + "/" + theFileName + "_thumbnail.png' alt='" + theFileName + "'></td></tr>";
+                    fileUploadResultString += "<tr><td>" + theFileName + "</td><td><img src='UploadedFile/multimedia/"
+                            + userPathId + "/" + theFileName + "_thumbnail.jpg' alt='" + theFileName + "'></td></tr>";
                 }
             }
             fileUploadResultString += "</table><input type='button' value='Go back' onclick='goBack()'>";
