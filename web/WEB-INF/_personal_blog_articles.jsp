@@ -22,8 +22,6 @@
                 </div>
 
                 <br>
-                <img class="panel-img-top img-rounded img-responsive" src="https://source.unsplash.com/${Math.round((Math.random()*400))+700}x${Math.round((Math.random()*200))+300}/?{food}"
-                     alt="article picture "/>
                 <br>
                 <div id="showActivatedMultimedia-article-${blog.getArticle().getId()}" class="activated-multimedia"></div>
                 <br>
@@ -41,6 +39,10 @@
                     <!-- active pictures -->
                     <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media active-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
                         <span class="fa fa-eyedropper"></span> Activate</a>
+
+                    <img id="load-article-img" src="pictures/big_loading.gif" alt="loading..."
+                         width="200" style="display: none;margin: 400px auto;" aria-hidden="true">
+
                     <!-- show the attachments of this article -->
                     <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media delete-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
                         <span class="fa fa-eye-slash"></span> Delete</a>
