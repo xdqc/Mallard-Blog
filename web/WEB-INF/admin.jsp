@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--suppress SyntaxError --%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -217,6 +218,7 @@
 
 </script>
 <style>
+    /*do not delete*/
     th.tablesorter-headerAsc {
         cursor: pointer;
         background: url(../pictures/small_asc.png) no-repeat center right;

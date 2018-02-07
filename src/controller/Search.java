@@ -1,17 +1,14 @@
 package controller;
 
-import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.UserRecord;
 import db_connector.DbConnector;
-import org.jooq.Record;
 import utililties.Tuple;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +48,6 @@ public class Search extends Controller {
             req.setAttribute("userResults", userResults);
             req.setAttribute("articleResults", articleResults);
             req.getRequestDispatcher("search_result.jsp").forward(req, resp);
-            return;
         }
     }
 

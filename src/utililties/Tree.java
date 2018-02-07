@@ -4,7 +4,6 @@ package utililties;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 
-import java.rmi.activation.ActivationGroup_Stub;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +13,7 @@ public class Tree<T> {
     private T data;
     private Tree<T> root;
 
-    public Tree(){}
+    Tree(){}
 
     public Tree(T rootData) {
         root = this;
@@ -43,7 +42,7 @@ public class Tree<T> {
      * @param node root
      * @param result a list to hold the flatten tree
      */
-    public void traverse(Tree<T> node, List<T> result){       // pre order traversal
+    private void traverse(Tree<T> node, List<T> result){       // pre order traversal
         if (node.data!=null)
             result.add(node.data);
         for(Tree<T> each : node.children) {
@@ -57,7 +56,7 @@ public class Tree<T> {
      * @param s target node
      * @return found node or null
      */
-    public Tree<T> findNode(Tree<T> n, T s) {
+    private Tree<T> findNode(Tree<T> n, T s) {
         if (n.data == s) {
             return n;
         } else {
@@ -97,7 +96,7 @@ public class Tree<T> {
      * @param s target comment's child
      * @return the parent or null
      */
-    public Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> findParentComment(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> n, Tuple3<UserRecord, CommentRecord, UserRecord> s) {
+    Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> findParentComment(Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> n, Tuple3<UserRecord, CommentRecord, UserRecord> s) {
         if (Objects.equals(n.getData().Val2.getId(), s.Val2.getParentComment())) {
             return n;
         } else {

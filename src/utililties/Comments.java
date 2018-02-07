@@ -1,6 +1,5 @@
 package utililties;
 
-import ORM.tables.User;
 import ORM.tables.records.CommentRecord;
 import ORM.tables.records.UserRecord;
 
@@ -10,9 +9,9 @@ import java.util.List;
 
 public class Comments extends Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> implements Serializable{
     private int numComments = 0;
-    private Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = new Tree<>(new Tuple3<>(new UserRecord(), new CommentRecord(), new UserRecord()));
+    private final Tree<Tuple3<UserRecord, CommentRecord, UserRecord>> commentTree = new Tree<>(new Tuple3<>(new UserRecord(), new CommentRecord(), new UserRecord()));
 
-    public Comments(Tuple3<UserRecord, CommentRecord, UserRecord> rootData) {
+    private Comments(Tuple3<UserRecord, CommentRecord, UserRecord> rootData) {
         super(rootData);
     }
 

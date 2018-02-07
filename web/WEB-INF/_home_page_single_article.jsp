@@ -37,7 +37,7 @@
         <div id="article-content-${blog.getArticle().getId()}" class="panel-text article-content">
             ${blog.getArticle().getContent().substring(0, Math.min(140, blog.getArticle().getContent().length()-1))}
 
-            <img id="load-article-content-img-${blog.getArticle().getId()}" src="pictures/loading.gif"
+            <img id="load-article-content-img-${blog.getArticle().getId()}" src="../pictures/loading.gif"
                  alt="loading..."
                  width="45" style="display: none;" aria-hidden="true">
 

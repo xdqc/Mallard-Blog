@@ -16,8 +16,7 @@
     <style type="text/css">
         body {
             margin: 0 auto;
-            background-image: url("../pictures/backs.jpg");
-            background-repeat: no-repeat;
+            background: url("../pictures/backs.jpg") no-repeat;
             background-size: 100% 1024px;
         }
 

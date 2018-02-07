@@ -20,7 +20,7 @@ public class Login extends Controller {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (redirectTo("logout=1", HttpSession::invalidate, "home-page", req, resp))
+        if (redirectTo(HttpSession::invalidate, req, resp))
             return;
 
         if (loggedUserRedirectTo("home-page", req, resp)) {

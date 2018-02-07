@@ -1,17 +1,17 @@
-.card{
+.profile-panel{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     max-width: 300px;
     margin: auto;
     text-align: center;
-    font-family: Arial;
+    font-family: Lato, Helvetica, sans-serif;
     background-color: beige;
 }
 
-.card-title{
+.profile-panel-title{
     color: #333333;
 }
 
-.card-text{
+.profile-panel-text{
     color: #333333;
 }
 

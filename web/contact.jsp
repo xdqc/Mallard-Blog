@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-bottom: 300px">
         <div class="col-md-8">
             <div class="well well-sm">
                 <form>
@@ -78,8 +78,8 @@
                     12 345 6789
                 </address>
                 <address>
-                    <strong>Abc Xyz</strong><br>
-                    <a href="mailto:#">abc123@students.waikato.ac.nz</a>
+                    <strong>Web Master</strong><br>
+                    <a href="mailto:#">mallard.blog@gmail.com</a>
                 </address>
             </form>
         </div>

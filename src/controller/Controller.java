@@ -24,7 +24,7 @@ public abstract class Controller extends HttpServlet {
 
     protected abstract void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;
 
-    protected void cleanAllParameters(HttpServletRequest req){
+    void cleanAllParameters(HttpServletRequest req){
         Enumeration names = req.getParameterNames();
         while(names.hasMoreElements()){
             req.removeAttribute((String)names.nextElement());
@@ -35,7 +35,7 @@ public abstract class Controller extends HttpServlet {
     /**
      * @return Logged User, or null if not logged in
      */
-    protected UserRecord getLoggedUserFromSession(HttpServletRequest req) {
+    UserRecord getLoggedUserFromSession(HttpServletRequest req) {
         // If current session does not exist, then it will NOT create a new session.
         HttpSession session = req.getSession(false);
 
@@ -55,7 +55,7 @@ public abstract class Controller extends HttpServlet {
      * @param target a web page or servlet
      * @return Successfully redirected or not
      */
-    protected boolean redirectTo(String paramFrom, String target, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    boolean redirectTo(String paramFrom, String target, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String[] paramsFrom = paramFrom.split("=");
         if (req.getParameter(paramsFrom[0]) !=null && req.getParameter(paramsFrom[0]).equals(paramsFrom[1])){
@@ -68,20 +68,18 @@ public abstract class Controller extends HttpServlet {
 
     /**
      * Redirect a HttpRequest to target and do something
-     * @param paramFrom parameter in request
      * @param action do something before redirection
-     * @param target a web page or servlet
      * @return Successfully redirected or not
      */
-    protected boolean redirectTo(String paramFrom, Consumer<HttpSession> action, String target, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    boolean redirectTo(Consumer<HttpSession> action, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String[] paramsFrom = paramFrom.split("=");
+        String[] paramsFrom = "logout=1".split("=");
         if (req.getParameter(paramsFrom[0]) !=null && req.getParameter(paramsFrom[0]).equals(paramsFrom[1])){
 
             action.accept(req.getSession(false));
 
             cleanAllParameters(req);
-            req.getRequestDispatcher(target).forward(req, resp);
+            req.getRequestDispatcher("home-page").forward(req, resp);
             return true;
         }
         return false;
@@ -92,7 +90,7 @@ public abstract class Controller extends HttpServlet {
      * @param target a web page or servlet
      * @return Successfully redirected or not
      */
-    protected boolean loggedUserRedirectTo(String target, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    boolean loggedUserRedirectTo(String target, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (getLoggedUserFromSession(req) != null){
             cleanAllParameters(req);

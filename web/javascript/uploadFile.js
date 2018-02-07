@@ -12,27 +12,27 @@ function addFileInput(attachmentId,parameterName) {
 }
 
 //close the window make it look like in the same page
-function goBack() {
-    history.back();
-}
+// function goBack() {
+//     history.back();
+// }
 
 //close the window make it look like in the same page
-function showArticles(parameterName,value) {
-    //alert(parameterName + value);
-    //deal with the multimedia gallery show content
-    $('#showMultimedia-' + parameterName +'-' + value).click(function() {
-        $.ajax({
-            url : 'multimedia-gallery',
-            data : {
-                articleId : value
-            },
-            success : function(responseText) {
-                $('multimediaShowAreatest').html(responseText);
-                $('#multimediaShowArea-' + parameterName +'-' + value).html(responseText);
-            }
-        });
-    });
-}
+// function showArticles(parameterName,value) {
+//     //alert(parameterName + value);
+//     //deal with the multimedia gallery show content
+//     $('#showMultimedia-' + parameterName +'-' + value).click(function() {
+//         $.ajax({
+//             url : 'multimedia-gallery',
+//             data : {
+//                 articleId : value
+//             },
+//             success : function(responseText) {
+//                 $('multimediaShowAreatest').html(responseText);
+//                 $('#multimediaShowArea-' + parameterName +'-' + value).html(responseText);
+//             }
+//         });
+//     });
+// }
 
 $(document).on("load","activated-multimedia",function() {
     const entityId = getEntityId($(this));
@@ -99,7 +99,7 @@ $(document).ready(function () {
                     $("#load-article-img").css("display", "none");
                 }
             });
-        }else if(userCheck.toLowerCase() == "filelist" ){
+        }else if(userCheck.toLowerCase() === "filelist" ){
             $.ajax({
                 url : 'File-Manage',
                 data : {
@@ -117,7 +117,7 @@ $(document).ready(function () {
                     $("#load-article-img").css("display", "none");
                 }
             });
-        }else if(userCheck.toLowerCase() == "delete" ){
+        }else if(userCheck.toLowerCase() === "delete" ){
             $.ajax({
                 url : 'File-Manage',
                 data : {
@@ -135,7 +135,7 @@ $(document).ready(function () {
                     $("#load-article-img").css("display", "none");
                 }
             });
-        }else if(userCheck.toLowerCase() == "showmultimedia" ){
+        }else if(userCheck.toLowerCase() === "showmultimedia" ){
         $.ajax({
             url : 'multimedia-gallery',
             data : {
@@ -152,7 +152,7 @@ $(document).ready(function () {
                 $("#load-article-img").css("display", "none");
             }
         });
-        }else if(userCheck.toLowerCase() == "activatelist" ){
+        }else if(userCheck.toLowerCase() === "activatelist" ){
             $.ajax({
                 url: 'Attachment-Manage',
                 data: {

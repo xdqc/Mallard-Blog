@@ -37,7 +37,7 @@ public class FilesManage extends Controller {
     }
 
     //deal with the file list generation
-    private void generateFileList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws ServletException, IOException{
+    private void generateFileList(HttpServletRequest req, HttpServletResponse resp,String ownby) throws IOException{
         String attachmentId = req.getParameter("entityId");
         String parameterName = req.getParameter("parameterName");
         if(ownby != null){
@@ -57,29 +57,24 @@ public class FilesManage extends Controller {
         //get all articles sort by like number
         List<AttachmentRecord> attachments ;
         attachments = DbConnector.getEntityAttachments(attachmentId,attachType);
-        attachments.forEach( a -> {
-            System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]");
-        });
+        attachments.forEach( a -> System.out.println("a.getId() = [" + a.getId() + "]" + "a.getFilename() = [" + a.getFilename() + "]"));
         req.setAttribute("attachments", attachments);
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (AttachmentRecord attachment : attachments) {
-            result += "<tr>";
-            result += "<td>" + attachment.getFilename() + "</td><td><a href=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\"><img src=\"" + attachment.getPath() + attachment.getFilename() + "_thumbnail.jpg\" alt=\"" + attachment.getFilename() + "\"></a></td>";
+            result.append("<tr>");
+            result.append("<td>").append(attachment.getFilename()).append("</td><td><a href=\"").append(attachment.getPath()).append(attachment.getFilename()).append(".").append(attachment.getMime()).append("\"><img src=\"").append(attachment.getPath()).append(attachment.getFilename()).append("_thumbnail.jpg\" alt=\"").append(attachment.getFilename()).append("\"></a></td>");
             //operate setting
-            result += "<td>" +
-                    "<span id=\"showMultimedia-Delete-" + parameterName.toLowerCase() + "-" + attachment.getId() + "\" class=\"delete-item btn btn-danger\" ><span class=\"fa fa-trash\"></span>Delete</span>" +
-                    "</td>";
+            result.append("<td>" + "<span id=\"showMultimedia-Delete-").append(parameterName.toLowerCase()).append("-").append(attachment.getId()).append("\" class=\"delete-item btn btn-danger\" ><span class=\"fa fa-trash\"></span>Delete</span>").append("</td>");
 
-            result += "</tr>";
+            result.append("</tr>");
         }
         resp.setContentType("text/html");
-        if(result.equals("")) {
+        if(result.toString().equals("")) {
             resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
         }else{
-            resp.getWriter().write(getShowString(result,attachmentId));
+            resp.getWriter().write(getShowString(result.toString(),attachmentId));
         }
-        return;
     }
 
     @Override
@@ -89,7 +84,7 @@ public class FilesManage extends Controller {
 
 
     private String getShowString(String insertContent,String articleId){
-        String result ="<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
+        return "<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
                 + insertContent +
                 "</table>"
                 + "<script>\n" +
@@ -120,13 +115,11 @@ public class FilesManage extends Controller {
                 "        }\n" +
                 "    });\n" +
                 "})\n" +
-                "</script>\n"
-                ;
-        return result;
+                "</script>\n";
     }
 
     private String getDeleteString(String insertContent,String articleId){
-        String result ="<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
+        return "<table><tr><td>File name</td><td>Thumbnail</td><td>Operate</td></tr>"
                 + insertContent +
                 "</table>"
                 + "<script>\n" +
@@ -150,8 +143,6 @@ public class FilesManage extends Controller {
                 "        }\n" +
                 "    });\n" +
                 "})\n" +
-                "</script>\n"
-                ;
-        return result;
+                "</script>\n";
     }
 }

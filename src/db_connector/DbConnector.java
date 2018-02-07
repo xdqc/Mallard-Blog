@@ -2,10 +2,8 @@ package db_connector;
 
 
 import ORM.tables.Article;
-import ORM.tables.Attachment;
 import ORM.tables.FollowRelation;
 
-import ORM.tables.User;
 import ORM.tables.records.ArticleRecord;
 import ORM.tables.records.AttachmentRecord;
 import ORM.tables.records.CommentRecord;
@@ -17,10 +15,8 @@ import utililties.Comments;
 import utililties.Tuple;
 import utililties.Tuple3;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -32,7 +28,6 @@ import static ORM.tables.Article.ARTICLE;
 import static ORM.tables.Attachment.ATTACHMENT;
 import static ORM.tables.Comment.*;
 import static ORM.tables.User.*;
-import static org.jooq.impl.DSL.select;
 
 public class DbConnector {
 
@@ -52,7 +47,7 @@ public class DbConnector {
         }
     }
 
-    private static Properties dbProps = new Properties();
+    private static final Properties dbProps = new Properties();
 
 
     public static UserRecord getAuthorByArticleId(String articleId) {
@@ -142,6 +137,8 @@ public class DbConnector {
             result = create.selectCount()
                     .from(ARTICLE)
                     .where(ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
+                    .and(ARTICLE.VALID_TIME.le(new Timestamp(System.currentTimeMillis())))
                     .fetchOne(0, int.class);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -834,7 +831,7 @@ public class DbConnector {
      * @param user user to create new profile
      * @return
      */
-    public static boolean insertNewUser(UserRecord user) {
+    public static void insertNewUser(UserRecord user) {
 
         try (Connection conn = DriverManager.getConnection(dbProps.getProperty("url"), dbProps)) {
             DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
@@ -845,10 +842,8 @@ public class DbConnector {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                return false;
-            }
+        }
 
-        return true;
     }
 
     /**

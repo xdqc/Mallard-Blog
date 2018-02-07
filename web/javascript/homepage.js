@@ -72,6 +72,14 @@ $(document).ready(function () {
         });
     });
 
+    $(".reset-my-password").on("click", function (e) {
+        e.preventDefault();
+        swal("Contact Us", "Please contact administrator to reset your password.", "info")
+
+    });
+
+
+
 
 
     //load user profile panel when user logged in

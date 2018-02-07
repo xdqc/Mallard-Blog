@@ -14,14 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.*;
-import java.util.List;
 
 public class FileUpload extends HttpServlet {
 
-    private boolean isMultipart;
-    private int maxFileSize = 50 * 1024 * 1024;
-    private int maxMemSize = 5 * 1024 * 1024;
-    private File file;
     private String fullPath = "";
     private UserRecord user = null;
 
@@ -38,7 +33,7 @@ public class FileUpload extends HttpServlet {
         this.fullPath = getServletContext().getRealPath("/UploadedFile/");
         FileUtilities.createDirection(new File(this.fullPath));
         // Check that we have a file upload request
-        isMultipart = ServletFileUpload.isMultipartContent(request);
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         response.setContentType("text/html");
         //deal with those invalid upload situation
         if (!isMultipart) {
@@ -66,10 +61,10 @@ public class FileUpload extends HttpServlet {
         uploadFile(request, response);
     }
 
-    private void uploadFile(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, java.io.IOException {
+    private void uploadFile(HttpServletRequest request, HttpServletResponse response) {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
+        int maxMemSize = 5 * 1024 * 1024;
         factory.setSizeThreshold(maxMemSize);
         // Location to save data that is larger than maxMemSize.
         File theDir = new File(this.fullPath + "temp/");
@@ -78,15 +73,16 @@ public class FileUpload extends HttpServlet {
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
+        int maxFileSize = 50 * 1024 * 1024;
         upload.setSizeMax(maxFileSize);
         try {
             // Parse the request to get file items.
             List fileItems = upload.parseRequest(request);
             // Process the uploaded file items
             Iterator i = fileItems.iterator();
-            String fileUploadResultString = "<p>You have uploaded multimedia as follow:</p><br>" +
+            StringBuilder fileUploadResultString = new StringBuilder("<p>You have uploaded multimedia as follow:</p><br>" +
                     "<script>setTimeout(function () { history.back()}, 1500);</script>" +
-                    "<table><tr><td>title</td><td>thumbnail</td><tr>";
+                    "<table><tr><td>title</td><td>thumbnail</td><tr>");
             while (i.hasNext()) {
                 FileItem fi = (FileItem) i.next();
                 if (!fi.isFormField()) {
@@ -122,8 +118,8 @@ public class FileUpload extends HttpServlet {
                     } else {
                         uploadFileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
                     }
-                    this.file = new File(this.fullPath + uploadFileName);
-                    fi.write(this.file);
+                    File file = new File(this.fullPath + uploadFileName);
+                    fi.write(file);
                     //create thumbnail for the file
                     FileUtilities.createThumbnail(this.fullPath, getServletContext().getRealPath("/pictures/"), uploadFileName);
                     String articleId = request.getParameter("articleId");
@@ -154,17 +150,13 @@ public class FileUpload extends HttpServlet {
 
                     FileUtilities.saveInformationToDB(theFileName, "UploadedFile/multimedia/" + userPathId + "/", fileTypeFlag, attachType, ownby);
                     //store the result information
-                    fileUploadResultString += "<tr><td>" + theFileName + "</td><td><img src='UploadedFile/multimedia/"
-                            + userPathId + "/" + theFileName + "_thumbnail.jpg' alt='" + theFileName + "'></td></tr>";
+                    fileUploadResultString.append("<tr><td>").append(theFileName).append("</td><td><img src='UploadedFile/multimedia/").append(userPathId).append("/").append(theFileName).append("_thumbnail.jpg' alt='").append(theFileName).append("'></td></tr>");
                 }
             }
-            fileUploadResultString += "</table><input type='button' value='Go back' onclick='goBack()'>";
-            response.getWriter().write(FileUtilities.getShowingString(fileUploadResultString));
-            return;
-        } catch (FileUploadException ex) {
-            System.out.println(ex);
+            fileUploadResultString.append("</table><input type='button' value='Go back' onclick='goBack()'>");
+            response.getWriter().write(FileUtilities.getShowingString(fileUploadResultString.toString()));
         } catch (Exception ex) {
-            System.out.println(ex);
+            ex.printStackTrace();
         }
     }
 
@@ -189,8 +181,7 @@ public class FileUpload extends HttpServlet {
     /**
      * For new user uploading avatar
      */
-    private void setPathByUserId(String userId, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, java.io.IOException {
+    private void setPathByUserId(String userId, HttpServletRequest request, HttpServletResponse response) {
         //create direction for multimedia
         this.fullPath += "/multimedia/";
         File theDir = new File(this.fullPath);
@@ -204,7 +195,7 @@ public class FileUpload extends HttpServlet {
     /**
      * @return Logged User, or null if not logged in
      */
-    protected UserRecord getLoggedUserFromSession(HttpServletRequest req) {
+    private UserRecord getLoggedUserFromSession(HttpServletRequest req) {
         // If current session does not exist, then it will NOT create a new session.
         HttpSession session = req.getSession(false);
 
