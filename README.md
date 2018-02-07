@@ -24,7 +24,7 @@ This is a personal blogging system.
 ## Team members
 - Matthew Hu
 - Nishant Rana
-- Samuel Ding
+- Samuel Ding (scrum master)
 - Tonny Li
 
 ## Important Dates
