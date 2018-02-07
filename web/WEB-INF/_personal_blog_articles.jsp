@@ -21,29 +21,33 @@
 
                 </div>
 
-
+                <br>
+                <br>
                 <div id="showActivatedMultimedia-article-${blog.getArticle().getId()}" class="activated-multimedia"></div>
-
+                <br>
 
 
                 <!-- collapse style multimedia gallery begin-->
                 <div>
-                <!-- show all attachments of one article -->
-                <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Show all multimedia</a>
-                <!-- show the user's own attachments of one article including comments' attachments in this article -->
-                <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Show my own multimedia</a>
-                 <!-- show the attachments of this article -->
-                 <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                    <span class="glyphicon glyphicon-file"></span>Edit multimedia</a>
-                    <!-- show the attachments of this article -->
-                    <a id="showMultimedia-FileList-comment-57" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                        <span class="glyphicon glyphicon-file"></span>Edit multimedia222</a>
+                    <span class="comment-media-text">Multi-Media Gallery</span>
+                    <!-- show all attachments of one article -->
+                    <a id="showMultimedia-article-${blog.getArticle().getId()}" class="show-media show-comment-media-all" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-picture-o"></span> Article & Comments</a>
+                    <!-- show the user's own attachments of one article including comments' attachments in this article -->
+                    <a id="showMultimedia-UserCheck_${sessionScope.get('loggedInUser').getId()}-article-${blog.getArticle().getId()}" class="show-media show-my-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eye"></span> My Media</a>
                     <!-- active pictures -->
-                    <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
-                        <span class="glyphicon glyphicon-file"></span>Attachment attachments</a>
-                <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
+                    <a id="showMultimedia-activateList-article-${blog.getArticle().getId()}" class="show-media active-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eyedropper"></span> Activate</a>
+
+                    <img id="load-article-img" src="pictures/big_loading.gif" alt="loading..."
+                         width="200" style="display: none;margin: 400px auto;" aria-hidden="true">
+
+                    <!-- show the attachments of this article -->
+                    <a id="showMultimedia-FileList-article-${blog.getArticle().getId()}" class="show-media delete-comment-media" data-toggle="collapse" href="#multimediaShowArea-article-${blog.getArticle().getId()}">
+                        <span class="fa fa-eye-slash"></span> Delete</a>
+
+                    <div id="multimediaShowArea-article-${blog.getArticle().getId()}" class="collapse"></div>
                 </div>
                 <!-- collapse style multimedia gallery end-->
 
@@ -64,8 +68,8 @@
                 </div>
                 <br>
                 <div class="panel-text article-likes">
-                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
-                                class="fa fa-thumbs-up"></span></span>
+                        <span class="h5 text-muted" id="like-number-${blog.getArticle().getId()}">${blog.getArticle().getLikeNum()}
+                            <a href="#" id="thumb-up-${blog.getArticle().getId()}" class="thumb-up"><span class="fa fa-thumbs-up"></span></a></span>
                 </div>
                 <br>
                 <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
@@ -101,7 +105,7 @@
 
                     <%--<c:if test="${blog.getNumComments() > 0}">--%>
                 <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                        class="btn btn-info show-comment-btn">
+                        class="show-comment-btn" style="width:100%">
                     <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
                     Comments
                     <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>

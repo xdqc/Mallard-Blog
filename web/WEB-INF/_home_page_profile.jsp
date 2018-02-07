@@ -1,6 +1,6 @@
 <%--personal information card--%>
-<div class="card">
-        <img class="card-img-top img-responsive" src="http://i.pravatar.cc/300?u=${userId}" alt="Card image cap">
+    <div class="card">
+        <img class="card-img-top img-thumbnail img-rounded" src="http://i.pravatar.cc/300?u=${userId}" alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title">${fname} ${lname}
                 ${gender==0? '<span class="fa fa-venus" style="color:hotpink"></span>'

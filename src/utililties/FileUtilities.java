@@ -25,11 +25,11 @@ public class FileUtilities {
             fileTypeFlag = uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1);
         }
         if(fileTypeFlag.equals("mp4")||fileTypeFlag.equals("mpg")||fileTypeFlag.equals("avi")||fileTypeFlag.equals("mpeg")) {
-            img.createGraphics().drawImage(ImageIO.read(new File( realPath + "mp4.png")).getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
+            img.createGraphics().drawImage(ImageIO.read(new File( realPath + "mp4.jpg")).getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
         }else {
             img.createGraphics().drawImage(ImageIO.read(new File(fullPath + uploadFileName)).getScaledInstance(50, 50, Image.SCALE_SMOOTH), 0, 0, null);
         }
-        ImageIO.write(img, "png", new File(fullPath + theFileName + "_thumbnail.png" ));
+        ImageIO.write(img, "jpg", new File(fullPath + theFileName + "_thumbnail.jpg" ));
     }
 
     //save the file information into database

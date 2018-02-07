@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <article class="panel panel-info article-panel" id="article-panel-${blog.getArticle().getId()}">
     <div class="panel-heading">
         <h3 class="article-title"
@@ -18,8 +19,8 @@
             ${blog.getArticle().getCreateTime().toLocalDateTime()}&nbsp;&nbsp;&nbsp;</span>
         </div>
         <br>
-        <img class="panel-img-top img-responsive" src="https://source.unsplash.com/random/${Math.round((Math.random()*600))+500}x${Math.round((Math.random()*200))+300}"
-             alt="random picture"/>
+        <img class="panel-img-top img-responsive img-rounded" src="https://source.unsplash.com/${Math.round((Math.random()*300))+800}x${Math.round((Math.random()*100))+300}/?{food}"
+             alt="article picture "/>
         <br>
         <!-- collapse style multimedia gallery begin-->
         <div>
@@ -44,17 +45,20 @@
                 Read more
             </button>
         </div>
+        <br>
         <div class="panel-text article-likes">
-                        <span class="h5 text-muted">  ${blog.getArticle().getLikeNum()}&nbsp;<span
-                                class="fa fa-thumbs-up"></span></span>
+            <span class="h5 text-muted" id="like-number-${blog.getArticle().getId()}">${blog.getArticle().getLikeNum()}
+                ${sessionScope.get("loggedInUser")!=null? '<a id="thumb-up-'.concat(id).concat('" class="thumb-up" href="#"><span class="fa fa-thumbs-up"></span></a>') : '<span class="fa fa-thumbs-up"></span>'}
+
+            </span>
         </div>
         <br>
         <div class="edit-article-area" id="edit-article-area-${blog.getArticle().getId()}"></div>
         <br>
 
         <button type="button" id="showCommentBtn-${blog.getArticle().getId()}"
-                class="btn btn-info show-comment-btn">
-            <span class="badge" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
+                class="show-comment-btn" style="width: 100%">
+            <span class="badge badge-info" id="num-comments-${blog.getArticle().getId()}">${blog.getNumValidComments()}</span>
             Comments
             <span id="comment-arrow-${blog.getArticle().getId()}" class="fa fa-chevron-down"></span>
         </button>

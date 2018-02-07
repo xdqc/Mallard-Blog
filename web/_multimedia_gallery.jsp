@@ -10,18 +10,17 @@
 <html>
 <head>
     <title>Title</title>
-    <script type="text/javascript" src="../javascript/jquery.js"></script>
-    <script type="text/javascript" src="../javascript/html5gallery.js"></script>
+    <script type="text/javascript" src="javascript/jquery.js"></script>
+    <script type="text/javascript" src="javascript/html5gallery.js"></script>
 </head>
 <body>
 <div id="imagesShowing" style="display:none;" class="html5gallery" data-skin="horizontal" data-width="400" data-height="300">
 
-<c:forEach var="attachment" items="${attachments}">
-    <!-- Add images to Gallery -->
-    <a href="${attachment.getPath()}${attachment.getFilename()}.${attachment.getMime()}"><img src="${attachment.getPath()}${attachment.getFilename()}_thumbnail.png" alt="${attachment.getFilename()}"></a>
-</c:forEach>
+
+    <a href="UploadedFile/multimedia/4/Red_Tulip.jpg"><img src="UploadedFile/multimedia/4/Red_Tulip.jpg" alt="Red_Tulip"></a>
+    <a href="multimedia/blue.png"><img src="multimedia/blue.png" alt="blue"></a>
     <!-- Add videos to Gallery -->
-    <!--a href="multimedia/Big_Buck_Bunny.mp4"><img src="multimedia/Big_Buck_Bunny.jpg" alt="Big Buck Bunny, Copyright Blender Foundation"></a -->
+    <a href="multimedia/Big_Buck_Bunny.mp4"><img src="multimedia/Big_Buck_Bunny.jpg" alt="Big Buck Bunny, Copyright Blender Foundation"></a>
 
     <!-- Add Youtube video to Gallery -->
     <!--a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg" alt="Youtube Video"></a-->

@@ -29,11 +29,18 @@ public class ActiveAttachment extends Controller {
         AttachmentRecord attachment = DbConnector.getActiavedAttachment(attachmentId,attachType);
         String result = "";
         if(attachment != null) {
-            result += "<img src=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\" class=\"panel-img-top img-responsive\" alt=\"" + attachment.getFilename() + "\" />";
+            if(attachment.getMime().equals("mp4")) {
+                result += "<video class=\"panel-img-top img-responsive\" controls>\n" +
+                        "  <source src=\"" + attachment.getPath() + attachment.getFilename() + ".mp4\" type=\"video/mp4\">\n" +
+                        "  Your browser does not support the video tag.\n" +
+                        "</video>";
+            }else{
+                result += "<img src=\"" + attachment.getPath() + attachment.getFilename() + "." + attachment.getMime() + "\" class=\"panel-img-top img-responsive\" alt=\"" + attachment.getFilename() + "\" />";
+            }
         }
         resp.setContentType("text/html");
         if(result.equals("")) {
-            resp.getWriter().write("<p>There has not any multimedia.Please upload some what you like.<p>");
+            resp.getWriter().write("<p>There is no multimedia. Please upload some what you like.<p>");
         }else{
             resp.getWriter().write(result);
         }
