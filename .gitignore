@@ -54,5 +54,5 @@ fabric.properties
 /.idea/dataSources/
 
 # config files
-./**/web.xml
-./**/mysql.properties
+/**/web.xml
+/**/mysql.properties
