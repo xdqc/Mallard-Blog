@@ -15,7 +15,7 @@
     color: #333333;
 }
 
-.list-group{
+.list-group .item-list{
     border:none;
     outline: 0;
     display: inline-block;
