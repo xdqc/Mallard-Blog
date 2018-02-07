@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-bottom: 300px">
         <div class="col-md-8">
             <div class="well well-sm">
                 <form>

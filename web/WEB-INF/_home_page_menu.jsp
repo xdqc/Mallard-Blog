@@ -51,8 +51,8 @@
                         </c:if>
                     </ul>
                     </li>
-                    <li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>
-                    </li>
+                    <%--<li><a href="#"><span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;Notification</a>--%>
+                    <%--</li>--%>
                 </c:if>
                 <li>
                     <div class="btn-group" role="group" aria-label="...">

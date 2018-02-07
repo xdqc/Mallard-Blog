@@ -11,13 +11,13 @@
         </div>
         <dl class="list-group">
             <div class="list-group-item item-list">
-                <dt><span class="fa fa-envelope"></span> Followers:&nbsp;${follower_number}</dt>
+                <dt><span class="fa fa-map-marker"></span> Posts:&nbsp;${post_number} </dt>
             </div>
             <div class="list-group-item item-list">
-                <dt><span class="fa fa-map-marker"></span> Post:&nbsp;${post_number} </dt>
+                <dt><span class="fa fa-envelope"></span> From:&nbsp;${country}</dt>
             </div>
             <div class="list-group-item item-list">
-                <dt><span class="fa fa-heart"></span> Notification:&nbsp; </dt>
+                <dt><span class="fa fa-heart"></span> Age:&nbsp; ${age}</dt>
             </div>
         </dl>
     </div>

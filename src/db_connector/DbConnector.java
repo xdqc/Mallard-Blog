@@ -142,6 +142,8 @@ public class DbConnector {
             result = create.selectCount()
                     .from(ARTICLE)
                     .where(ARTICLE.AUTHOR.eq(Integer.parseInt(userId)))
+                    .and(ARTICLE.SHOW_HIDE_STATUS.eq((byte)1))
+                    .and(ARTICLE.VALID_TIME.le(new Timestamp(System.currentTimeMillis())))
                     .fetchOne(0, int.class);
         } catch (SQLException e) {
             e.printStackTrace();
