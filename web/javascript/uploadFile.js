@@ -18,7 +18,7 @@ function goBack() {
 
 //close the window make it look like in the same page
 function showArticles(parameterName,value) {
-    alert(parameterName + value);
+    //alert(parameterName + value);
     //deal with the multimedia gallery show content
     $('#showMultimedia-' + parameterName +'-' + value).click(function() {
         $.ajax({
@@ -34,7 +34,45 @@ function showArticles(parameterName,value) {
     });
 }
 
+$(document).on("load","activated-multimedia",function() {
+    const entityId = getEntityId($(this));
+    const parameterName = getEntityParameterName($(this));
+    $.ajax({
+        url: 'Activated-Multimedia',
+        data: {
+            entityId: entityId,
+            parameterName: parameterName
+        },
+        error: function (err) {
+            //console.log("function was unsuccessful");
+        }, success: function (responseText) {
+            //console.log("function was successful");
+            $('#showActivatedMultimedia-' + parameterName + '-' + entityId).html(responseText);
+        }
+    });
+});
+
 $(document).ready(function () {
+
+
+
+    $(document).on("click", ".activated-multimedia", function() {
+            const entityId = getEntityId($(this));
+            const parameterName = getEntityParameterName($(this));
+                $.ajax({
+                    url: 'Activated-Multimedia',
+                    data: {
+                        entityId: entityId,
+                        parameterName: parameterName
+                    },
+                    error: function (err) {
+                        //console.log("function was unsuccessful");
+                    }, success: function (responseText) {
+                        //console.log("function was successful");
+                        $('#showActivatedMultimedia-' + parameterName + '-' + entityId).html(responseText);
+                    }
+                });
+    });
 
     //deal with the multimedia gallery show content
     //also works on ajax loaded part
@@ -51,8 +89,14 @@ $(document).ready(function () {
                     parameterName : parameterName,
                     userID : userID
                 },
+                beforeSend: () => {
+                    $("#load-article-img").css("display", "block");
+                },
                 success : function(responseText) {
                     $('#multimediaShowArea-' + parameterName + '-'+entityId).html(responseText);
+                },
+                complete: () => {
+                    $("#load-article-img").css("display", "none");
                 }
             });
         }else if(userCheck.toLowerCase() == "filelist" ){
@@ -63,8 +107,14 @@ $(document).ready(function () {
                     parameterName : parameterName,
                     operateName : userCheck
                 },
+                beforeSend: () => {
+                    $("#load-article-img").css("display", "block");
+                },
                 success : function(responseText) {
                     $('#multimediaShowArea-' + parameterName + '-'+entityId).html(responseText);
+                },
+                complete: () => {
+                    $("#load-article-img").css("display", "none");
                 }
             });
         }else if(userCheck.toLowerCase() == "delete" ){
@@ -75,8 +125,14 @@ $(document).ready(function () {
                     parameterName : parameterName,
                     operateName : userCheck
                 },
+                beforeSend: () => {
+                    $("#load-article-img").css("display", "block");
+                },
                 success : function(responseText) {
                     $('#multimediaShowArea-' + parameterName + '-'+entityId).html(responseText);
+                },
+                complete: () => {
+                    $("#load-article-img").css("display", "none");
                 }
             });
         }else if(userCheck.toLowerCase() == "showmultimedia" ){
@@ -86,8 +142,14 @@ $(document).ready(function () {
                 entityId : entityId,
                 parameterName : parameterName
             },
+            beforeSend: () => {
+                $("#load-article-img").css("display", "block");
+            },
             success : function(responseText) {
                 $('#multimediaShowArea-' + parameterName + '-'+entityId).html(responseText);
+            },
+            complete: () => {
+                $("#load-article-img").css("display", "none");
             }
         });
         }else if(userCheck.toLowerCase() == "activatelist" ){
@@ -98,8 +160,14 @@ $(document).ready(function () {
                     parameterName: parameterName,
                     operateName : userCheck
                 },
+                beforeSend: () => {
+                    $("#load-article-img").css("display", "block");
+                },
                 success: function (responseText) {
                     $('#multimediaShowArea-' + parameterName + '-' + entityId).html(responseText);
+                },
+                complete: () => {
+                    $("#load-article-img").css("display", "none");
                 }
             });
         }
@@ -110,14 +178,21 @@ $(document).ready(function () {
     //     e.preventDefault();
     // });
     $(document).on("click", '.uploadButton', function(e) {
-        console.log(e);
+        //console.log(e);
+        const uploadingImg = $("img.uploading-img");
         $.ajax({
             url : 'File-Upload',
             data : {
                 articleId : $('#articleId').val()
             },
+            beforeSend: () => {
+                $("#load-article-img").css("display", "block");
+            },
             success : function(responseText) {
                 $('#uploadFileArea').html(responseText);
+            },
+            complete: () => {
+                $("#load-article-img").css("display", "none");
             }
         });
     });
@@ -138,14 +213,14 @@ $(document).ready(function () {
 
 
 });
-
+//
 // $(document).bind('DOMSubtreeModified', function() {
-//     console.log("page changed");
+//     //console.log("page changed");
 //     $(".activated-multimedia").each(function() {
 //         const entityId = getEntityId($(this));
 //         const parameterName = getEntityParameterName($(this));
-//         if ($(this).hasClass("activated-multimedia")) { // TODO: CHANGE ME //
-//             console.log("onload happened");
+//         if ($(this).hasClass("activated-multimedia")) {
+//             //console.log("onload happened");
 //             $.ajax({
 //                     url: 'Activated-Multimedia',
 //                 data: {
@@ -153,9 +228,9 @@ $(document).ready(function () {
 //                     parameterName: parameterName
 //                 },
 //                 error: function (err) {
-//                     console.log("function was unsuccessful");
+//                     //console.log("function was unsuccessful");
 //                 }, success: function (responseText) {
-//                     console.log("function was successful");
+//                     //console.log("function was successful");
 //                     $('#showActivatedMultimedia-' + parameterName + '-' + entityId).html(responseText);
 //                 }
 //             });
