@@ -10,13 +10,13 @@
             <p class="card-text">${description}</p>
         </div>
         <dl class="list-group">
-            <div class="list-group-item">
+            <div class="list-group-item item-list">
                 <dt><span class="fa fa-envelope"></span> Followers:&nbsp;${follower_number}</dt>
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item item-list">
                 <dt><span class="fa fa-map-marker"></span> Post:&nbsp;${post_number} </dt>
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item item-list">
                 <dt><span class="fa fa-heart"></span> Notification:&nbsp; </dt>
             </div>
         </dl>
