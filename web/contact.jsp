@@ -78,8 +78,8 @@
                     12 345 6789
                 </address>
                 <address>
-                    <strong>Abc Xyz</strong><br>
-                    <a href="mailto:#">abc123@students.waikato.ac.nz</a>
+                    <strong>Web Master</strong><br>
+                    <a href="mailto:#">mallard.blog@gmail.com</a>
                 </address>
             </form>
         </div>

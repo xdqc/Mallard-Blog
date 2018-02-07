@@ -5,6 +5,7 @@ dl.comment {
     border: 2px dashed seashell;
     border-radius: 10px;
     background-color: #F4F4F9;
+    box-shadow: 6px 2px 10px #ccc;
 }
 
 dd.comment {
@@ -299,6 +300,7 @@ div.article-content{
     margin-right: 9px;
     margin-top: 9px;
     padding: 6px 15px;
+    box-shadow: 2px 1px 4px #ccc;
 }
 .badge-info{
     background-color: #9BC;

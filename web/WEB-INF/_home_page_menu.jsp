@@ -44,7 +44,7 @@
                         <li><a href="#" class="delete-account-btn" id="delete-account-btn-${user.getId()}">Delete account</a>
                             <a href="home_page.jsp" id="refresh-after-delete" style="display: none"></a>
                         </li>
-                        <li><a href="#" class="send-email" id="send-email-${user.getId()}">Re-set Password</a></li>
+                        <li><a href="#" class="reset-my-password" id="send-email-${user.getId()}">Re-set Password</a></li>
 
                         <c:if test="${user.getSystemRole()==0}">
                             <li><a href="admin">Admin's Pleasure Hub</a></li>
