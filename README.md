@@ -98,9 +98,9 @@ All our team members are very appreciated to have a chance working together to a
 * C-- Comment id
 * U-- User id
 ### attachment.mine
-* Picture-- .jpg .jpn .bpm
+* Picture-- .jpg .png .bmp
 * Audio-- .wmv .mp3 .wav
-* Media-- .mov .mp4
+* Video-- .mov .mp4 .ogg
 
 ----
 
