@@ -36,7 +36,6 @@ In the ***execution stage***, my coding works were both in back and front-end. F
 
 ![alt text](https://github.com/xdqc/Mallard-Blog/blob/master/git_contributions.PNG "Git punch card")
 
-<br>
 The __highlight__ of my work was the extensively usage of AJAX in our blog website. There are massive jQuery.ajax() calls in `personal_blog.js` to load whole article, load edit article area, load nested comments, do post/edit/delete actions of articles and comments. I also used event delegates to make sure the buttons and anchors in ajax loaded part of the web page can be triggered correctly. 
 
 The most __challenging__ part of my work was the implementation of nested comments feature. The first step was building a tree data structure, of which each node can have n children, with recursive algorithms to traverse the tree and find specific node. At the starting point, I tried to make recursive queries to the database to fetch nested comments data. The poor time efficiency can be imagined. Then I figured out to make a Blog class, which implements `Map.Entry<Tuple<UserRecord, ArticleRecord>, Tree<CommentRecord>>`. The reason of creating this class is to minimize total database connect, thus enhance the performance of the web app (localhost debug stage). This is also helpful to integrate our data model, with one database connection to query all comments under an article and process the list of comments to tree of comments. Similar reason to create Comment class in utilities package. 
@@ -69,7 +68,6 @@ Regular expressions, which I suggest we may cover a little bit in class, give st
 I suggest we could have more lab practices on json or with the usage of json object, json array. It is a very useful data structure, we need deeper understanding and should use it more fluently and naturally.
 
 We also used some third-party libraries in the project. 
-<br>
 
 ## Teamwork
 
@@ -77,7 +75,6 @@ We had a great team work and fair task allocation. The following chart shows a g
 
 ![alt text](https://github.com/xdqc/Mallard-Blog/blob/master/git_teamwork.PNG "Git teamwork")
 
-<br>
 *Tonny* is the oldest member in our team and has most experiences in web development. I learned a lot from him, especially in the planning stage of our project. He is very good at requirement analysis and prioritizing task list. He took the most difficult part of our project, multimedia gallery implementation. Although we were working on different part, we collaborated very efficiently by presenting interface to each other to use each one’s code. We made our team project with high coherence, low coupling.
 
 *Nishant* is the one I spend most of the time with in our team. He is full of momentum to move forward and eager to learn more. We did 40+ hours pair programming, several whole nights in the lab together to conquer tasks of the team project. During that time, we were free to communicate without worrying about disturbing others. Our discussions not only limited to the specific issues of the project, but encompass programming languages, web technologies, IT trends and so on. For most of the times I was the navigator, and Nishant was driver. “Docendo discimus”, we both improved our programming skills in this process.
@@ -151,11 +148,11 @@ delete their account.
 Using default Bootstrap, w3.css or similar is ok, but do not use any commercial or freely
 available 'website templates'. If in doubt, check with your lecturer first .
 
-** Pack One
+** Pack One: Administrative interface
 
-** Pack Three
+** Pack Three: Feature enhancements
 
-** Pack Four
+** Pack Four: Multimedia
 
 ** Pack Six: Extensively Use of AJAX
 
