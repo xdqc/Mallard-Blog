@@ -6,7 +6,7 @@ The structure of our blog system follows MVC design pattern.
 
 ### Model
 
-![alt text](https://github.com/xdqc/Mallard-Blog/blob/master/ER_model.png "ER diagram")
+![ER diagram](https://raw.githubusercontent.com/xdqc/Mallard-Blog/master/ER_model.png "ER diagram")
 
 The ER diagram is shown above. There are four entities: `User`, `Article`, `Comment` and `Attachment`. User to Article, User to Comment, Article to Comment are 1:n relations, so we have foreign keys for each of them. To accomplish nested comments feature, the Comment has foreign key that references to itself.  To accomplish multimedia pack, i.e. each User (avatars), Article (gallery) or Comment (gallery) could have many files associated with it (1:n relation), we designed Attachment entity to represent files stored on sever, which has foreign keys reference to other entities. We also planned to have a feature that allows users to follow each other, i.e. an n:n relation, so we added another table called follow-relation. 
 
@@ -34,7 +34,7 @@ In the ***planning stage*** of our project, I took part in the discussion active
 
 In the ***execution stage***, my coding works were both in back and front-end. For back-end, I wrote the `Controller` class, and `PersonalBlog`, `Search`, `Admin`, `ResetPassword`, `Contact`, `Error` servlets, as well as part of `HomePage`, `Login`, `SignUp` servlet. For front-end, I wrote the jsp files corresponds to those controllers above, as well as `homepage.js`, `personal_blog.js`, `admin.js` and some css. The following chart shows my git commit punch card during the two weeks.
 
-![alt text](https://github.com/xdqc/Mallard-Blog/blob/master/git_contributions.PNG "Git punch card")
+![git punchcard](https://raw.githubusercontent.com/xdqc/Mallard-Blog/master/git_contributions.PNG "Git punch card")
 
 The __highlight__ of my work was the extensively usage of AJAX in our blog website. There are massive jQuery.ajax() calls in `personal_blog.js` to load whole article, load edit article area, load nested comments, do post/edit/delete actions of articles and comments. I also used event delegates to make sure the buttons and anchors in ajax loaded part of the web page can be triggered correctly. 
 
@@ -73,7 +73,7 @@ We also used some third-party libraries in the project.
 
 We had a great team work and fair task allocation. The following chart shows a glimpse of our git history. We were planning to rotate scrum master between team members, but during most of the time in past two weeks, I was the de facto organizer and coordinator of the team. As a scrum master, I tried my best to bear in mind of each team member's coding works, and make sure each one's work could be properly integrated into the whole system. I was quite enjoying working with our mallard team and had a nice relation and communication with our team members.
 
-![alt text](https://github.com/xdqc/Mallard-Blog/blob/master/git_teamwork.PNG "Git teamwork")
+![git teamwork](https://raw.githubusercontent.com/xdqc/Mallard-Blog/master/git_teamwork.PNG "Git teamwork")
 
 *Tonny* is the oldest member in our team and has most experiences in web development. I learned a lot from him, especially in the planning stage of our project. He is very good at requirement analysis and prioritizing task list. He took the most difficult part of our project, multimedia gallery implementation. Although we were working on different part, we collaborated very efficiently by presenting interface to each other to use each one’s code. We made our team project with high coherence, low coupling.
 
