@@ -1,3 +1,112 @@
+
+# About
+## Introduction ##
+This a blogging website. Through the web site, users can register for an account, be able to post
+articles and to leave comments on others. When logged in, they have full control of the
+content they have authored: creating, updating and deleting their content and comments.
+
+## Features
+Basic functionality of this blogging system:
+1. Users are able to create new accounts. Each new user can choose
+a username (which must be unique) and a password. User’s
+name, date of birth, and country can be recorded, along with a brief
+description about themselves.
+2. When creating an account, users are able to choose from amongst a set of
+predefined “avatar” icons to represent themselves. Users can upload
+an image from their devices, from which a thumbnail can be generated for use as a
+custom avatar.
+3. Once a user has created an account, they are able to log in and log out.
+4. Users are able to browse a list of all articles, regardless of whether they are
+logged in or not. If logged in, they can additionally be able to browse a list of their
+own articles.
+5. When logged in, users are able to add new articles, and edit or delete existing
+articles.
+6. When logged in, users are able to comment on articles. Users are also able
+to delete any comments they have written, as well as any comments on articles
+which they have authored.
+7. Users are able to edit any of their account information, and also be able to
+delete their account.
+8. The website is responsive.
+
+**Features Pack One: Administrative interface
+
+An administrative interface are implemented using Swing Web
+technologies that allows an administrative user to:
+1. Add and remove users
+2. Reset user passwords, by sending the corresponding user an email with a link to
+reset their password
+3. Show and hide comments and articles
+
+**Features Pack Two: User interface
+
+The blogging system provides the following improvements to the website’s user
+experience:
+1. TODO: WYSIWYG support for authoring articles
+2. Informing new users whether or not their chosen username is already taken - without
+the user having to submit a form to find out.
+
+**Features Pack Three: Feature enhancements
+
+The blogging system provides the following extra features to users:
+1. When creating new accounts, users are verified as human using a Google’s
+reCAPTCHA.
+2. Users are able to enter a date when authoring an article. The date is
+default to the current day, but the user can change this to any valid date (past or
+future) they wish. If the user enters a future date, the article cannot be visible until
+that date.
+3. Users are able to search and sort article lists by article title , username , and
+date .
+
+**Features Pack Four: Multimedia
+
+The website incorporates the following support for multimedia:
+1. Users are able to upload any number of images to an article. Multiple images
+per article is supported, and these images can be added and
+removed when editing existing articles, as well as when authoring new ones. 
+2. Users can upload audio and video files to an article. 
+3. Users can embed YouTube videos within an article. These embedded videos can be placed
+anywhere within the article’s content.
+4. Users can browse a multimedia gallery showing all multimedia content
+that’s been uploaded to any article. Users can switch between looking
+at just their own multimedia, or content from all users. When not logged in, users
+can still be able to browse all content.
+
+**Features Pack Five: Robustness & security
+
+The website implements the following features to make it more resilient to attacks and
+unexpected user input:
+1. Passwords are appropriately hashed /
+salted. TODO: investigate and use a 3rd-party authentication system
+(SSO), such as “log in with Facebook”, or “log in with Google”, etc.
+2. TODO: comprehensively check all input, and provide appropriate non-default
+error responses when required. What happens when users browse to non-existent
+pages? What happens when users bypass your HTML5 / JavaScript form validation
+and submit incorrect values (this is very easy to do with appropriate tools)? What
+happens if a malicious user attempts SQL injection? These questions and more
+should be considered!
+3. TODO: Any other items / checks from the OWASP Top 10 which may be applicable.
+
+----
+
+## Meta Data #
+### user.gender
+* 0-- Female
+* 1-- Male
+* 2-- Other
+### user.system_role
+* 0-- Administrator
+* 1-- Public
+### attachment.attach_type
+* A-- Article id
+* C-- Comment id
+* U-- User id
+### attachment.mine
+* Picture-- .jpg .png .bmp
+* Audio-- .wmv .mp3 .wav
+* Video-- .mov .mp4 .ogg
+
+****
+
 # Project Report #
 
 ##	Designing of The Blog System
@@ -82,78 +191,4 @@ We had a great team work and fair task allocation. The following chart shows a g
 I also communicate with *Matthew* a lot. At the beginning, he was not crystal clear about how servlet works with http request and response. I spent an hour to tell him an analogous story of a custom going to restaurants to ordering food, how custom, server, cooker act at that scenario, and how menu, order sheet, plates do their roles. By analogy, he understood the flow of servlet much clearer, and then he finished his part of work.
  
 All our team members are very appreciated to have a chance working together to accomplish something for real. Special thanks to our lecture *Dr. Cameron Grout* for giving us valuable help during the project.
-
-****
-
-## Meta Data #
-### user.gender
-* 0-- Female
-* 1-- Male
-* 2-- Other
-### user.system_role
-* 0-- Administrator
-* 1-- Public
-### attachment.attach_type
-* A-- Article id
-* C-- Comment id
-* U-- User id
-### attachment.mine
-* Picture-- .jpg .png .bmp
-* Audio-- .wmv .mp3 .wav
-* Video-- .mov .mp4 .ogg
-
-----
-
-# Requirements
-## Introduction ##
-In this assignment you will develop a blogging website using a combination of the
-programming skills you have learnt through the Programming for Industry and Programming
-with Web Technology courses. The snapshot shown above is taken from a previous PGCert
-IT student group’s submission.
-
-Through the web site, users can register for an account, which is needed to be able to post
-articles and to leave comments on others. When logged in, they have full control of the
-content they have authored: creating, updating and deleting their content and comments.
-The functionality you need to provide to implement the blogging system, which is detailed
-below, has been divided into two sections: basic functionality, which is compulsory, and
-advanced features. For advanced features, there are a range of features to choose
-from—you do not have to implement them all.
-
-This project is a team project - each of you will be working in groups which will be assigned
-by your lecturer. Make sure to name your team something memorable!
-
-## Features
-functionality of a blogging system:
-1. Users must be able to create new accounts. Each new user should be able to choose
-a username (which must be unique) and a password. At minimum, a user’s real
-name, date of birth, and country should also be recorded, along with a brief
-description about themselves.
-2. When creating an account, users must be able to choose from amongst a set of
-predefined “avatar” icons to represent themselves. Users must also be able to upload
-an image from their computer, from which a thumbnail can be generated for use as a
-custom avatar.
-3. Once a user has created an account, they must be able to log in and log out.
-4. Users must be able to browse a list of all articles, regardless of whether they are
-logged in or not. If logged in, they should additionally be able to browse a list of their
-own articles.
-5. When logged in, users must be able to add new articles, and edit or delete existing
-articles.
-6. When logged in, users must be able to comment on articles. Users must also be able
-to delete any comments they have written, as well as any comments on articles
-which they have authored.
-7. Users must be able to edit any of their account information, and also be able to
-delete their account.
-8. The website must have a consistent look and feel, and must be responsive.
-
-Using default Bootstrap, w3.css or similar is ok, but do not use any commercial or freely
-available 'website templates'. If in doubt, check with your lecturer first .
-
-** Pack One: Administrative interface
-
-** Pack Three: Feature enhancements
-
-** Pack Four: Multimedia
-
-** Pack Six: Extensively Use of AJAX
-
 
